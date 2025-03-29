@@ -30,7 +30,7 @@ export default function SignUpPage() {
       const token = await userCredential.user.getIdToken();
       document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
       router.push('/client');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Signup error:', err);
       // Tłumaczenie komunikatów błędów na język polski
       if (err.code === 'auth/email-already-in-use') {
@@ -132,7 +132,7 @@ export default function SignUpPage() {
               const token = await userCredential.user.getIdToken();
               document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
               router.push('/client');
-            } catch (err: any) {
+            } catch (err: Error | { code?: string; message?: string }) {
               console.error('Google login error:', err);
               setError('Nie udało się zarejestrować przez Google. Spróbuj ponownie później.');
             } finally {

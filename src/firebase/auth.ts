@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, PhoneAuthProvider, signInWithPhoneNumber, RecaptchaVerifier, Auth } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, PhoneAuthProvider, signInWithPhoneNumber, RecaptchaVerifier, Auth } from 'firebase/auth';
 import { firebaseConfig } from './config';
 
 // Sprawdzenie czy kod jest wykonywany w przeglądarce
@@ -9,13 +9,12 @@ const isBrowser = typeof window !== 'undefined';
 let app;
 let auth: Auth;
 let googleProvider: GoogleAuthProvider;
-let phoneProvider;
+// phoneProvider jest zadeklarowany, ale nieużywany
 
 if (isBrowser) {
   app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
   auth = getAuth(app);
   googleProvider = new GoogleAuthProvider();
-  phoneProvider = new PhoneAuthProvider(auth);
 }
 
 // Authentication functions
