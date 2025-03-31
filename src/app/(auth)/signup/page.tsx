@@ -33,16 +33,24 @@ export default function SignUpPage() {
     } catch (err: unknown) {
       console.error('Signup error:', err);
       // Tłumaczenie komunikatów błędów na język polski
-      if (err.code === 'auth/email-already-in-use') {
-        setError('Ten adres email jest już używany. Zaloguj się lub użyj innego adresu email.');
-      } else if (err.code === 'auth/invalid-email') {
-        setError('Podany adres email jest nieprawidłowy. Sprawdź format adresu email.');
-      } else if (err.code === 'auth/weak-password') {
-        setError('Hasło jest zbyt słabe. Użyj silniejszego hasła (minimum 6 znaków).');
-      } else if (err.code === 'auth/operation-not-allowed') {
-        setError('Rejestracja za pomocą emaila i hasła jest obecnie wyłączona.');
+      if (typeof err === 'object' && err !== null && 'code' in err) {
+        const firebaseError = err as { code: string; message: string }; // Asercja typu
+        if (firebaseError.code === 'auth/email-already-in-use') {
+          setError('Ten adres email jest już używany. Zaloguj się lub użyj innego adresu email.');
+        } else if (firebaseError.code === 'auth/invalid-email') {
+          setError('Podany adres email jest nieprawidłowy. Sprawdź format adresu email.');
+        } else if (firebaseError.code === 'auth/weak-password') {
+          setError('Hasło jest zbyt słabe. Użyj silniejszego hasła (minimum 6 znaków).');
+        } else if (firebaseError.code === 'auth/operation-not-allowed') {
+          setError('Rejestracja za pomocą emaila i hasła jest obecnie wyłączona.');
+        } else {
+          setError(firebaseError.message || 'Nie udało się zarejestrować. Spróbuj ponownie później.');
+        }
+      } else if (typeof err === 'object' && err !== null && 'message' in err) {
+        const errorWithMessage = err as { message: string };
+        setError(errorWithMessage.message || 'Nie udało się zarejestrować. Spróbuj ponownie później.');
       } else {
-        setError(err.message || 'Nie udało się zarejestrować. Spróbuj ponownie później.');
+        setError('Nie udało się zarejestrować. Spróbuj ponownie później.');
       }
     } finally {
       setLoading(false);
@@ -53,13 +61,13 @@ export default function SignUpPage() {
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8 rounded-lg border p-6 shadow-md">
         <h1 className="text-center text-2xl font-bold">Sign Up</h1>
-        
+
         {error && (
           <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleSignUp} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
@@ -74,7 +82,7 @@ export default function SignUpPage() {
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
-          
+
           <div>
             <label htmlFor="password" className="block text-sm font-medium">
               Password
@@ -88,7 +96,7 @@ export default function SignUpPage() {
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
-          
+
           <div>
             <label htmlFor="confirmPassword" className="block text-sm font-medium">
               Confirm Password
@@ -102,7 +110,7 @@ export default function SignUpPage() {
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={loading}
@@ -111,7 +119,7 @@ export default function SignUpPage() {
             {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
-        
+
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300"></div>
@@ -120,7 +128,7 @@ export default function SignUpPage() {
             <span className="bg-white px-2 text-gray-500">Or continue with</span>
           </div>
         </div>
-        
+
         <button
           type="button"
           onClick={async () => {
@@ -132,9 +140,14 @@ export default function SignUpPage() {
               const token = await userCredential.user.getIdToken();
               document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
               router.push('/client');
-            } catch (err: Error | { code?: string; message?: string }) {
+            } catch (err: unknown) {
               console.error('Google login error:', err);
-              setError('Nie udało się zarejestrować przez Google. Spróbuj ponownie później.');
+              if (typeof err === 'object' && err !== null && 'message' in err) {
+                const errorWithMessage = err as { message: string };
+                setError(errorWithMessage.message || 'Nie udało się zarejestrować przez Google. Spróbuj ponownie później.');
+              } else {
+                setError('Nie udało się zarejestrować przez Google. Spróbuj ponownie później.');
+              }
             } finally {
               setLoading(false);
             }
