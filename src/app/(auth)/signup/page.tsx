@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import '../../globals.css';
 import { signUp, signInWithGoogle } from '../../../firebase/auth';
 import { useRouter } from 'next/navigation';
+
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -58,53 +60,53 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8 rounded-lg border p-6 shadow-md">
+    <div className="signin-container">
+      <div className="signin-form-wrapper">
         <h1 className="text-center text-2xl font-bold">Sign Up</h1>
 
         {error && (
-          <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
+          <div className="signin-error">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSignUp} className="space-y-6">
+        <form onSubmit={handleSignUp} className="signin-form">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className="signin-label">
               Email
             </label>
-            <input
+            <input             
               id="email"
               type="email"
-              value={email}
+              value={email}              
               onChange={(e) => setEmail(e.target.value)}
               required
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+          <div >
+            <label htmlFor="password" className="signin-label">
               Password
-            </label>
+            </label>            
             <input
               id="password"
               type="password"
-              value={password}
+              value={password}              
               onChange={(e) => setPassword(e.target.value)}
               required
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium">
+          <div >
+            <label htmlFor="confirmPassword" className="signin-label">
               Confirm Password
-            </label>
+            </label>           
             <input
               id="confirmPassword"
               type="password"
-              value={confirmPassword}
+              value={confirmPassword}              
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
@@ -114,18 +116,18 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+            className="mr-4"
           >
             {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
 
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300"></div>
+        <div className="signin-divider">
+          <div className="signin-divider-line">
+            <div className="signin-divider-line"></div>
           </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-2 text-gray-500">Or continue with</span>
+          <div className="signin-divider-text">
+            <span className="signin-divider-text">Or continue with</span>
           </div>
         </div>
 
@@ -153,7 +155,7 @@ export default function SignUpPage() {
             }
           }}
           disabled={loading}
-          className="flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+          className="signin-google-button"
         >
           <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" width="24" height="24">
             <path
