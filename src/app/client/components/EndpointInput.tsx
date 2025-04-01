@@ -11,6 +11,7 @@ export default function EndpointInput({
       type="text"
       value={endpointUrl}
       onChange={(e) => setEndpointUrl(e.target.value)}
+      placeholder={'Enter Endpoint URL'}
     />
   );
 }
