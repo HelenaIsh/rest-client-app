@@ -2,23 +2,23 @@
 
 import Link from 'next/link';
 
-const Home: React.FC = () => {
-  const isAuthenticated = false;
+const MainPage: React.FC = () => {
+  const isAuthenticated = true;
 
   return (
     <div>
       <main className="main-content">
         {!isAuthenticated ? (
           <div className="welcome-section">
-            <h1>Welcome!</h1>
+            <h1 className="welcome-sign">Welcome!</h1>
             <div className="auth-links">
               <Link href="/signin" className="nav-btn">Sign In</Link>
               <Link href="/signup" className="nav-btn">Sign Up</Link>
             </div>
           </div>
         ) : (
-          <div className="welcome-back-section">
-            <h1>Welcome Back, Username!</h1>
+          <div className="welcome-section">
+            <h1 className="welcome-sign">Welcome Back, Username!</h1>
             <div className="client-links">
               <Link href="/rest-client" className="nav-btn">REST Client</Link>
               <Link href="/history" className="nav-btn">History</Link>
@@ -31,4 +31,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default MainPage;
