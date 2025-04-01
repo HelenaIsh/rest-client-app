@@ -17,14 +17,15 @@ interface HeaderProps {
     <header className="header">
       <Link href="/" className="logo">Logo</Link>
       <nav>
-        {isAuthenticated ? (
-          <button onClick={onSignOut} className="nav-btn">Sign Out</button>
-        ) : (
-          <>
-            <Link href="/signin" className="nav-btn">Sign In</Link>
-            <Link href="/signup" className="nav-btn">Sign Up</Link>
-          </>
-        )}
+      <button className="nav-btn">EN / RU</button>
+      {isAuthenticated ? (
+      <button onClick={onSignOut} className="nav-btn">Sign Out</button>
+    ) : (
+      <>
+        <Link href="/signin" className="nav-btn">Sign In</Link>
+        <Link href="/signup" className="nav-btn">Sign Up</Link>
+      </>
+    )}
       </nav>
     </header>
   );
