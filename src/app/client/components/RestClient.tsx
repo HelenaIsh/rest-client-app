@@ -1,10 +1,12 @@
 'use client';
 
-import MethodSelector from '@/app/client/components/MethodSelector';
+import MethodSelector, {
+  methods,
+} from '@/app/client/components/MethodSelector';
 import EndpointInput from '@/app/client/components/EndpointInput';
 import SendButton from '@/app/client/components/SendButton';
 import { FormEvent, useState } from 'react';
-import { Header, methods } from '@/types';
+import { Header } from '@/types';
 import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
 import HeaderEditor from '@/app/client/components/HeaderEditor';
 
