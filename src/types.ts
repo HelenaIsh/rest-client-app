@@ -7,3 +7,10 @@ export const methods = [
   'HEAD',
   'OPTIONS',
 ] as const;
+
+export interface Header {
+  id: number;
+  key: string;
+  value: string;
+  enabled: boolean;
+}

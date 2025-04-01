@@ -4,14 +4,18 @@ import MethodSelector from '@/app/client/components/MethodSelector';
 import EndpointInput from '@/app/client/components/EndpointInput';
 import SendButton from '@/app/client/components/SendButton';
 import { FormEvent, useState } from 'react';
-import { methods } from '@/types';
+import { Header, methods } from '@/types';
 import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
+import HeaderEditor from '@/app/client/components/HeaderEditor';
 
 export default function RestClient() {
   const [endpointUrl, setEndpointUrl] = useState('');
   const [selectedMethod, setSelectedMethod] =
     useState<(typeof methods)[number]>('GET');
   const [requestBody, setRequestBody] = useState('{}');
+  const [headers, setHeaders] = useState<Header[]>([
+    { id: 1, key: '', value: '', enabled: false },
+  ]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +26,9 @@ export default function RestClient() {
       'selectedMethod',
       selectedMethod,
       'requestBody',
-      requestBody
+      requestBody,
+      'headers',
+      headers
     );
   };
   return (
@@ -45,6 +51,8 @@ export default function RestClient() {
             requestBody={requestBody}
             setRequestBody={setRequestBody}
           />
+          <p className={'text-lg mt-6'}>Headers</p>
+          <HeaderEditor headers={headers} setHeaders={setHeaders} />
         </form>
       </div>
     </div>
