@@ -43,9 +43,10 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
       </Link>
 
       <nav className="nav">
-        <Link href="#" className="nav-link">
+{/* TODO - Internationalization (i18n) */}
+        <button className="nav-link">
           EN / RU
-        </Link>
+        </button>
         {isAuthenticated ? (
           <Link href="#" onClick={onSignOut} className="nav-link">
             Sign Out
