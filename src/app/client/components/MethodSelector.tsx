@@ -9,7 +9,7 @@ export const methods = [
 ] as const;
 
 export default function MethodSelector({
-  selectedMethod,
+  selectedMethod = 'GET'
   setSelectedMethod,
 }: {
   selectedMethod?: (typeof methods)[number];
