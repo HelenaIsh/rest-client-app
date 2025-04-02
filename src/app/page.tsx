@@ -24,7 +24,7 @@ const MainPage: React.FC = () => {
           <div className="welcome-section">
             <h1 className="welcome-sign">Welcome Back, Username!</h1>
             <div className="client-links">
-              <Link href="/rest-client" className="btn">
+              <Link href="/client" className="btn">
                 REST Client
               </Link>
               <Link href="/history" className="btn">
