@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -42,17 +42,33 @@ body {
   line-height: 1.6;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-sans);
 }
 
 .header {
-  background-color: var(--accentcolor);
-  padding: 0.8rem 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition:
+    background-color 0.3s ease,
+    padding 0.3s ease;
+  z-index: 10;
+}
+
+.header.sticky {
+  background-color: var(--accentcolor);
+  padding: 0.5rem 2rem;
 }
 
 .header .logo {
@@ -66,7 +82,26 @@ h1, h2, h3, h4, h5, h6 {
   gap: 1rem;
 }
 
-.nav-btn {
+.nav-link {
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 8px;
+}
+
+.nav-link:hover {
+  color: var(--color-background);
+  background-color: var(--accentcolor);
+}
+
+.nav-link:active {
+  background-color: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.btn {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
@@ -75,21 +110,23 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 10px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
   border-radius: 8px;
   text-decoration: none;
   display: inline-flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
 }
 
-.nav-btn:hover {
+.btn:hover {
   background-color: var(--color-foreground);
   color: var(--color-background);
   transform: scale(1.05);
 }
 
-.nav-btn:active {
+.btn:active {
   background-color: var(--color-background);
   color: var(--color-foreground);
   transform: scale(1);
@@ -112,7 +149,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-copyright {
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 .footer a {
@@ -149,7 +186,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .welcome-sign {
   font-size: 1.5rem;
-
 }
 
 .auth-links,

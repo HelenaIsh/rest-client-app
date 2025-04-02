@@ -2,41 +2,64 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
 interface HeaderProps {
-    isAuthenticated: boolean;
-  }
+  isAuthenticated: boolean;
+}
 
-  const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
+const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
+  const [isSticky, setIsSticky] = useState<boolean>(false);
 
-    const onSignOut = () => {
-        console.log('Sign out clicked');
-      };
+  const onSignOut = (): void => {
+    console.log('Sign out clicked');
+  };
 
-  
+  const handleScroll = (): void => {
+    if (window.scrollY > 0) {
+      setIsSticky(true);
+    } else {
+      setIsSticky(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <header className="header">
-       <Link href="/" className="logo">
-        <Image 
-          src="/globe.svg"
-          alt="Logo" 
-          width={40}
-          height={40}
-        />
+    <header className={`header ${isSticky ? 'sticky' : ''}`}>
+
+      <Link href="/" className="logo">
+        <Image src="/vercel.svg" alt="Logo" width={30} height={30} />
       </Link>
-      <nav>
-      <button className="nav-btn">EN / RU</button>
-      {isAuthenticated ? (
-      <button onClick={onSignOut} className="nav-btn">Sign Out</button>
-    ) : (
-      <>
-        <Link href="/signin" className="nav-btn">Sign In</Link>
-        <Link href="/signup" className="nav-btn">Sign Up</Link>
-      </>
-    )}
+
+      <nav className="nav">
+        <Link href="#" className="nav-link">
+          EN / RU
+        </Link>
+        {isAuthenticated ? (
+          <Link href="#" onClick={onSignOut} className="nav-link">
+            Sign Out
+          </Link>
+        ) : (
+          <>
+            <Link href="/signin" className="nav-link">
+              Sign In
+            </Link>
+            <Link href="/signup" className="nav-link">
+              Sign Up
+            </Link>
+          </>
+        )}
       </nav>
+
     </header>
   );
-}
+};
 
 export default Header;

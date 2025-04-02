@@ -12,17 +12,27 @@ const MainPage: React.FC = () => {
           <div className="welcome-section">
             <h1 className="welcome-sign">Welcome!</h1>
             <div className="auth-links">
-              <Link href="/signin" className="nav-btn">Sign In</Link>
-              <Link href="/signup" className="nav-btn">Sign Up</Link>
+              <Link href="/signin" className="nav-btn">
+                Sign In
+              </Link>
+              <Link href="/signup" className="nav-btn">
+                Sign Up
+              </Link>
             </div>
           </div>
         ) : (
           <div className="welcome-section">
             <h1 className="welcome-sign">Welcome Back, Username!</h1>
             <div className="client-links">
-              <Link href="/rest-client" className="nav-btn">REST Client</Link>
-              <Link href="/history" className="nav-btn">History</Link>
-              <Link href="/variables" className="nav-btn">Variables</Link>
+              <Link href="/rest-client" className="btn">
+                REST Client
+              </Link>
+              <Link href="/history" className="btn">
+                History
+              </Link>
+              <Link href="/variables" className="btn">
+                Variables
+              </Link>
             </div>
           </div>
         )}

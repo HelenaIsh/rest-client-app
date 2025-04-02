@@ -24,7 +24,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const isAuthenticated = false; // no authorization yet
 
   return (
@@ -32,10 +31,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header isAuthenticated={isAuthenticated}/>
-        <main>
-          {children}
-        </main>
+        <Header isAuthenticated={isAuthenticated} />
+        <main>{children}</main>
         <Footer />
       </body>
     </html>
