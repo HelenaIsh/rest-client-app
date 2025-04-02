@@ -62,7 +62,8 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
     setRequestBody(defaultValue);
   };
 
-  const extensions = contentType === 'json' ? [javascript()] : [EditorView.lineWrapping];
+  const extensions =
+    contentType === 'json' ? [javascript()] : [EditorView.lineWrapping];
 
   return (
     <div className={'border border-gray-300 rounded-md overflow-hidden '}>

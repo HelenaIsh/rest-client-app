@@ -5,7 +5,6 @@ export default function EndpointInput({
   endpointUrl?: string;
   setEndpointUrl: (endpointUrl: string) => void;
 }) {
-
   const isValid = (() => {
     try {
       return !!endpointUrl && new URL(endpointUrl);
