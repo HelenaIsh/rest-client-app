@@ -19,6 +19,7 @@ export default function Tabs({ tabs, defaultActiveTab }: TabsProps) {
       <div className="flex space-x-4 m-4">
         {tabs.map((tab) => (
           <button
+            type="button"
             key={tab.id}
             className={`text-lg ${
               activeTab === tab.id ? 'font-bold text-blue-600' : 'text-gray-600'

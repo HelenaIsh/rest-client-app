@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { EditorView } from '@codemirror/view';
@@ -34,8 +34,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
     setRequestBody(value);
   };
 
-  const prettifyContent = (e: FormEvent) => {
-    e.preventDefault();
+  const prettifyContent = () => {
     if (contentType === 'json') {
       try {
         const parsed = JSON.parse(content);
@@ -55,8 +54,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
     }
   };
 
-  const clearContent = (e: FormEvent) => {
-    e.preventDefault();
+  const clearContent = () => {
     const defaultValue = contentType === 'json' ? '{}' : '';
     setContent(defaultValue);
     setRequestBody(defaultValue);
@@ -91,6 +89,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
 
         <div className="flex gap-2">
           <button
+            type="button"
             onClick={prettifyContent}
             disabled={contentType === 'json' && !isValidJson}
             className="px-2 py-1  rounded border border-gray-300 hover:bg-gray-600 disabled:opacity-60 disabled:cursor-not-allowed"
@@ -98,6 +97,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
             Prettify
           </button>
           <button
+            type="button"
             onClick={clearContent}
             className="px-2 py-1 bg-gray-700 text-gray-200 rounded border border-gray-300 hover:bg-gray-600"
           >
