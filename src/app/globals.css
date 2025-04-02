@@ -4,13 +4,27 @@
   --background: #ffffff;
   --foreground: #171717;
   --accentcolor: #7b7979;
+  --font-sans: 'Arial', sans-serif;
+  --font-mono: 'Courier New', monospace;
+}
+
+:root.theme-dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --accentcolor: #7b7979;
+}
+
+:root.theme-light {
+  --background: #f0f0f0;
+  --foreground: #1c1c1c;
+  --accentcolor: #095964;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Arial', sans-serif;
-  --font-mono: 'Courier New', monospace;
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,8 +47,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .header {
-  background-color: var(--color-background);
-  padding: 1rem 2rem;
+  background-color: var(--accentcolor);
+  padding: 0.8rem 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
@@ -56,13 +70,13 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans);
-  border: 2px solid var(--color-foreground);
+  border: 1px solid var(--color-foreground);
   padding: 0.4rem 1rem;
   margin: 0 10px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  border-radius: 5px;
+  border-radius: 8px;
   text-decoration: none;
   display: inline-flex;
   align-items: center; 
@@ -84,8 +98,21 @@ h1, h2, h3, h4, h5, h6 {
 .footer {
   background-color: var(--accentcolor);
   color: #ffffff;
-  padding: 2rem;
+  padding: 0.5rem;
   text-align: center;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.footer-copyright {
+  margin-right: 15px;
 }
 
 .footer a {
@@ -139,5 +166,15 @@ h1, h2, h3, h4, h5, h6 {
 
   .nav-btn {
     width: 100%;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer a {
+    margin-top: 0.5rem;
   }
 }

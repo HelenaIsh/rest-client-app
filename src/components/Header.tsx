@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface HeaderProps {
     isAuthenticated: boolean;
@@ -15,7 +16,14 @@ interface HeaderProps {
   
   return (
     <header className="header">
-      <Link href="/" className="logo">Logo</Link>
+       <Link href="/" className="logo">
+        <Image 
+          src="/globe.svg"
+          alt="Logo" 
+          width={40}
+          height={40}
+        />
+      </Link>
       <nav>
       <button className="nav-btn">EN / RU</button>
       {isAuthenticated ? (
