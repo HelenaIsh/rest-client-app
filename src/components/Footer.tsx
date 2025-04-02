@@ -7,8 +7,9 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="footer-container">
         <p>
+{/* TODO correct link for github */}
           <a
-            href="https://github.com"
+            href="https://github.com/HelenaIsh/rest-client-app"
             target="_blank"
             rel="noopener noreferrer"
           >
