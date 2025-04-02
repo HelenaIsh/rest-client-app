@@ -124,21 +124,60 @@ h6 {
 .footer {
   background-color: var(--accentcolor);
   color: #ffffff;
-  padding: 0.5rem;
+  padding: 5px;
   text-align: center;
 }
 
 .footer-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 30px;
   margin: 0 auto;
   padding: 0 1rem;
 }
 
+.footer-github-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.footer-github-links {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
 .footer-copyright {
   margin-right: 10px;
+}
+
+.github-link {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.github-link:hover {
+  color: var(--accentcolor);
+}
+
+.github-img-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.github-logo {
+  object-fit: cover;
 }
 
 .footer a {

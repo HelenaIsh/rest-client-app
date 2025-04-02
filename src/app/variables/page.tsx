@@ -1,5 +1,3 @@
 export default function Variables() {
-  return (
-      <h1>Variables Page</h1>
-  );
+  return <h1>Variables Page</h1>;
 }
