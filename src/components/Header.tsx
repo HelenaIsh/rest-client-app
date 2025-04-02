@@ -8,8 +8,13 @@ interface HeaderProps {
   isAuthenticated: boolean;
 }
 
+ //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of header ([Sign In] | [Sign up] OR [Sign Out]) 
+ // — we need to connect the Authentication here
+ 
 const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
+ 
+//TODO - Currently, onSignOut is not working.
 
   const onSignOut = (): void => {
     console.log('Sign out clicked');
@@ -33,9 +38,8 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
 
   return (
     <header className={`header ${isSticky ? 'sticky' : ''}`}>
-
-      <Link href="/" className="logo">
-        <Image src="/vercel.svg" alt="Logo" width={30} height={30} />
+      <Link href="/" className="logo">  
+        <Image src="/favicon.ico" alt="Favicon" width={40} height={40} />
       </Link>
 
       <nav className="nav">
@@ -57,7 +61,6 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
           </>
         )}
       </nav>
-
     </header>
   );
 };

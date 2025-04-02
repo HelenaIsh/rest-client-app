@@ -1,3 +1,7 @@
 export default function Variables() {
-  return <h1>Variables Page</h1>;
+  return (
+    <div className="main-content">
+      <h1>Variables Page</h1>
+    </div>
+  );
 }

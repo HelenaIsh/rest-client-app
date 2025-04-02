@@ -14,9 +14,11 @@ const Footer: React.FC = () => {
           >
             <Image
               src="/images/Github_logo.png"
+              className="github-logo"
               alt="Github Logo"
               width={40}
               height={40}
+              style={{ height: 'auto' }}
             />
           </a>
         </p>

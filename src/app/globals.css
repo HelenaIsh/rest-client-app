@@ -20,13 +20,6 @@
   --accentcolor: #095964;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -54,8 +47,8 @@ h6 {
 .header {
   position: sticky;
   top: 0;
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--background);
+  color: var(--foreground);
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -71,41 +64,37 @@ h6 {
   padding: 0.5rem 2rem;
 }
 
-.header .logo {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--color-foreground);
-}
-
 .nav {
   display: flex;
   gap: 1rem;
 }
 
 .nav-link {
-  color: var(--color-foreground);
+  color: var(--foreground);
   font-family: var(--font-sans);
   text-decoration: none;
   padding: 0.5rem 1rem;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease;
   border-radius: 8px;
 }
 
 .nav-link:hover {
-  color: var(--color-background);
+  color: var(--background);
   background-color: var(--accentcolor);
 }
 
 .nav-link:active {
-  background-color: var(--color-foreground);
-  color: var(--color-background);
+  background-color: var(--foreground);
+  color: var(--background);
 }
 
 .btn {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: var(--font-sans);
-  border: 1px solid var(--color-foreground);
+  border: 1px solid var(--foreground);
   padding: 0.4rem 1rem;
   margin: 0 10px;
   font-size: 1rem;
@@ -121,14 +110,14 @@ h6 {
 }
 
 .btn:hover {
-  background-color: var(--color-foreground);
+  background-color: var(--foreground);
   color: var(--color-background);
   transform: scale(1.05);
 }
 
 .btn:active {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--background);
+  color: var(--foreground);
   transform: scale(1);
 }
 
@@ -200,17 +189,7 @@ h6 {
     padding: 10px;
   }
 
-  .nav-btn {
+  .btn {
     width: 100%;
-  }
-
-  .footer-container {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .footer a {
-    margin-top: 0.5rem;
   }
 }
