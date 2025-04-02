@@ -7,8 +7,7 @@ const MainPage: React.FC = () => {
   //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of the main page — we need to connect the Authentication!
 
   return (
-    <div>
-      <main className="main-content">
+      <div>
         {!isAuthenticated ? (
           <div className="welcome-section">
             <h1 className="welcome-sign">Welcome!</h1>
@@ -37,8 +36,7 @@ const MainPage: React.FC = () => {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      </div>
   );
 };
 

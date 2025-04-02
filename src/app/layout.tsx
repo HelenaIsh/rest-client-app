@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header isAuthenticated={isAuthenticated} />
-        <main>{children}</main>
+        <main className="main-content">{children}</main>
         <Footer />
       </body>
     </html>
