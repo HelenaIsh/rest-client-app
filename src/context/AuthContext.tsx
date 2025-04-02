@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User } from 'firebase/auth';
 import { auth, onAuthStateChanged } from '../firebase/auth';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useRouter } from 'next/navigation';
 
 type AuthContextType = {

@@ -1,5 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, PhoneAuthProvider, signInWithPhoneNumber, RecaptchaVerifier, Auth } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithPhoneNumber, RecaptchaVerifier, Auth } from 'firebase/auth';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { PhoneAuthProvider } from 'firebase/auth';
 import { firebaseConfig } from './config';
 
 // Sprawdzenie czy kod jest wykonywany w przeglądarce

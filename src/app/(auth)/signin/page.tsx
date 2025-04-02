@@ -1,5 +1,4 @@
 'use client';
-import '../../globals.css';
 import { useState } from 'react';
 import { signIn, signInWithGoogle } from '../../../firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -29,91 +28,93 @@ export default function SignInPage() {
       console.error('Login error:', err);
       // Tłumaczenie komunikatów błędów na język polski
       if (typeof err === 'object' && err !== null && 'code' in err) {
-          if (err.code === 'auth/invalid-credential') {
-            setError('Invalid credentials. Please check your email and password or sign up if you do not have an account yet.');
+        if (err.code === 'auth/invalid-credential') {
+          setError('Invalid credentials. Please check your email and password or sign up if you do not have an account yet.');
         } else if (err.code === 'auth/user-not-found') {
-            setError('User with this email does not exist. Sign up to create an account.');
+          setError('User with this email does not exist. Sign up to create an account.');
         } else if (err.code === 'auth/wrong-password') {
-            setError('Incorrect password. Please try again.');
+          setError('Incorrect password. Please try again.');
         } else if (err.code === 'auth/too-many-requests') {
-            setError('Too many unsuccessful login attempts. Please try again later.');
+          setError('Too many unsuccessful login attempts. Please try again later.');
         } else {
-            setError((err as Error).message || 'Failed to sign in. Please try again later.');
+          // Zastosowano poprawkę typu
+          setError(((err as unknown) as Error).message || 'Failed to sign in. Please try again later.');
         }
-        } else {
-            setError('An unknown error occurred.');
+      } else {
+        setError('An unknown error occurred.');
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const commonButtonClasses =
-    "signup-button";
-
   return (
-    <div className="signin-container">
-      <div className="signin-form-wrapper">
-        <h1 className="text-center text-2xl font-bold">Sign In</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100">
+      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
+        <h1 className="text-center text-2xl font-bold mb-6">Sign In</h1>
         {error && (
-          <div className="signin-error">
+          <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSignIn} className="space-y-6">
+        <form onSubmit={handleSignIn} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
-            <label htmlFor="email" className="signin-label">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
             </label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
-              className="signin-input"
+              required className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="signin-label">
-            Password
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
             </label>
             <input
               id="password"
-              type="password"
+              type="password"             
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="signin-input"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>          
 
           <div className="signin-buttons">
-            <button
+          <button
             type="submit"
-              disabled={loading} 
-              className={"signup-button mr-2 ml-2"}
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </button>          
-            
-              <Link href="/signup">
-              <button type="button" className={commonButtonClasses} > 
+            disabled={loading}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            {loading ? 'Signing in...' : 'Sign In'}
+          </button>          <Link href="/signup" className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
                 Sign Up
-              </button>
-              </Link>            
+            </Link>   
           </div>
         </form>
 
-        <div className="signin-divider">
-          <div className="signin-divider-line">           
-            <div className="w-full border-t border-gray-300"/>
+        <div className="mt-4 border-t pt-4">
+        {/* <button
+          type="button"
+          onClick={async () => {}}
+            disabled={loading}
+            className="w-full bg-white hover:bg-gray-100 border border-gray-300 text-blue-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >
+            Sign in with Google
+        </button> */}
+
+<div className="mt-4 border-t pt-4">
+         <div className="mt-4 border-t pt-4">
+            <span className="signin-divider-text">Or continue with</span>
           </div>
-          <div className="signin-divider-text">
-            <span className="">Or continue with</span>
-          </div>
+        </div>
+
         </div>
 
         <button
@@ -126,20 +127,21 @@ export default function SignInPage() {
               // Set auth token in cookie for middleware to use
               const token = await userCredential.user.getIdToken();
               document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
-              router.push('/client');
+                router.push('/client');
             } catch (err: unknown) {
               console.error('Google login error:', err);
               if (typeof err === 'object' && err !== null && 'message' in err) {
-                setError((err as Error).message || 'Nie udało się zalogować przez Google. Spróbuj ponownie później.');
+                setError(((err as unknown) as Error).message || 'Nie udało się zalogować przez Google. Spróbuj ponownie później.');
                 } else {
-                setError('Wystąpił nieznany błąd.');
+                setError('An unknown error occurred.');
               }
                } finally {
               setLoading(false);
             }
           }}
+          
           disabled={loading}
-          className="signin-google-button"
+          className=""
         >
           <svg className="signin-google-icon" viewBox="0 0 24 24" width="24" height="24">
             <path
@@ -159,9 +161,10 @@ export default function SignInPage() {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
             <path fill="none" d="M1 1h22v22H1z" />
+
           </svg>
           Sign in with Google
         </button>
       </div>
     </div>
-  );
+  );}

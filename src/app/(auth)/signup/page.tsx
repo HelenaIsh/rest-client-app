@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import '../../globals.css';
 import { signUp, signInWithGoogle } from '../../../firebase/auth';
 import { useRouter } from 'next/navigation';
 
@@ -60,19 +59,19 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="signin-container">
-      <div className="signin-form-wrapper">
-        <h1 className="text-center text-2xl font-bold">Sign Up</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100">
+      <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
+        <h1 className="text-center text-2xl font-bold mb-6">Sign Up</h1>
 
         {error && (
-          <div className="signin-error">
+          <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSignUp} className="signin-form">
+        <form onSubmit={handleSignUp} className="space-y-4">
           <div>
-            <label htmlFor="email" className="signin-label">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email
             </label>
             <input             
@@ -86,9 +85,9 @@ export default function SignUpPage() {
           </div>
 
           <div >
-            <label htmlFor="password" className="signin-label">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
-            </label>            
+            </label>
             <input
               id="password"
               type="password"
@@ -100,9 +99,9 @@ export default function SignUpPage() {
           </div>
 
           <div >
-            <label htmlFor="confirmPassword" className="signin-label">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
               Confirm Password
-            </label>           
+            </label>
             <input
               id="confirmPassword"
               type="password"
@@ -116,17 +115,14 @@ export default function SignUpPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mr-4"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
 
-        <div className="signin-divider">
-          <div className="signin-divider-line">
-            <div className="signin-divider-line"></div>
-          </div>
-          <div className="signin-divider-text">
+        <div className="mt-4 border-t pt-4">
+         <div className="mt-4 border-t pt-4">
             <span className="signin-divider-text">Or continue with</span>
           </div>
         </div>
@@ -135,7 +131,7 @@ export default function SignUpPage() {
           type="button"
           onClick={async () => {
             setError('');
-            setLoading(true);
+               setLoading(true);
             try {
               const userCredential = await signInWithGoogle();
               // Set auth token in cookie for middleware to use
@@ -155,7 +151,7 @@ export default function SignUpPage() {
             }
           }}
           disabled={loading}
-          className="signin-google-button"
+           className="w-full flex items-center justify-center border border-gray-300 hover:bg-gray-100 text-blue-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
           <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" width="24" height="24">
             <path
