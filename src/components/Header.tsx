@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
   return (
     <header className={`header ${isSticky ? 'sticky' : ''}`}>
       <Link href="/" className="logo">  
-        <Image src="/favicon.ico" alt="Favicon" width={40} height={40} />
+        <Image src="/images/logo.png" alt="logo" width={45} height={45} />
       </Link>
 
       <nav className="nav">
