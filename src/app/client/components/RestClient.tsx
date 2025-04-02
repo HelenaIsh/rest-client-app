@@ -9,10 +9,9 @@ import { FormEvent, useState } from 'react';
 import { Header } from '@/types';
 import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
 import HeaderEditor from '@/app/client/components/HeaderEditor';
+import Tabs from '@/app/client/components/Tabs';
 
 export default function RestClient() {
-  const [activeTab, setActiveTab] = useState('body');
-
   const [endpointUrl, setEndpointUrl] = useState('');
   const [selectedMethod, setSelectedMethod] =
     useState<(typeof methods)[number]>('GET');
@@ -35,6 +34,25 @@ export default function RestClient() {
       headers
     );
   };
+
+  const tabs = [
+    {
+      id: 'body',
+      label: 'Body',
+      content: (
+        <RequestBodyEditor
+          requestBody={requestBody}
+          setRequestBody={setRequestBody}
+        />
+      ),
+    },
+    {
+      id: 'headers',
+      label: 'Headers',
+      content: <HeaderEditor headers={headers} setHeaders={setHeaders} />,
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow p-6">
@@ -50,30 +68,7 @@ export default function RestClient() {
             />
             <SendButton />
           </div>
-          <div className="flex space-x-4 m-4">
-            <button
-              className={`text-lg ${activeTab === 'body' ? 'font-bold text-blue-600' : 'text-gray-600'}`}
-              onClick={() => setActiveTab('body')}
-            >
-              Body
-            </button>
-            <button
-              className={`text-lg ${activeTab === 'headers' ? 'font-bold text-blue-600' : 'text-gray-600'}`}
-              onClick={() => setActiveTab('headers')}
-            >
-              Headers
-            </button>
-          </div>
-          <div style={{ display: activeTab === 'body' ? 'block' : 'none' }}>
-            <RequestBodyEditor
-              requestBody={requestBody}
-              setRequestBody={setRequestBody}
-            />
-          </div>
-
-          <div style={{ display: activeTab === 'headers' ? 'block' : 'none' }}>
-            <HeaderEditor headers={headers} setHeaders={setHeaders} />
-          </div>
+          <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
       </div>
     </div>
