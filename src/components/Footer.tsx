@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
         </a>
 
         <div className="footer-github-container">
-          <p>Developed by the team:</p>
+          <p className="footer-github-article">Developed by the team:</p>
           <div className="footer-github-links">
             <a
               href="https://github.com/AlanKowalzky"

@@ -14,7 +14,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
 
-  //TODO - Currently, onSignOut is not working.
+//TODO - Currently, onSignOut is not working.
 
   const onSignOut = (): void => {
     console.log('Sign out clicked');
@@ -49,7 +49,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
       </Link>
 
       <nav className="nav">
-        {/* TODO - Internationalization (i18n) */}
+{/* TODO - Internationalization (i18n) */}
         <button className="nav-link">EN / RU</button>
         {isAuthenticated ? (
           <Link href="#" onClick={onSignOut} className="nav-link">
