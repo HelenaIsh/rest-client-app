@@ -11,11 +11,13 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.2.3",
-    "@uiw/react-codemirror": "^4.23.10",
     "next": "15.2.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@codemirror/lang-javascript": "^6.2.3",
+    "@uiw/react-codemirror": "^4.23.10",
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-json": "^6.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -5,11 +5,45 @@ import MethodSelector, {
 } from '@/app/client/components/MethodSelector';
 import EndpointInput from '@/app/client/components/EndpointInput';
 import SendButton from '@/app/client/components/SendButton';
-import { FormEvent, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Header } from '@/types';
 import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
 import HeaderEditor from '@/app/client/components/HeaderEditor';
 import Tabs from '@/app/client/components/Tabs';
+import CodeMirror, { Extension } from '@uiw/react-codemirror';
+import { json } from '@codemirror/lang-json';
+import { javascript } from '@codemirror/lang-javascript';
+import { html } from '@codemirror/lang-html';
+import { EditorView } from '@codemirror/view';
+
+const getFilteredHeaders = (headers: Header[]): Record<string, string> => {
+  return headers.reduce(
+    (acc, { key, value, enabled }) => {
+      if (enabled && key) acc[key] = value;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
+};
+
+const handleResponse = async (response: Response) => {
+  const contentType = response.headers.get('Content-Type') || '';
+  let detectedLanguage: Extension | null = null;
+  let data;
+
+  if (contentType.includes('application/json')) {
+    data = JSON.stringify(await response.json(), null, 2);
+    detectedLanguage = json();
+  } else if (contentType.includes('text/')) {
+    data = await response.text();
+    detectedLanguage = html();
+  } else {
+    data = await response.text();
+    detectedLanguage = javascript();
+  }
+
+  return { data, detectedLanguage };
+};
 
 export default function RestClient() {
   const [endpointUrl, setEndpointUrl] = useState('');
@@ -19,20 +53,36 @@ export default function RestClient() {
   const [headers, setHeaders] = useState<Header[]>([
     { id: 1, key: '', value: '', enabled: false },
   ]);
+  const [responseData, setResponseData] = useState<unknown>('');
+  const [responseStatus, setResponseStatus] = useState<number | undefined>();
+  const [language, setLanguage] = useState<unknown>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(
-      'submit',
-      'endpointUrl',
-      endpointUrl,
-      'selectedMethod',
-      selectedMethod,
-      'requestBody',
-      requestBody,
-      'headers',
-      headers
-    );
+    if (!endpointUrl) {
+      alert('Invalid or missing endpoint URL');
+      return;
+    }
+
+    try {
+      const requestHeaders = getFilteredHeaders(headers);
+      const options: RequestInit = {
+        method: selectedMethod,
+        headers: requestHeaders,
+        ...(selectedMethod !== 'GET' &&
+          selectedMethod !== 'HEAD' && { body: requestBody }),
+      };
+
+      const response = await fetch(endpointUrl, options);
+      setResponseStatus(response.status);
+
+      const { data, detectedLanguage } = await handleResponse(response);
+      setResponseData(data);
+      setLanguage(detectedLanguage);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setResponseData(`Request failed: ${error}`);
+    }
   };
 
   const tabs = [
@@ -70,6 +120,17 @@ export default function RestClient() {
           </div>
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
+        <p className={'text-lg m-4'}>Response</p>
+        {responseStatus}
+        <CodeMirror
+          value={responseData as string}
+          extensions={
+            language ? [language as Extension] : [EditorView.lineWrapping]
+          }
+          readOnly={true}
+          height="300px"
+          className="text-sm"
+        />
       </div>
     </div>
   );

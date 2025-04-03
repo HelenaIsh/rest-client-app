@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { json } from '@codemirror/lang-json';
 import { EditorView } from '@codemirror/view';
 
 type ContentType = 'json' | 'text';
@@ -61,7 +61,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
   };
 
   const extensions =
-    contentType === 'json' ? [javascript()] : [EditorView.lineWrapping];
+    contentType === 'json' ? [json()] : [EditorView.lineWrapping];
 
   return (
     <div className={'border border-gray-300 rounded-md overflow-hidden '}>
