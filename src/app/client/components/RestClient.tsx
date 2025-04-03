@@ -28,7 +28,7 @@ const getFilteredHeaders = (headers: Header[]): Record<string, string> => {
 
 const handleResponse = async (response: Response) => {
   const contentType = response.headers.get('Content-Type') || '';
-  let detectedLanguage: Extension | null = null;
+  let detectedLanguage: Extension | null;
   let data;
 
   if (contentType.includes('application/json')) {
@@ -63,16 +63,18 @@ export default function RestClient() {
       alert('Invalid or missing endpoint URL');
       return;
     }
+    const requestHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...getFilteredHeaders(headers),
+    };    const options: RequestInit = {
+      method: selectedMethod,
+      headers: requestHeaders,
+      ...(selectedMethod !== 'GET' &&
+        selectedMethod !== 'HEAD' && { body: requestBody }),
+    };
 
     try {
-      const requestHeaders = getFilteredHeaders(headers);
-      const options: RequestInit = {
-        method: selectedMethod,
-        headers: requestHeaders,
-        ...(selectedMethod !== 'GET' &&
-          selectedMethod !== 'HEAD' && { body: requestBody }),
-      };
-
       const response = await fetch(endpointUrl, options);
       setResponseStatus(response.status);
 
@@ -128,7 +130,7 @@ export default function RestClient() {
             language ? [language as Extension] : [EditorView.lineWrapping]
           }
           readOnly={true}
-          height="300px"
+          height="250px"
           className="text-sm"
         />
       </div>

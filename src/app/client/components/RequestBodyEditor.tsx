@@ -113,7 +113,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
           value={content}
           extensions={extensions}
           onChange={handleContentChange}
-          height="300px"
+          height="250px"
           className="text-sm"
         />
       </div>
