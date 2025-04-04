@@ -65,7 +65,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
 
   return (
     <div className={'border border-gray-300 rounded-md overflow-hidden '}>
-      <div className="flex justify-between items-center p-2 border border-gray-300">
+      <div className="flex justify-between items-center p-2">
         <div className="flex gap-4 ">
           <label className="flex items-center gap-1 cursor-pointer ">
             <input

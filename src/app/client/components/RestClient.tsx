@@ -123,7 +123,8 @@ export default function RestClient() {
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
         <p className={'text-lg m-4'}>Response</p>
-        {responseStatus}
+        <p>{responseStatus}</p>
+        <div className="border border-gray-300 rounded-md">
         <CodeMirror
           value={responseData as string}
           extensions={
@@ -133,6 +134,7 @@ export default function RestClient() {
           height="250px"
           className="text-sm"
         />
+        </div>
       </div>
     </div>
   );
