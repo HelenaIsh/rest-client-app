@@ -1,0 +1,20 @@
+{
+  "HomePage": {
+    "title": "Добро пожаловать в REST Client",
+    "about": "Перейти на страницу о проекте",
+    "authLinks": {
+      "signin": "Войти",
+      "signup": "Зарегистрироваться"
+    },
+    "clientLinks": {
+      "restClient": "REST Client",
+      "history": "История",
+      "variables": "Переменные"
+    },
+    "teamTitle": "Наша команда",
+    "teamMember": {
+      "name": "Имя",
+      "description": "Описание"
+    }
+  }
+}

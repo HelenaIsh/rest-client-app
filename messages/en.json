@@ -1,0 +1,20 @@
+{
+    "HomePage": {
+      "title": "Welcome to the REST Client",
+      "about": "Go to the about page",
+      "authLinks": {
+        "signin": "Sign In",
+        "signup": "Sign Up"
+      },
+      "clientLinks": {
+        "restClient": "REST Client",
+        "history": "History",
+        "variables": "Variables"
+      },
+      "teamTitle": "Our Team",
+      "teamMember": {
+        "name": "Name",
+        "description": "Description"
+      }
+    }
+  }
