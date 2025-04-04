@@ -249,10 +249,10 @@ h6 {
 }
 
 .authors {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+  justify-items: center;
   width: 100%;
 }
 
@@ -265,6 +265,7 @@ h6 {
   font-weight: bold;
   transition: color 0.3s ease-in-out;
   padding-bottom: 10px;
+  height: 100%;
 }
 
 .author-link:hover {

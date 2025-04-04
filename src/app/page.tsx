@@ -60,8 +60,7 @@ const MainPage: React.FC = () => {
             />
             <span>Alan Kowalzky</span>
             <p className="author-description">
-{/*TODO Authors Section -  write a description */}
-              we need to fill out this section and write some information about the team member.
+            My name is Alan, and I am in the process of transitioning to a developer. I’ve completed a JavaScript Fullstack Developer course and am currently working on an RSSchool React course and an AWS Cloud Developer certification.
             </p>
           </a>
           
@@ -80,8 +79,10 @@ const MainPage: React.FC = () => {
             />
             <span>Helena Ish</span>
             <p className="author-description">
-{/*TODO Authors Section -  write a description */}
-              we need to fill out this section and write some information about the team member.
+            My name is Lena. Last year, I completed the JSFE course. I already have some work experience — I was part of an infrastructure team at an IT company in Russia. 
+            I was responsible for building a React component library. The work was quite specific with many nuances. 
+            However, I didn’t work with many tools — there was no interaction with the backend, I had no experience with Next.js, among other things.
+            Six months ago, I moved to Croatia and left my job. I decided to continue learning and explore the tools I hadn’t worked with before.
             </p>
           </a>
 
@@ -100,8 +101,8 @@ const MainPage: React.FC = () => {
             />
             <span>Mayskii</span>
             <p className="author-description">
-{/*TODO Authors Section -  write a description */}
-              we need to fill out this section and write some information about the team member.
+            My name is Maya, and I am in the process of learning to become a developer. I currently live in the USA and am working through the JSFE course, as well as taking the React course from RSSchool.
+            My goal is to continue growing as a developer and eventually work on building complex, full-stack applications.
             </p>
           </a>
         </div>
