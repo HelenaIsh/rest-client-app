@@ -43,16 +43,16 @@ const HeaderEditor = ({
     <table className="w-full border-collapse">
       <thead>
         <tr>
-          <th className="border p-2 text-left">Key</th>
-          <th className="border p-2 text-left">Value</th>
-          <th className="border p-2 text-left w-10">Enabled</th>
-          <th className="border p-2 text-left w-10">Delete</th>
+          <th className="border border-gray-300 p-2 text-left">Key</th>
+          <th className="border border-gray-300 p-2 text-left">Value</th>
+          <th className="border border-gray-300 p-2 text-left w-10">Enabled</th>
+          <th className="border border-gray-300 p-2 text-left w-10">Delete</th>
         </tr>
       </thead>
       <tbody>
         {headers.map((header) => (
           <tr key={header.id} className="hover:bg-gray-50">
-            <td className="border p-1">
+            <td className="border border-gray-300 p-1">
               <input
                 type="text"
                 value={header.key}
@@ -61,7 +61,7 @@ const HeaderEditor = ({
                 placeholder="key"
               />
             </td>
-            <td className="border p-1">
+            <td className="border border-gray-300 p-1">
               <input
                 type="text"
                 value={header.value}
@@ -72,7 +72,7 @@ const HeaderEditor = ({
                 placeholder="value"
               />
             </td>
-            <td className="border p-1 text-center">
+            <td className="border border-gray-300 p-1 text-center">
               <input
                 type="checkbox"
                 checked={header.enabled}
@@ -80,7 +80,7 @@ const HeaderEditor = ({
                 className="h-4 w-4"
               />
             </td>
-            <td className="border p-1 text-center">
+            <td className="border border-gray-300 p-1 text-center">
               {headers.length > 1 && (
                 <button
                   onClick={() => deleteRow(header.id)}
