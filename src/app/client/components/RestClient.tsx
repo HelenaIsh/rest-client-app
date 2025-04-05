@@ -46,6 +46,15 @@ const handleResponse = async (response: Response) => {
   return { data, detectedLanguage };
 };
 
+const getStatusColor = (status?: number) => {
+  if (!status) return 'text-gray-500';
+  if (status >= 200 && status < 300) return 'text-green-600';
+  if (status >= 300 && status < 400) return 'text-blue-600';
+  if (status >= 400 && status < 500) return 'text-yellow-600';
+  if (status >= 500) return 'text-red-600';
+  return 'text-gray-500';
+};
+
 export default function RestClient() {
   const [endpointUrl, setEndpointUrl] = useState('');
   const [selectedMethod, setSelectedMethod] =
@@ -142,7 +151,9 @@ export default function RestClient() {
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
         <p className={'text-lg m-4'}>Response</p>
-        <p>{responseStatus}</p>
+        <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
+          {responseStatus ? `HTTP ${responseStatus}` : 'No response yet'}
+        </p>{' '}
         <div className="border border-gray-300 rounded-md">
           <CodeMirror
             value={responseData as string}
