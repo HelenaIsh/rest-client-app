@@ -5,7 +5,7 @@ import MethodSelector, {
 } from '@/app/client/components/MethodSelector';
 import EndpointInput from '@/app/client/components/EndpointInput';
 import SendButton from '@/app/client/components/SendButton';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Header } from '@/types';
 import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
 import HeaderEditor from '@/app/client/components/HeaderEditor';
@@ -81,7 +81,7 @@ export default function RestClient({
   initialBody?: string;
   initialHeaders?: Header[];
 }) {
-  const [endpointUrl, setEndpointUrl] = useState(initialUrl);
+  const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl as string);
   const [selectedMethod, setSelectedMethod] = useState<
     (typeof methods)[number]
   >(initialMethod as (typeof methods)[number]);
@@ -97,37 +97,45 @@ export default function RestClient({
 
   const router = useRouter();
 
+  useEffect(() => {
+    const myFetch = async () => {
+      const requestHeaders = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        ...getFilteredHeaders(headers),
+      };
+      const options: RequestInit = {
+        method: selectedMethod,
+        headers: requestHeaders,
+        ...(selectedMethod !== 'GET' &&
+          selectedMethod !== 'HEAD' && { body: requestBody }),
+      };
+
+      try {
+        const response = await fetch(endpointUrl, options);
+        setResponseStatus(response.status);
+        const { data, detectedLanguage } = await handleResponse(response);
+        setResponseData(data);
+        setLanguage(detectedLanguage);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // setResponseData(`Request failed: ${error}`);
+      }
+    };
+
+    myFetch();
+  }, []);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!endpointUrl) {
       alert('Invalid or missing endpoint URL');
       return;
     }
-    const requestHeaders = {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      ...getFilteredHeaders(headers),
-    };
-    const options: RequestInit = {
-      method: selectedMethod,
-      headers: requestHeaders,
-      ...(selectedMethod !== 'GET' &&
-        selectedMethod !== 'HEAD' && { body: requestBody }),
-    };
 
-    try {
-      const response = await fetch(endpointUrl, options);
-      setResponseStatus(response.status);
-      const { data, detectedLanguage } = await handleResponse(response);
-      setResponseData(data);
-      setLanguage(detectedLanguage);
-      router.push(
-        buildRequestUrl(endpointUrl, selectedMethod, requestBody!, headers)
-      );
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      // setResponseData(`Request failed: ${error}`);
-    }
+    router.push(
+      buildRequestUrl(endpointUrl, selectedMethod, requestBody!, headers)
+    );
   };
 
   const tabs = [
