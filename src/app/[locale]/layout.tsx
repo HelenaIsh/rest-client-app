@@ -4,25 +4,33 @@ import { routing } from '@/i18n/routing';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+
 type Props = {
-  children: React.ReactNode;
-  params: { locale: string };
-};
+    children: React.ReactNode;
+    params: Promise<{ locale: string }>;
+  };
+  
+  export default async function LocaleLayout({ children, params }: Props) {
 
-export default async function LocaleLayout({ children, params }: Props) {
-  const { locale } = params;
-
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
+    const { locale } = await params;
+  
+    if (!hasLocale(routing.locales, locale)) {
+      notFound();
+    }
+  
+    let messages: Record<string, string>;
+    try {
+      messages = (await import(`../../../messages/${locale}.json`)).default;
+    } catch (error) {
+      console.error('error:', error);
+      notFound();
+    }
+  
+    return (
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <Header isAuthenticated={false} />
+        <main className="main-content">{children}</main>
+        <Footer />
+      </NextIntlClientProvider>
+    );
   }
-
-  const messages = (await import(`../../../messages/${locale}.json`)).default;
-
-  return (
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <Header isAuthenticated={false} />
-          <main className="main-content">{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
-  );
-}

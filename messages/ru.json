@@ -20,5 +20,13 @@
   "Footer": {
     "developedBy": "Разработано командой:",
     "copyright": "Авторские права"
+  },
+  "History": {
+    "title": "История",
+    "description": "Это страница истории"
+  },
+  "Variables": {
+    "title": "Переменные",
+    "description": "Это страница переменных"
   }
 }

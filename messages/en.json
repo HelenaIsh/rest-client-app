@@ -20,6 +20,14 @@
     "Footer": {
         "developedBy": "Developed by the team:",
          "copyright": "Copyright"
+    },
+    "History": {
+        "title": "History",
+        "description": "This is the history page"
+    },
+    "Variables": {
+        "title": "Variables",
+        "description": "This is the variables page"
     }
 }
 
