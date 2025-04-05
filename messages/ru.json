@@ -28,5 +28,13 @@
   "Variables": {
     "title": "Переменные",
     "description": "Это страница переменных"
+  },
+  "SignInPage": {
+    "title": "Страница входа",
+    "description": "Это страница входа"
+  },
+  "SignUpPage": {
+    "title": "Страница регистрации",
+    "description": "Это страница регистрации"
   }
 }

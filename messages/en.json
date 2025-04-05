@@ -25,9 +25,13 @@
         "title": "History",
         "description": "This is the history page"
     },
-    "Variables": {
-        "title": "Variables",
-        "description": "This is the variables page"
+    "SignInPage": {
+        "title": "SignInPage",
+        "description": "This is the SignInPages page"
+    },
+    "SignUpPage": {
+        "title": "SignUpPage",
+        "description": "This is the SignUpPage page"
     }
 }
 
