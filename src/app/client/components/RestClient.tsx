@@ -63,7 +63,7 @@ export default function RestClient() {
   const [headers, setHeaders] = useState<Header[]>([
     { id: 1, key: '', value: '', enabled: false },
   ]);
-  const [responseData, setResponseData] = useState<unknown>('');
+  const [responseData, setResponseData] = useState<string>('');
   const [responseStatus, setResponseStatus] = useState<number | undefined>();
   const [language, setLanguage] = useState<unknown>(null);
   const [toast, setToast] = useState<{
