@@ -1,25 +1,28 @@
-import {NextIntlClientProvider, hasLocale} from 'next-intl';
-import {notFound} from 'next/navigation';
-import {routing} from '@/i18n/routing';
- 
-export default async function LocaleLayout({
-  children,
-  params
-}: {
+import { notFound } from 'next/navigation';
+import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { routing } from '@/i18n/routing';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
+type Props = {
   children: React.ReactNode;
-  params: Promise<{locale: string}>;
-}) {
-  // Ensure that the incoming `locale` is valid
-  const {locale} = await params;
+  params: { locale: string };
+};
+
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = params;
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
- 
+
+  const messages = (await import(`../../../messages/${locale}.json`)).default;
+
   return (
-    <html lang={locale}>
-      <body>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
-      </body>
-    </html>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Header isAuthenticated={false} />
+          <main className="main-content">{children}</main>
+          <Footer />
+        </NextIntlClientProvider>
   );
 }

@@ -1,11 +1,12 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 
 const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
+  const locale = useLocale();
   const isAuthenticated = true;
   //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of the main page — we need to connect the Authentication!
 
@@ -17,10 +18,10 @@ const MainPage: React.FC = () => {
         <div className="welcome-section">
           <h1 className="welcome-sign">{t('welcome')}</h1>
           <div className="auth-links">
-            <Link href="/signin" className="btn">
+          <Link href={`/${locale}/signin`} className="btn">
             {t('signIn')}
             </Link>
-            <Link href="/signup" className="btn">
+            <Link href={`/${locale}/signup`} className="btn">
             {t('signUp')}
             </Link>
           </div>
@@ -29,13 +30,13 @@ const MainPage: React.FC = () => {
         <div className="welcome-section">
           <h1 className="welcome-sign">{t('welcomeBack')}</h1>
           <div className="client-links">
-            <Link href="/client" className="btn">
+          <Link href={`/${locale}/client`} className="btn">
             {t('restClient')}
             </Link>
-            <Link href="/history" className="btn">
+            <Link href={`/${locale}/history`} className="btn">
             {t('history')}
             </Link>
-            <Link href="/variables" className="btn">
+            <Link href={`/${locale}/variables`} className="btn">
             {t('variables')}
             </Link>
           </div>
