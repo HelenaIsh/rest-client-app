@@ -15,6 +15,7 @@ import { json } from '@codemirror/lang-json';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { EditorView } from '@codemirror/view';
+import Toast from '@/components/Toast';
 
 const getFilteredHeaders = (headers: Header[]): Record<string, string> => {
   return headers.reduce(
@@ -56,18 +57,23 @@ export default function RestClient() {
   const [responseData, setResponseData] = useState<unknown>('');
   const [responseStatus, setResponseStatus] = useState<number | undefined>();
   const [language, setLanguage] = useState<unknown>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+  } | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!endpointUrl) {
-      alert('Invalid or missing endpoint URL');
+      setToast({ message: 'Invalid or missing endpoint URL', type: 'error' });
       return;
     }
     const requestHeaders = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      Accept: 'application/json',
       ...getFilteredHeaders(headers),
-    };    const options: RequestInit = {
+    };
+    const options: RequestInit = {
       method: selectedMethod,
       headers: requestHeaders,
       ...(selectedMethod !== 'GET' &&
@@ -82,8 +88,14 @@ export default function RestClient() {
       setResponseData(data);
       setLanguage(detectedLanguage);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      setResponseData(`Request failed: ${error}`);
+      let errorMessage = 'An error occurred';
+
+      if (error instanceof TypeError) {
+        errorMessage = 'Network error: Failed to connect to the server';
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      setToast({ message: errorMessage, type: 'error' });
     }
   };
 
@@ -106,7 +118,14 @@ export default function RestClient() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
       <div className="bg-white rounded-lg shadow p-6">
         <form onSubmit={handleSubmit}>
           <div className="flex items-stretch">
@@ -125,15 +144,15 @@ export default function RestClient() {
         <p className={'text-lg m-4'}>Response</p>
         <p>{responseStatus}</p>
         <div className="border border-gray-300 rounded-md">
-        <CodeMirror
-          value={responseData as string}
-          extensions={
-            language ? [language as Extension] : [EditorView.lineWrapping]
-          }
-          readOnly={true}
-          height="250px"
-          className="text-sm"
-        />
+          <CodeMirror
+            value={responseData as string}
+            extensions={
+              language ? [language as Extension] : [EditorView.lineWrapping]
+            }
+            readOnly={true}
+            height="250px"
+            className="text-sm"
+          />
         </div>
       </div>
     </div>
