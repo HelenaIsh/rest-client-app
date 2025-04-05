@@ -6,7 +6,7 @@ import { EditorView } from '@codemirror/view';
 type ContentType = 'json' | 'text';
 
 interface RequestBodyEditorProps {
-  requestBody: string;
+  requestBody?: string;
   setRequestBody: (content: string) => void;
 }
 

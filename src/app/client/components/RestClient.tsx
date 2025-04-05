@@ -81,13 +81,16 @@ export default function RestClient({
   initialBody?: string;
   initialHeaders?: Header[];
 }) {
-  const [endpointUrl, setEndpointUrl] = useState('');
-  const [selectedMethod, setSelectedMethod] =
-    useState<(typeof methods)[number]>('GET');
-  const [requestBody, setRequestBody] = useState('{}');
-  const [headers, setHeaders] = useState<Header[]>([
-    { id: 1, key: '', value: '', enabled: false },
-  ]);
+  const [endpointUrl, setEndpointUrl] = useState(initialUrl);
+  const [selectedMethod, setSelectedMethod] = useState<
+    (typeof methods)[number]
+  >(initialMethod as (typeof methods)[number]);
+  const [requestBody, setRequestBody] = useState(initialBody);
+  const [headers, setHeaders] = useState<Header[]>(
+    initialHeaders && initialHeaders.length > 1
+      ? initialHeaders
+      : [{ id: 1, key: '', value: '', enabled: false }]
+  );
   const [responseData, setResponseData] = useState<unknown>('');
   const [responseStatus, setResponseStatus] = useState<number | undefined>();
   const [language, setLanguage] = useState<unknown>(null);
@@ -119,7 +122,7 @@ export default function RestClient({
       setResponseData(data);
       setLanguage(detectedLanguage);
       router.push(
-        buildRequestUrl(endpointUrl, selectedMethod, requestBody, headers)
+        buildRequestUrl(endpointUrl, selectedMethod, requestBody!, headers)
       );
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -133,7 +136,7 @@ export default function RestClient({
       label: 'Body',
       content: (
         <RequestBodyEditor
-          requestBody={initialBody || requestBody}
+          requestBody={requestBody}
           setRequestBody={setRequestBody}
         />
       ),
@@ -141,12 +144,7 @@ export default function RestClient({
     {
       id: 'headers',
       label: 'Headers',
-      content: (
-        <HeaderEditor
-          headers={initialHeaders || headers}
-          setHeaders={setHeaders}
-        />
-      ),
+      content: <HeaderEditor headers={headers} setHeaders={setHeaders} />,
     },
   ];
 
@@ -156,11 +154,11 @@ export default function RestClient({
         <form onSubmit={handleSubmit}>
           <div className="flex items-stretch">
             <EndpointInput
-              endpointUrl={initialUrl || endpointUrl}
+              endpointUrl={endpointUrl}
               setEndpointUrl={setEndpointUrl}
             />
             <MethodSelector
-              selectedMethod={initialMethod || selectedMethod}
+              selectedMethod={selectedMethod}
               setSelectedMethod={setSelectedMethod}
             />
             <SendButton />
