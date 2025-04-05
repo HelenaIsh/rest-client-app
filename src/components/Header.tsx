@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { toggleToOtherLocale } from '../i18n/locale-utils';
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -44,8 +45,8 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
   }, []);
 
   const toggleLocale = () => {
-    const newLocale = locale === 'en' ? 'ru' : 'en';
-    router.push(`/${newLocale}${pathname}`);
+    const newPath = toggleToOtherLocale(locale, pathname);
+    router.push(newPath);
   };
 
   return (
