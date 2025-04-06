@@ -2,14 +2,14 @@
 
 import MethodSelector, {
   methods,
-} from '@/app/client/components/MethodSelector';
-import EndpointInput from '@/app/client/components/EndpointInput';
-import SendButton from '@/app/client/components/SendButton';
+} from '@components/MethodSelector';
+import EndpointInput from '@components/EndpointInput';
+import SendButton from '@components/SendButton';
 import { FormEvent, useState } from 'react';
 import { Header } from '@/types';
-import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
-import HeaderEditor from '@/app/client/components/HeaderEditor';
-import Tabs from '@/app/client/components/Tabs';
+import RequestBodyEditor from '@components/RequestBodyEditor';
+import HeaderEditor from '@components/HeaderEditor';
+import Tabs from '@components/Tabs';
 
 export default function RestClient() {
   const [endpointUrl, setEndpointUrl] = useState('');

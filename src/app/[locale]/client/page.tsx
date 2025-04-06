@@ -1,8 +1,14 @@
 import dynamic from 'next/dynamic';
+import { useTranslations } from 'next-intl';
 
 const RestClient = dynamic(() => import('./components/RestClient'), {
-  loading: () => <div>Loading REST Client...</div>,
+  loading: () => <Loading />,
 });
+
+const Loading = () => {
+  const t = useTranslations('RestClient');
+  return <div>{t('loading')}</div>;
+}
 
 export default function Client() {
   return (

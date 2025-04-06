@@ -36,6 +36,9 @@
     "SignUpPage": {
         "title": "SignUpPage",
         "description": "This is the SignUpPage page"
+    },
+    "RestClient": {
+        "loading": "Loading REST Client..."
     }
 }
 
