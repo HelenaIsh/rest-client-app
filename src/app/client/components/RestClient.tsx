@@ -81,13 +81,13 @@ export default function RestClient({
   initialBody?: string;
   initialHeaders?: Header[];
 }) {
-  const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl as string);
+  const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl || '');
   const [selectedMethod, setSelectedMethod] = useState<
     (typeof methods)[number]
-  >(initialMethod as (typeof methods)[number]);
-  const [requestBody, setRequestBody] = useState(initialBody);
+  >(initialMethod || 'GET');
+  const [requestBody, setRequestBody] = useState(initialBody || '{}');
   const [headers, setHeaders] = useState<Header[]>(
-    initialHeaders && initialHeaders.length > 1
+    initialHeaders && initialHeaders.length > 0
       ? initialHeaders
       : [{ id: 1, key: '', value: '', enabled: false }]
   );
@@ -98,6 +98,7 @@ export default function RestClient({
   const router = useRouter();
 
   useEffect(() => {
+    if (!initialMethod && !initialUrl) return;
     const myFetch = async () => {
       const requestHeaders = {
         'Content-Type': 'application/json',
