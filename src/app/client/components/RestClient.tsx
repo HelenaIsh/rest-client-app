@@ -74,8 +74,14 @@ export default function RestClient({
         setResponseData(data);
         setLanguage(detectedLanguage);
       } catch (error) {
-        console.error('Error fetching data:', error);
-        // setResponseData(`Request failed: ${error}`);
+        let errorMessage = 'An error occurred';
+
+        if (error instanceof TypeError) {
+          errorMessage = 'Network error: Failed to connect to the server';
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        setToast({ message: errorMessage, type: 'error' });
       }
     };
 
