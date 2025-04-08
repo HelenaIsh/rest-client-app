@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { VariablesProvider } from './context/VariablesContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,16 +25,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isAuthenticated = false; // no authorization yet
+  const isAuthenticated = true; // no authorization yet
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header isAuthenticated={isAuthenticated} />
-        <main className="main-content">{children}</main>
-        <Footer />
+        <VariablesProvider>
+          <Header isAuthenticated={isAuthenticated} />
+          <main className="main-content">{children}</main>
+          <Footer />
+        </VariablesProvider>
       </body>
     </html>
   );

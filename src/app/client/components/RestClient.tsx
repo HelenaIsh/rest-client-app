@@ -20,6 +20,7 @@ import {
   getStatusColor,
   handleResponse,
 } from '@/app/client/utils/utils';
+import { useVariables } from '@/app/context/VariablesContext';
 
 export default function RestClient({
   initialMethod,
@@ -32,6 +33,7 @@ export default function RestClient({
   initialBody?: string;
   initialHeaders?: Header[];
 }) {
+  const { substituteVariables } = useVariables();
   const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl || '');
   const [selectedMethod, setSelectedMethod] = useState<
     (typeof methods)[number]
@@ -55,20 +57,53 @@ export default function RestClient({
   useEffect(() => {
     if (!initialMethod && !initialUrl) return;
     const myFetch = async () => {
+      const urlResult = substituteVariables(endpointUrl);
+      const bodyResult = substituteVariables(requestBody);
+      const headersResult = Object.entries(getFilteredHeaders(headers)).reduce<{
+        headers: Record<string, string>;
+        missingVariables: string[];
+      }>(
+        (acc, [key, value]) => {
+          const { result, missingVariables } = substituteVariables(value);
+          return {
+            headers: { ...acc.headers, [key]: result },
+            missingVariables: [...acc.missingVariables, ...missingVariables],
+          };
+        },
+        { headers: {}, missingVariables: [] }
+      );
+
+      const allMissingVariables = [
+        ...urlResult.missingVariables,
+        ...bodyResult.missingVariables,
+        ...headersResult.missingVariables,
+      ];
+
+      if (allMissingVariables.length > 0) {
+        setToast({
+          message: `Missing variables: ${allMissingVariables.join(', ')}`,
+          type: 'error',
+        });
+        return;
+      }
+
       const requestHeaders = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        ...getFilteredHeaders(headers),
+        ...headersResult.headers,
       };
+
       const options: RequestInit = {
         method: selectedMethod,
         headers: requestHeaders,
         ...(selectedMethod !== 'GET' &&
-          selectedMethod !== 'HEAD' && { body: requestBody }),
+          selectedMethod !== 'HEAD' && {
+            body: bodyResult.result,
+          }),
       };
 
       try {
-        const response = await fetch(endpointUrl, options);
+        const response = await fetch(urlResult.result, options);
         setResponseStatus(response.status);
         const { data, detectedLanguage } = await handleResponse(response);
         setResponseData(data);
@@ -95,8 +130,39 @@ export default function RestClient({
       return;
     }
 
+    const urlResult = substituteVariables(endpointUrl);
+    const bodyResult = substituteVariables(requestBody!);
+    const headersWithSubstitutions = headers.map((header) => {
+      const { result } = substituteVariables(header.value);
+      return {
+        ...header,
+        value: result,
+      };
+    });
+
+    const allMissingVariables = [
+      ...urlResult.missingVariables,
+      ...bodyResult.missingVariables,
+      ...headersWithSubstitutions.flatMap(
+        (header) => substituteVariables(header.value).missingVariables
+      ),
+    ];
+
+    if (allMissingVariables.length > 0) {
+      setToast({
+        message: `Missing variables: ${allMissingVariables.join(', ')}`,
+        type: 'error',
+      });
+      return;
+    }
+
     router.push(
-      buildRequestUrl(endpointUrl, selectedMethod, requestBody!, headers)
+      buildRequestUrl(
+        urlResult.result,
+        selectedMethod,
+        bodyResult.result,
+        headersWithSubstitutions
+      )
     );
   };
 
