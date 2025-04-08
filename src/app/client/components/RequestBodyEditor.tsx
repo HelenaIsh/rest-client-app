@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { json } from '@codemirror/lang-json';
 import { EditorView } from '@codemirror/view';
 
 type ContentType = 'json' | 'text';
@@ -61,11 +61,11 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
   };
 
   const extensions =
-    contentType === 'json' ? [javascript()] : [EditorView.lineWrapping];
+    contentType === 'json' ? [json()] : [EditorView.lineWrapping];
 
   return (
     <div className={'border border-gray-300 rounded-md overflow-hidden '}>
-      <div className="flex justify-between items-center p-2 border border-gray-300">
+      <div className="flex justify-between items-center p-2">
         <div className="flex gap-4 ">
           <label className="flex items-center gap-1 cursor-pointer ">
             <input
@@ -113,7 +113,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
           value={content}
           extensions={extensions}
           onChange={handleContentChange}
-          height="300px"
+          height="250px"
           className="text-sm"
         />
       </div>
