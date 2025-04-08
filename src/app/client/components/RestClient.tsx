@@ -15,34 +15,11 @@ import { EditorView } from '@codemirror/view';
 import { useRouter } from 'next/navigation';
 import Toast from '@/components/Toast';
 import {
+  buildRequestUrl,
   getFilteredHeaders,
   getStatusColor,
   handleResponse,
 } from '@/app/client/utils/utils';
-
-const buildRequestUrl = (
-  endpointUrl: string,
-  selectedMethod: (typeof methods)[number],
-  requestBody: string,
-  headers: Header[]
-) => {
-  const encodedUrl = btoa(endpointUrl);
-  let path = `/client/${selectedMethod}/${encodedUrl}`;
-
-  if (selectedMethod !== 'GET' && selectedMethod !== 'HEAD') {
-    const encodedBody = btoa(requestBody);
-    path += `/${encodedBody}`;
-  }
-
-  const params = new URLSearchParams();
-  headers.forEach((h) => {
-    if (h.enabled && h.key) {
-      params.append(h.key, h.value);
-    }
-  });
-
-  return `${path}?${params.toString()}`;
-};
 
 export default function RestClient({
   initialMethod,

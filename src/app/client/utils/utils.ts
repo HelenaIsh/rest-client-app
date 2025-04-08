@@ -3,6 +3,7 @@ import { Extension } from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { javascript } from '@codemirror/lang-javascript';
+import { methods } from '@/app/client/components/MethodSelector';
 
 export const getFilteredHeaders = (
   headers: Header[]
@@ -42,4 +43,28 @@ export const getStatusColor = (status?: number) => {
   if (status >= 400 && status < 500) return 'text-yellow-600';
   if (status >= 500) return 'text-red-600';
   return 'text-gray-500';
+};
+
+export const buildRequestUrl = (
+  endpointUrl: string,
+  selectedMethod: (typeof methods)[number],
+  requestBody: string,
+  headers: Header[]
+) => {
+  const encodedUrl = btoa(endpointUrl);
+  let path = `/client/${selectedMethod}/${encodedUrl}`;
+
+  if (selectedMethod !== 'GET' && selectedMethod !== 'HEAD') {
+    const encodedBody = btoa(requestBody);
+    path += `/${encodedBody}`;
+  }
+
+  const params = new URLSearchParams();
+  headers.forEach((h) => {
+    if (h.enabled && h.key) {
+      params.append(h.key, h.value);
+    }
+  });
+
+  return `${path}?${params.toString()}`;
 };
