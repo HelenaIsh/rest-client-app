@@ -16,6 +16,12 @@ import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { EditorView } from '@codemirror/view';
 import { useRouter } from 'next/navigation';
+import Toast from '@/components/Toast';
+import {
+  getFilteredHeaders,
+  getStatusColor,
+  handleResponse,
+} from '@/app/client/utils/utils';
 
 const getFilteredHeaders = (headers: Header[]): Record<string, string> => {
   return headers.reduce(
@@ -94,6 +100,10 @@ export default function RestClient({
   const [responseData, setResponseData] = useState<unknown>('');
   const [responseStatus, setResponseStatus] = useState<number | undefined>();
   const [language, setLanguage] = useState<unknown>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'info';
+  } | null>(null);
 
   const router = useRouter();
 
@@ -130,7 +140,7 @@ export default function RestClient({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!endpointUrl) {
-      alert('Invalid or missing endpoint URL');
+      setToast({ message: 'Invalid or missing endpoint URL', type: 'error' });
       return;
     }
 
@@ -158,7 +168,14 @@ export default function RestClient({
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
       <div className="bg-white rounded-lg shadow p-6">
         <form onSubmit={handleSubmit}>
           <div className="flex items-stretch">
@@ -175,7 +192,9 @@ export default function RestClient({
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
         <p className={'text-lg m-4'}>Response</p>
-        <p>{responseStatus}</p>
+        <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
+          {responseStatus ? `HTTP ${responseStatus}` : 'No response yet'}
+        </p>{' '}
         <div className="border border-gray-300 rounded-md">
           <CodeMirror
             value={responseData as string}
