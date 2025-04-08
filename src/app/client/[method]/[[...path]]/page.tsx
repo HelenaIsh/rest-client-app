@@ -1,9 +1,13 @@
 'use client';
 
-import RestClient from '@/app/client/components/RestClient';
 import { useParams, useSearchParams } from 'next/navigation';
 import { Header } from '@/types';
 import { methods } from '@/app/client/components/MethodSelector';
+import dynamic from 'next/dynamic';
+
+const RestClient = dynamic(() => import('../../components/RestClient'), {
+  loading: () => <div>Loading REST Client...</div>,
+});
 
 export default function RequestPage() {
   const params = useParams<{
