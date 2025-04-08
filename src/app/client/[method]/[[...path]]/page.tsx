@@ -26,7 +26,6 @@ export default function RequestPage() {
   searchParams.forEach((value, key) => {
     headers.push({ id: Date.now() + Math.random(), key, value, enabled: true });
   });
-  console.log(headers);
 
   return (
     <div className="w-full h-full max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col ">
