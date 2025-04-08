@@ -11,9 +11,6 @@ import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
 import HeaderEditor from '@/app/client/components/HeaderEditor';
 import Tabs from '@/app/client/components/Tabs';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
-import { json } from '@codemirror/lang-json';
-import { javascript } from '@codemirror/lang-javascript';
-import { html } from '@codemirror/lang-html';
 import { EditorView } from '@codemirror/view';
 import { useRouter } from 'next/navigation';
 import Toast from '@/components/Toast';
@@ -22,35 +19,6 @@ import {
   getStatusColor,
   handleResponse,
 } from '@/app/client/utils/utils';
-
-const getFilteredHeaders = (headers: Header[]): Record<string, string> => {
-  return headers.reduce(
-    (acc, { key, value, enabled }) => {
-      if (enabled && key) acc[key] = value;
-      return acc;
-    },
-    {} as Record<string, string>
-  );
-};
-
-const handleResponse = async (response: Response) => {
-  const contentType = response.headers.get('Content-Type') || '';
-  let detectedLanguage: Extension | null;
-  let data;
-
-  if (contentType.includes('application/json')) {
-    data = JSON.stringify(await response.json(), null, 2);
-    detectedLanguage = json();
-  } else if (contentType.includes('text/')) {
-    data = await response.text();
-    detectedLanguage = html();
-  } else {
-    data = await response.text();
-    detectedLanguage = javascript();
-  }
-
-  return { data, detectedLanguage };
-};
 
 const buildRequestUrl = (
   endpointUrl: string,
