@@ -103,7 +103,14 @@ export default function RestClient({
     };
 
     myFetch();
-  }, []);
+  }, [
+    endpointUrl,
+    headers,
+    initialMethod,
+    initialUrl,
+    requestBody,
+    selectedMethod,
+  ]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

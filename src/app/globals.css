@@ -43,7 +43,6 @@ body {
   padding: 0;
   display: flex;
   flex-direction: column;
-
 }
 
 h1,
@@ -217,7 +216,7 @@ h6 {
 /* Main Page */
 .main-container {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: stretch;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
   width: 85%;
@@ -280,7 +279,7 @@ h6 {
   margin-bottom: 10px;
 }
 
-.author-description{
+.author-description {
   margin-top: 10px;
 }
 
@@ -288,7 +287,8 @@ h6 {
   transform: scale(1.1);
 }
 
-.authors-content, .app-content {
+.authors-content,
+.app-content {
   width: 100%;
 }
 
@@ -320,9 +320,7 @@ h6 {
   width: 100%;
 }
 
-
 @media (max-width: 1100px) {
-
   .main-container {
     width: 100%;
     justify-content: space-around;
@@ -347,7 +345,6 @@ h6 {
 }
 
 @media (max-width: 850px) {
-
   .main-content {
     padding: 10px;
   }
@@ -364,7 +361,7 @@ h6 {
     height: 80px;
   }
 
-  .footer-github-article{
+  .footer-github-article {
     display: none;
-  }  
+  }
 }
