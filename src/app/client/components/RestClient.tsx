@@ -57,40 +57,10 @@ export default function RestClient({
   useEffect(() => {
     if (!initialMethod && !initialUrl) return;
     const myFetch = async () => {
-      const urlResult = substituteVariables(endpointUrl);
-      const bodyResult = substituteVariables(requestBody);
-      const headersResult = Object.entries(getFilteredHeaders(headers)).reduce<{
-        headers: Record<string, string>;
-        missingVariables: string[];
-      }>(
-        (acc, [key, value]) => {
-          const { result, missingVariables } = substituteVariables(value);
-          return {
-            headers: { ...acc.headers, [key]: result },
-            missingVariables: [...acc.missingVariables, ...missingVariables],
-          };
-        },
-        { headers: {}, missingVariables: [] }
-      );
-
-      const allMissingVariables = [
-        ...urlResult.missingVariables,
-        ...bodyResult.missingVariables,
-        ...headersResult.missingVariables,
-      ];
-
-      if (allMissingVariables.length > 0) {
-        setToast({
-          message: `Missing variables: ${allMissingVariables.join(', ')}`,
-          type: 'error',
-        });
-        return;
-      }
-
       const requestHeaders = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        ...headersResult.headers,
+        ...getFilteredHeaders(headers),
       };
 
       const options: RequestInit = {
@@ -98,12 +68,12 @@ export default function RestClient({
         headers: requestHeaders,
         ...(selectedMethod !== 'GET' &&
           selectedMethod !== 'HEAD' && {
-            body: bodyResult.result,
+            body: requestBody,
           }),
       };
 
       try {
-        const response = await fetch(urlResult.result, options);
+        const response = await fetch(endpointUrl, options);
         setResponseStatus(response.status);
         const { data, detectedLanguage } = await handleResponse(response);
         setResponseData(data);
