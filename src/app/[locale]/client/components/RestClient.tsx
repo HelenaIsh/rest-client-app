@@ -1,7 +1,7 @@
 'use client';
 
 import MethodSelector, { methods } from '@components/MethodSelector';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState, useEffect } from 'react';
 import EndpointInput from '@components/EndpointInput';
 import SendButton from '@components/SendButton';
 import { Header } from '@/types';
@@ -68,14 +68,11 @@ export default function RestClient({
         Accept: 'application/json',
         ...getFilteredHeaders(headers),
       };
-
       const options: RequestInit = {
         method: selectedMethod,
         headers: requestHeaders,
         ...(selectedMethod !== 'GET' &&
-          selectedMethod !== 'HEAD' && {
-            body: requestBody,
-          }),
+          selectedMethod !== 'HEAD' && { body: requestBody }),
       };
 
       try {
@@ -105,6 +102,7 @@ export default function RestClient({
       setToast({ message: 'Invalid or missing endpoint URL', type: 'error' });
       return;
     }
+
     try {
       new URL(endpointUrl);
     } catch {
