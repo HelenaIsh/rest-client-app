@@ -1,49 +1,81 @@
 {
-    "MainPage": {
-      "welcome": "Welcome!",
-      "signIn": "Sign In",
-      "signUp": "Sign Up",
-      "welcomeBack": "Welcome Back, Username!",
-      "restClient": "REST Client",
-      "history": "History",
-      "variables": "Variables",
-      "ourTeam": "Our Team",
-      "alanDescription": "My name is Alan, and I am in the process of transitioning to a developer. I’ve completed a JavaScript Fullstack Developer course and am currently working on an RSSchool React course and an AWS Cloud Developer certification.",
-      "helenaDescription": "My name is Lena. Last year, I completed the JSFE course. I already have some work experience — I was part of an infrastructure team at an IT company in Russia. I was responsible for building a React component library. The work was quite specific with many nuances. However, I didn’t work with many tools — there was no interaction with the backend, I had no experience with Next.js, among other things. Six months ago, I moved to Croatia and left my job. I decided to continue learning and explore the tools I hadn’t worked with before.",
-      "mayaDescription": "My name is Maya, and I am in the process of learning to become a developer. I currently live in the USA and am working through the JSFE course, as well as taking the React course from RSSchool. My goal is to continue growing as a developer and eventually work on building complex, full-stack applications."
+  "MainPage": {
+    "welcome": "Welcome!",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "welcomeBack": "Welcome Back, Username!",
+    "restClient": "REST Client",
+    "history": "History",
+    "variables": "Variables",
+    "ourTeam": "Our Team",
+    "alanDescription": "My name is Alan, and I am in the process of transitioning to a developer. I’ve completed a JavaScript Fullstack Developer course and am currently working on an RSSchool React course and an AWS Cloud Developer certification.",
+    "helenaDescription": "My name is Lena. Last year, I completed the JSFE course. I already have some work experience — I was part of an infrastructure team at an IT company in Russia. I was responsible for building a React component library. The work was quite specific with many nuances. However, I didn’t work with many tools — there was no interaction with the backend, I had no experience with Next.js, among other things. Six months ago, I moved to Croatia and left my job. I decided to continue learning and explore the tools I hadn’t worked with before.",
+    "mayaDescription": "My name is Maya, and I am in the process of learning to become a developer. I currently live in the USA and am working through the JSFE course, as well as taking the React course from RSSchool. My goal is to continue growing as a developer and eventually work on building complex, full-stack applications."
+  },
+  "Header": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out"
+  },
+  "Footer": {
+    "developedBy": "Developed by the team:",
+    "copyright": "Copyright"
+  },
+  "History": {
+    "title": "History",
+    "description": "This is the history page"
+  },
+  "Variables": {
+    "title": "Variables",
+    "description": "This is the Variables page"
+  },
+  "SignInPage": {
+    "title": "SignInPage",
+    "description": "This is the SignInPages page"
+  },
+  "SignUpPage": {
+    "title": "SignUpPage",
+    "description": "This is the SignUpPage page"
+  },
+  "RestClient": {
+    "loading": "Loading REST Client...",
+    "invalidEndpointUrl": "Invalid or missing endpoint URL",
+    "genericError": "An error occurred",
+    "networkError": "Network error: Failed to connect to the server",
+    "body": "Body",
+    "headers": "Headers",
+    "response": "Response",
+    "noResponseYet": "No response yet"
+  },
+  "SendButton": {
+    "send": "Send"
+  },
+  "RequestBodyEditor": {
+    "type": {
+      "json": "JSON",
+      "text": "Plain Text"
     },
-    "Header": {
-        "signIn": "Sign In",
-        "signUp": "Sign Up",
-        "signOut": "Sign Out"
+    "actions": {
+      "prettify": "Prettify",
+      "clear": "Clear"
     },
-    "Footer": {
-        "developedBy": "Developed by the team:",
-         "copyright": "Copyright"
-    },
-    "History": {
-        "title": "History",
-        "description": "This is the history page"
-    },
-    "Variables": {
-        "title": "Variables",
-        "description": "This is the Variables page"
-    },
-    "SignInPage": {
-        "title": "SignInPage",
-        "description": "This is the SignInPages page"
-    },
-    "SignUpPage": {
-        "title": "SignUpPage",
-        "description": "This is the SignUpPage page"
-    },
-    "RestClient": {
-        "loading": "Loading REST Client..."
+    "errors": {
+      "invalidJson": "Invalid JSON format"
     }
+  },
+  "HeaderEditor": {
+    "table": {
+      "key": "Key",
+      "value": "Value",
+      "enabled": "Enabled",
+      "delete": "Delete"
+    },
+    "placeholders": {
+      "key": "Enter key",
+      "value": "Enter value"
+    },
+    "aria": {
+      "deleteRow": "Delete header row"
+    }
+  }
 }
-
-
-
-
-
-            

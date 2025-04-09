@@ -11,16 +11,16 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-javascript": "^6.2.3",
+    "@codemirror/lang-json": "^6.0.1",
+    "@uiw/react-codemirror": "^4.23.10",
     "autoprefixer": "^10.4.21",
     "next": "15.2.4",
     "next-intl": "^4.0.2",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "@codemirror/lang-javascript": "^6.2.3",
-    "@uiw/react-codemirror": "^4.23.10",
-    "@codemirror/lang-html": "^6.4.9",
-    "@codemirror/lang-json": "^6.0.1"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

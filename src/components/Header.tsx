@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
   const locale = useLocale();
   const t = useTranslations('Header');
 
-//TODO - Currently, onSignOut is not working.
+  //TODO - Currently, onSignOut is not working.
 
   const onSignOut = (): void => {
     console.log('Sign out clicked');
@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
 
       <nav className="nav">
         <button className="nav-link" onClick={toggleLocale}>
-        {locale === 'en' ? 'РУС' : 'EN'}
+          {locale === 'en' ? 'РУС' : 'EN'}
         </button>
 
         {isAuthenticated ? (
@@ -73,10 +73,10 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
         ) : (
           <>
             <Link href="/signin" className="nav-link">
-            {t('signIn')}
+              {t('signIn')}
             </Link>
             <Link href="/signup" className="nav-link">
-            {t('signUp')}
+              {t('signUp')}
             </Link>
           </>
         )}

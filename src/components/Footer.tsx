@@ -77,7 +77,7 @@ const Footer: React.FC = () => {
         </div>
 
         <p className="footer-copyright">
-        {t('copyright')} &copy; {new Date().getFullYear()}
+          {t('copyright')} &copy; {new Date().getFullYear()}
         </p>
       </div>
     </footer>

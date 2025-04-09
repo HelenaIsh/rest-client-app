@@ -38,6 +38,53 @@
     "description": "Это страница регистрации"
   },
   "RestClient": {
-    "loading": "Загрузка REST клиента..."
+    "loading": "Загрузка REST клиента...",
+    "invalidEndpointUrl": "Неверный или отсутствующий URL",
+    "genericError": "Произошла ошибка",
+    "networkError": "Сетевая ошибка: не удалось подключиться к серверу",
+    "body": "Тело",
+    "headers": "Заголовки",
+    "response": "Ответ",
+    "noResponseYet": "Ответ еще не получен"
+  },
+  "SendButton": {
+    "send": "Отправить"
+  },
+  "RequestBodyEditor": {
+    "type": {
+      "json": "JSON",
+      "text": "Обычный текст"
+    },
+    "actions": {
+      "prettify": "Форматировать",
+      "clear": "Очистить"
+    },
+    "errors": {
+      "invalidJson": "Неверный формат JSON"
+    }
+  },
+  "HeaderEditor": {
+    "table": {
+      "key": "Ключ",
+      "value": "Значение",
+      "enabled": "Вкл.",
+      "delete": "Удалить"
+    },
+    "placeholders": {
+      "key": "Введите ключ",
+      "value": "Введите значение"
+    },
+    "aria": {
+      "deleteRow": "Удалить строку заголовка"
+    }
+  },
+  "EndpointInput": {
+    "placeholder": "Введите URL",
+    "errors": {
+      "invalidUrl": "Неверный формат URL"
+    },
+    "aria": {
+      "endpointUrl": "Поле для ввода URL"
+    }
   }
 }

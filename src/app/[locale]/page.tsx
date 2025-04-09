@@ -12,39 +12,37 @@ const MainPage: React.FC = () => {
 
   return (
     <div className="main-container">
-
-<div className="app-content">
-      {!isAuthenticated ? (
-        <div className="welcome-section">
-          <h1 className="welcome-sign">{t('welcome')}</h1>
-          <div className="auth-links">
-          <Link href={`/${locale}/signin`} className="btn">
-            {t('signIn')}
-            </Link>
-            <Link href={`/${locale}/signup`} className="btn">
-            {t('signUp')}
-            </Link>
+      <div className="app-content">
+        {!isAuthenticated ? (
+          <div className="welcome-section">
+            <h1 className="welcome-sign">{t('welcome')}</h1>
+            <div className="auth-links">
+              <Link href={`/${locale}/signin`} className="btn">
+                {t('signIn')}
+              </Link>
+              <Link href={`/${locale}/signup`} className="btn">
+                {t('signUp')}
+              </Link>
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="welcome-section">
-          <h1 className="welcome-sign">{t('welcomeBack')}</h1>
-          <div className="client-links">
-          <Link href={`/${locale}/client`} className="btn">
-            {t('restClient')}
-            </Link>
-            <Link href={`/${locale}/history`} className="btn">
-            {t('history')}
-            </Link>
-            <Link href={`/${locale}/variables`} className="btn">
-            {t('variables')}
-            </Link>
+        ) : (
+          <div className="welcome-section">
+            <h1 className="welcome-sign">{t('welcomeBack')}</h1>
+            <div className="client-links">
+              <Link href={`/${locale}/client`} className="btn">
+                {t('restClient')}
+              </Link>
+              <Link href={`/${locale}/history`} className="btn">
+                {t('history')}
+              </Link>
+              <Link href={`/${locale}/variables`} className="btn">
+                {t('variables')}
+              </Link>
+            </div>
           </div>
-        </div>
-      )}
-
+        )}
       </div>
-{/*TODO Authors Section -  write a description */}
+      {/*TODO Authors Section -  write a description */}
       <div className="authors-content">
         <h2 className="authors-sign">{t('ourTeam')}</h2>
         <div className="authors">
@@ -62,11 +60,9 @@ const MainPage: React.FC = () => {
               className="author-img"
             />
             <span>Alan Kowalzky</span>
-            <p className="author-description">
-            {t('alanDescription')}
-            </p>
+            <p className="author-description">{t('alanDescription')}</p>
           </a>
-          
+
           <a
             href="https://github.com/HelenaIsh"
             target="_blank"
@@ -81,10 +77,7 @@ const MainPage: React.FC = () => {
               className="author-img"
             />
             <span>Helena Ish</span>
-            <p className="author-description">
-            {t('helenaDescription')}
-            
-            </p>
+            <p className="author-description">{t('helenaDescription')}</p>
           </a>
 
           <a
@@ -101,13 +94,10 @@ const MainPage: React.FC = () => {
               className="author-img"
             />
             <span>Mayskii</span>
-            <p className="author-description">
-            {t('mayaDescription')}
-            </p>
+            <p className="author-description">{t('mayaDescription')}</p>
           </a>
         </div>
       </div>
-
     </div>
   );
 };
