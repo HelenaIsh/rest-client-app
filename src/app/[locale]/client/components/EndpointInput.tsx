@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 export default function EndpointInput({
   endpointUrl,
   setEndpointUrl,
@@ -5,6 +7,8 @@ export default function EndpointInput({
   endpointUrl?: string;
   setEndpointUrl: (endpointUrl: string) => void;
 }) {
+  const t = useTranslations('EndpointInput');
+
   const isValid = (() => {
     try {
       return !!endpointUrl && new URL(endpointUrl);
@@ -20,8 +24,9 @@ export default function EndpointInput({
       type="text"
       value={endpointUrl}
       onChange={(e) => setEndpointUrl(e.target.value)}
-      placeholder={'Enter Endpoint URL'}
-      title={isValid ? '' : 'Invalid URL'}
+      placeholder={t('placeholder')}
+      title={isValid ? '' : t('errors.invalidUrl')}
+      aria-label={t('aria.endpointUrl')}
     />
   );
 }

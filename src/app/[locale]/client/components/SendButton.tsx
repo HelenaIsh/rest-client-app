@@ -1,4 +1,7 @@
+import { useTranslations } from 'next-intl';
+
 export default function SendButton() {
+  const t = useTranslations('SendButton');
   return (
     <button
       type="submit"
@@ -7,7 +10,7 @@ export default function SendButton() {
             active:bg-blue-200 active:text-blue-800
             transition-colors duration-150"
     >
-      Send
+      {t('send')}
     </button>
   );
 }

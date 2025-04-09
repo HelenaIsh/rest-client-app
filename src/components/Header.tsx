@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { toggleToOtherLocale } from '../i18n/locale-utils';
 
 interface HeaderProps {
   isAuthenticated: boolean;
@@ -13,6 +16,11 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
+
+  const pathname = usePathname();
+  const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations('Header');
 
   //TODO - Currently, onSignOut is not working.
 
@@ -36,6 +44,11 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
     };
   }, []);
 
+  const toggleLocale = () => {
+    const newPath = toggleToOtherLocale(locale, pathname);
+    router.push(newPath);
+  };
+
   return (
     <header className={`header ${isSticky ? 'sticky' : ''}`}>
       <Link href="/" className="logo">
@@ -49,19 +62,20 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
       </Link>
 
       <nav className="nav">
-        {/* TODO - Internationalization (i18n) */}
-        <button className="nav-link">EN / RU</button>
+                <button className="nav-link" onClick={toggleLocale}>
+          {locale === 'en' ? 'РУС' : 'EN'}
+        </button>
         {isAuthenticated ? (
           <Link href="#" onClick={onSignOut} className="nav-link">
-            Sign Out
+            {t('signOut')}
           </Link>
         ) : (
           <>
             <Link href="/signin" className="nav-link">
-              Sign In
+              {t('signIn')}
             </Link>
             <Link href="/signup" className="nav-link">
-              Sign Up
+              {t('signUp')}
             </Link>
           </>
         )}

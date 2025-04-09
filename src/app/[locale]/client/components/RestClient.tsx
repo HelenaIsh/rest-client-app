@@ -1,15 +1,10 @@
 'use client';
 
-import MethodSelector, {
-  methods,
-} from '@/app/client/components/MethodSelector';
-import EndpointInput from '@/app/client/components/EndpointInput';
-import SendButton from '@/app/client/components/SendButton';
-import React, { FormEvent, useEffect, useState } from 'react';
+import MethodSelector, { methods } from '@components/MethodSelector';
+import React, { FormEvent, useState, useEffect } from 'react';
+import EndpointInput from '@components/EndpointInput';
+import SendButton from '@components/SendButton';
 import { Header } from '@/types';
-import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
-import HeaderEditor from '@/app/client/components/HeaderEditor';
-import Tabs from '@/app/client/components/Tabs';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import { useRouter } from 'next/navigation';
@@ -19,8 +14,11 @@ import {
   getFilteredHeaders,
   getStatusColor,
   handleResponse,
-} from '@/app/client/utils/utils';
-import { useVariables } from '@/app/context/VariablesContext';
+} from '@/app/[locale]/client/utils/utils';
+import RequestBodyEditor from '@components/RequestBodyEditor';
+import HeaderEditor from '@components/HeaderEditor';
+import Tabs from '@components/Tabs';
+import { useTranslations } from 'next-intl';
 
 export default function RestClient({
   initialMethod,
@@ -33,7 +31,8 @@ export default function RestClient({
   initialBody?: string;
   initialHeaders?: Header[];
 }) {
-  const { substituteVariables } = useVariables();
+  const t = useTranslations('RestClient');
+
   const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl || '');
   const [selectedMethod, setSelectedMethod] = useState<
     (typeof methods)[number]
@@ -56,20 +55,23 @@ export default function RestClient({
 
   useEffect(() => {
     if (!initialMethod && !initialUrl) return;
+    try {
+      new URL(initialUrl!);
+    } catch {
+      setToast({ message: 'URL is incorrect', type: 'error' });
+      return;
+    }
     const myFetch = async () => {
       const requestHeaders = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
         ...getFilteredHeaders(headers),
       };
-
       const options: RequestInit = {
         method: selectedMethod,
         headers: requestHeaders,
         ...(selectedMethod !== 'GET' &&
-          selectedMethod !== 'HEAD' && {
-            body: requestBody,
-          }),
+          selectedMethod !== 'HEAD' && { body: requestBody }),
       };
 
       try {
@@ -79,10 +81,10 @@ export default function RestClient({
         setResponseData(data);
         setLanguage(detectedLanguage);
       } catch (error) {
-        let errorMessage = 'An error occurred';
+        let errorMessage = t('genericError');
 
         if (error instanceof TypeError) {
-          errorMessage = 'Network error: Failed to connect to the server';
+          errorMessage = t('networkError');
         } else if (error instanceof Error) {
           errorMessage = error.message;
         }
@@ -100,46 +102,22 @@ export default function RestClient({
       return;
     }
 
-    const urlResult = substituteVariables(endpointUrl);
-    const bodyResult = substituteVariables(requestBody!);
-    const headersWithSubstitutions = headers.map((header) => {
-      const { result } = substituteVariables(header.value);
-      return {
-        ...header,
-        value: result,
-      };
-    });
-
-    const allMissingVariables = [
-      ...urlResult.missingVariables,
-      ...bodyResult.missingVariables,
-      ...headersWithSubstitutions.flatMap(
-        (header) => substituteVariables(header.value).missingVariables
-      ),
-    ];
-
-    if (allMissingVariables.length > 0) {
-      setToast({
-        message: `Missing variables: ${allMissingVariables.join(', ')}`,
-        type: 'error',
-      });
+    try {
+      new URL(endpointUrl);
+    } catch {
+      setToast({ message: 'URL is incorrect', type: 'error' });
       return;
     }
 
     router.push(
-      buildRequestUrl(
-        urlResult.result,
-        selectedMethod,
-        bodyResult.result,
-        headersWithSubstitutions
-      )
+      buildRequestUrl(endpointUrl, selectedMethod, requestBody!, headers)
     );
   };
 
   const tabs = [
     {
       id: 'body',
-      label: 'Body',
+      label: t('body'),
       content: (
         <RequestBodyEditor
           requestBody={requestBody}
@@ -149,7 +127,7 @@ export default function RestClient({
     },
     {
       id: 'headers',
-      label: 'Headers',
+      label: t('headers'),
       content: <HeaderEditor headers={headers} setHeaders={setHeaders} />,
     },
   ];
@@ -178,9 +156,9 @@ export default function RestClient({
           </div>
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
-        <p className={'text-lg m-4'}>Response</p>
+        <p className={'text-lg m-4'}>{t('response')}</p>
         <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
-          {responseStatus ? `HTTP ${responseStatus}` : 'No response yet'}
+          {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
         </p>{' '}
         <div className="border border-gray-300 rounded-md">
           <CodeMirror
