@@ -77,5 +77,14 @@
     "aria": {
       "deleteRow": "Delete header row"
     }
+  },
+  "EndpointInput": {
+    "placeholder": "Enter Endpoint URL",
+    "errors": {
+      "invalidUrl": "Invalid URL"
+    },
+    "aria": {
+      "endpointUrl": "Endpoint URL input field"
+    }
   }
 }
