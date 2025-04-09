@@ -54,6 +54,12 @@ export default function RestClient({
 
   useEffect(() => {
     if (!initialMethod && !initialUrl) return;
+    try {
+      new URL(initialUrl!);
+    } catch {
+      setToast({ message: 'URL is incorrect', type: 'error' });
+      return;
+    }
     const myFetch = async () => {
       const requestHeaders = {
         'Content-Type': 'application/json',
@@ -92,6 +98,13 @@ export default function RestClient({
     e.preventDefault();
     if (!endpointUrl) {
       setToast({ message: 'Invalid or missing endpoint URL', type: 'error' });
+      return;
+    }
+
+    try {
+      new URL(endpointUrl);
+    } catch {
+      setToast({ message: 'URL is incorrect', type: 'error' });
       return;
     }
 
