@@ -12,7 +12,7 @@ import {
   getFilteredHeaders,
   getStatusColor,
   handleResponse,
-} from '@/app/client/utils/utils';
+} from '@/app/[locale]/client/utils/utils';
 import RequestBodyEditor from '@components/RequestBodyEditor';
 import HeaderEditor from '@components/HeaderEditor';
 import Tabs from '@components/Tabs';
