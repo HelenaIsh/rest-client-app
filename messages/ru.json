@@ -27,7 +27,11 @@
   },
   "Variables": {
     "title": "Переменные",
-    "description": "Это страница переменных"
+    "description": "Это страница переменных",
+    "variableNamePlaceholder": "Имя переменной",
+    "variableValuePlaceholder": "Значение переменной",
+    "addVariableButton": "Добавить переменную",
+    "deleteButton": "Удалить"
   },
   "SignInPage": {
     "title": "Страница входа",

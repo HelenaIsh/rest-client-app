@@ -27,7 +27,11 @@
   },
   "Variables": {
     "title": "Variables",
-    "description": "This is the Variables page"
+    "description": "This is the Variables page",
+    "variableNamePlaceholder": "Variable name",
+    "variableValuePlaceholder": "Variable value",
+    "addVariableButton": "Add Variable",
+    "deleteButton": "Delete"
   },
   "SignInPage": {
     "title": "SignInPage",

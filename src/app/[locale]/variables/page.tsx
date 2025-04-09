@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { useVariables } from '@/app/context/VariablesContext';
+import { useTranslations } from 'next-intl';
 
 export default function Variables() {
   const { variables, addVariable, removeVariable } = useVariables();
   const [newVariable, setNewVariable] = useState({ name: '', value: '' });
+  const t = useTranslations('Variables');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,13 +19,13 @@ export default function Variables() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Variables</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
 
       <form onSubmit={handleSubmit} className="mb-8">
         <div className="flex gap-4 mb-4">
           <input
             type="text"
-            placeholder="Variable name"
+            placeholder={t('variableNamePlaceholder')}
             value={newVariable.name}
             onChange={(e) =>
               setNewVariable((prev) => ({ ...prev, name: e.target.value }))
@@ -32,7 +34,7 @@ export default function Variables() {
           />
           <input
             type="text"
-            placeholder="Variable value"
+            placeholder={t('variableValuePlaceholder')}
             value={newVariable.value}
             onChange={(e) =>
               setNewVariable((prev) => ({ ...prev, value: e.target.value }))
@@ -43,7 +45,7 @@ export default function Variables() {
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            Add Variable
+            {t('addVariableButton')}
           </button>
         </div>
       </form>
@@ -64,7 +66,7 @@ export default function Variables() {
               onClick={() => removeVariable(variable.name)}
               className="px-3 py-1 text-red-500 hover:text-red-700"
             >
-              Delete
+              {t('deleteButton')}
             </button>
           </div>
         ))}
