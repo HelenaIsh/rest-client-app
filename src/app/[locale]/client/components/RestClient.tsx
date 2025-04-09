@@ -1,15 +1,10 @@
 'use client';
 
-import MethodSelector, {
-  methods,
-} from '@/app/client/components/MethodSelector';
-import EndpointInput from '@/app/client/components/EndpointInput';
-import SendButton from '@/app/client/components/SendButton';
+import MethodSelector, { methods } from '@components/MethodSelector';
 import React, { FormEvent, useState } from 'react';
+import EndpointInput from '@components/EndpointInput';
+import SendButton from '@components/SendButton';
 import { Header } from '@/types';
-import RequestBodyEditor from '@/app/client/components/RequestBodyEditor';
-import HeaderEditor from '@/app/client/components/HeaderEditor';
-import Tabs from '@/app/client/components/Tabs';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
 import Toast from '@/components/Toast';
@@ -17,9 +12,15 @@ import {
   getFilteredHeaders,
   getStatusColor,
   handleResponse,
-} from '@/app/client/utils/utils';
+} from '@/app/[locale]/client/utils/utils';
+import RequestBodyEditor from '@components/RequestBodyEditor';
+import HeaderEditor from '@components/HeaderEditor';
+import Tabs from '@components/Tabs';
+import { useTranslations } from 'next-intl';
 
 export default function RestClient() {
+  const t = useTranslations('RestClient');
+
   const [endpointUrl, setEndpointUrl] = useState('');
   const [selectedMethod, setSelectedMethod] =
     useState<(typeof methods)[number]>('GET');
@@ -38,7 +39,7 @@ export default function RestClient() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!endpointUrl) {
-      setToast({ message: 'Invalid or missing endpoint URL', type: 'error' });
+      setToast({ message: t('invalidEndpointUrl'), type: 'error' });
       return;
     }
     const requestHeaders = {
@@ -61,10 +62,10 @@ export default function RestClient() {
       setResponseData(data);
       setLanguage(detectedLanguage);
     } catch (error) {
-      let errorMessage = 'An error occurred';
+      let errorMessage = t('genericError');
 
       if (error instanceof TypeError) {
-        errorMessage = 'Network error: Failed to connect to the server';
+        errorMessage = t('networkError');
       } else if (error instanceof Error) {
         errorMessage = error.message;
       }
@@ -75,7 +76,7 @@ export default function RestClient() {
   const tabs = [
     {
       id: 'body',
-      label: 'Body',
+      label: t('body'),
       content: (
         <RequestBodyEditor
           requestBody={requestBody}
@@ -85,7 +86,7 @@ export default function RestClient() {
     },
     {
       id: 'headers',
-      label: 'Headers',
+      label: t('headers'),
       content: <HeaderEditor headers={headers} setHeaders={setHeaders} />,
     },
   ];
@@ -114,9 +115,9 @@ export default function RestClient() {
           </div>
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
-        <p className={'text-lg m-4'}>Response</p>
+        <p className={'text-lg m-4'}>{t('response')}</p>
         <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
-          {responseStatus ? `HTTP ${responseStatus}` : 'No response yet'}
+          {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
         </p>{' '}
         <div className="border border-gray-300 rounded-md">
           <CodeMirror
