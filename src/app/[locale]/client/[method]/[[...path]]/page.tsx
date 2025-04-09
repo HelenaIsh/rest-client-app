@@ -11,7 +11,7 @@ const RestClient = dynamic(() => import('../../components/RestClient'), {
 
 export default function RequestPage() {
   const params = useParams<{
-    path: string;
+    path: string[];
     method: (typeof methods)[number];
   }>();
   const searchParams = useSearchParams();
