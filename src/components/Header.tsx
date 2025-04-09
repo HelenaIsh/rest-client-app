@@ -65,7 +65,6 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
         <button className="nav-link" onClick={toggleLocale}>
           {locale === 'en' ? 'РУС' : 'EN'}
         </button>
-
         {isAuthenticated ? (
           <Link href="#" onClick={onSignOut} className="nav-link">
             {t('signOut')}

@@ -1,14 +1,16 @@
 'use client';
 
 import MethodSelector, { methods } from '@components/MethodSelector';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useEffect } from 'react';
 import EndpointInput from '@components/EndpointInput';
 import SendButton from '@components/SendButton';
 import { Header } from '@/types';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
+import { useRouter } from 'next/navigation';
 import Toast from '@/components/Toast';
 import {
+  buildRequestUrl,
   getFilteredHeaders,
   getStatusColor,
   handleResponse,
@@ -18,17 +20,30 @@ import HeaderEditor from '@components/HeaderEditor';
 import Tabs from '@components/Tabs';
 import { useTranslations } from 'next-intl';
 
-export default function RestClient() {
+export default function RestClient({
+  initialMethod,
+  initialUrl,
+  initialBody,
+  initialHeaders,
+}: {
+  initialMethod?: (typeof methods)[number];
+  initialUrl?: string;
+  initialBody?: string;
+  initialHeaders?: Header[];
+}) {
   const t = useTranslations('RestClient');
 
-  const [endpointUrl, setEndpointUrl] = useState('');
-  const [selectedMethod, setSelectedMethod] =
-    useState<(typeof methods)[number]>('GET');
-  const [requestBody, setRequestBody] = useState('{}');
-  const [headers, setHeaders] = useState<Header[]>([
-    { id: 1, key: '', value: '', enabled: false },
-  ]);
-  const [responseData, setResponseData] = useState<string>('');
+  const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl || '');
+  const [selectedMethod, setSelectedMethod] = useState<
+    (typeof methods)[number]
+  >(initialMethod || 'GET');
+  const [requestBody, setRequestBody] = useState(initialBody || '{}');
+  const [headers, setHeaders] = useState<Header[]>(
+    initialHeaders && initialHeaders.length > 0
+      ? initialHeaders
+      : [{ id: 1, key: '', value: '', enabled: false }]
+  );
+  const [responseData, setResponseData] = useState<unknown>('');
   const [responseStatus, setResponseStatus] = useState<number | undefined>();
   const [language, setLanguage] = useState<unknown>(null);
   const [toast, setToast] = useState<{
@@ -36,41 +51,67 @@ export default function RestClient() {
     type: 'success' | 'error' | 'info';
   } | null>(null);
 
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!initialMethod && !initialUrl) return;
+    try {
+      new URL(initialUrl!);
+    } catch {
+      setToast({ message: 'URL is incorrect', type: 'error' });
+      return;
+    }
+    const myFetch = async () => {
+      const requestHeaders = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        ...getFilteredHeaders(headers),
+      };
+      const options: RequestInit = {
+        method: selectedMethod,
+        headers: requestHeaders,
+        ...(selectedMethod !== 'GET' &&
+          selectedMethod !== 'HEAD' && { body: requestBody }),
+      };
+
+      try {
+        const response = await fetch(endpointUrl, options);
+        setResponseStatus(response.status);
+        const { data, detectedLanguage } = await handleResponse(response);
+        setResponseData(data);
+        setLanguage(detectedLanguage);
+      } catch (error) {
+        let errorMessage = t('genericError');
+
+        if (error instanceof TypeError) {
+          errorMessage = t('networkError');
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        setToast({ message: errorMessage, type: 'error' });
+      }
+    };
+
+    myFetch();
+  }, []);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!endpointUrl) {
-      setToast({ message: t('invalidEndpointUrl'), type: 'error' });
+      setToast({ message: 'Invalid or missing endpoint URL', type: 'error' });
       return;
     }
-    const requestHeaders = {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      ...getFilteredHeaders(headers),
-    };
-    const options: RequestInit = {
-      method: selectedMethod,
-      headers: requestHeaders,
-      ...(selectedMethod !== 'GET' &&
-        selectedMethod !== 'HEAD' && { body: requestBody }),
-    };
 
     try {
-      const response = await fetch(endpointUrl, options);
-      setResponseStatus(response.status);
-
-      const { data, detectedLanguage } = await handleResponse(response);
-      setResponseData(data);
-      setLanguage(detectedLanguage);
-    } catch (error) {
-      let errorMessage = t('genericError');
-
-      if (error instanceof TypeError) {
-        errorMessage = t('networkError');
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      setToast({ message: errorMessage, type: 'error' });
+      new URL(endpointUrl);
+    } catch {
+      setToast({ message: 'URL is incorrect', type: 'error' });
+      return;
     }
+
+    router.push(
+      buildRequestUrl(endpointUrl, selectedMethod, requestBody!, headers)
+    );
   };
 
   const tabs = [
