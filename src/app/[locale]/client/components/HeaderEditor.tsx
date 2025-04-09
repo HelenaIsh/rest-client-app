@@ -1,4 +1,5 @@
 import { Header } from '@/types';
+import { useTranslations } from 'next-intl';
 
 const HeaderEditor = ({
   headers,
@@ -7,6 +8,8 @@ const HeaderEditor = ({
   headers: Header[];
   setHeaders: (headers: Header[]) => void;
 }) => {
+  const t = useTranslations('HeaderEditor');
+
   const handleChange = (id: number, field: keyof Header, value: string) => {
     const newHeaders = headers.map((header) =>
       header.id === id ? { ...header, [field]: value } : header
@@ -43,10 +46,18 @@ const HeaderEditor = ({
     <table className="w-full border-collapse">
       <thead>
         <tr>
-          <th className="border border-gray-300 p-2 text-left">Key</th>
-          <th className="border border-gray-300 p-2 text-left">Value</th>
-          <th className="border border-gray-300 p-2 text-left w-10">Enabled</th>
-          <th className="border border-gray-300 p-2 text-left w-10">Delete</th>
+          <th className="border border-gray-300 p-2 text-left">
+            {t('table.key')}
+          </th>
+          <th className="border border-gray-300 p-2 text-left">
+            {t('table.value')}
+          </th>
+          <th className="border border-gray-300 p-2 text-left w-10">
+            {t('table.enabled')}
+          </th>
+          <th className="border border-gray-300 p-2 text-left w-10">
+            {t('table.delete')}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -58,7 +69,7 @@ const HeaderEditor = ({
                 value={header.key}
                 onChange={(e) => handleChange(header.id, 'key', e.target.value)}
                 className="w-full p-1 border border-gray-300 rounded-md"
-                placeholder="key"
+                placeholder={t('placeholders.key')}
               />
             </td>
             <td className="border border-gray-300 p-1">
@@ -69,7 +80,7 @@ const HeaderEditor = ({
                   handleChange(header.id, 'value', e.target.value)
                 }
                 className="w-full p-1 border border-gray-300 rounded-md"
-                placeholder="value"
+                placeholder={t('placeholders.value')}
               />
             </td>
             <td className="border border-gray-300 p-1 text-center">
@@ -85,6 +96,7 @@ const HeaderEditor = ({
                 <button
                   onClick={() => deleteRow(header.id)}
                   className="text-red-500 hover:text-red-700"
+                  aria-label={t('aria.deleteRow')}
                 >
                   ×
                 </button>

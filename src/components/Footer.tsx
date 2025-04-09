@@ -1,8 +1,11 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 const Footer: React.FC = () => {
+  const t = useTranslations('Footer');
+
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -20,7 +23,7 @@ const Footer: React.FC = () => {
         </a>
 
         <div className="footer-github-container">
-          <p className="footer-github-article">Developed by the team:</p>
+          <p className="footer-github-article">{t('developedBy')}</p>
           <div className="footer-github-links">
             <a
               href="https://github.com/AlanKowalzky"
@@ -74,7 +77,7 @@ const Footer: React.FC = () => {
         </div>
 
         <p className="footer-copyright">
-          Copyright &copy; {new Date().getFullYear()}
+          {t('copyright')} &copy; {new Date().getFullYear()}
         </p>
       </div>
     </footer>
