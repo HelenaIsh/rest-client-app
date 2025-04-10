@@ -4,7 +4,7 @@ import RequestBodyEditor from '../RequestBodyEditor';
 import { NextIntlClientProvider } from 'next-intl';
 import '@testing-library/jest-dom';
 
-const messages = {
+export const RequestBodyMessages = {
   RequestBodyEditor: {
     type: {
       json: 'JSON',
@@ -29,7 +29,7 @@ describe('RequestBodyEditor', () => {
 
   it('renders with default props', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={RequestBodyMessages} locale="en">
         <RequestBodyEditor
           requestBody="{}"
           setRequestBody={mockSetRequestBody}
@@ -47,7 +47,7 @@ describe('RequestBodyEditor', () => {
 
   it('switches between JSON and text modes', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={RequestBodyMessages} locale="en">
         <RequestBodyEditor
           requestBody="{}"
           setRequestBody={mockSetRequestBody}
@@ -64,7 +64,7 @@ describe('RequestBodyEditor', () => {
 
   it('shows error state for invalid JSON', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={RequestBodyMessages} locale="en">
         <RequestBodyEditor
           requestBody="{invalid json"
           setRequestBody={mockSetRequestBody}
@@ -81,7 +81,7 @@ describe('RequestBodyEditor', () => {
     const prettifiedJson = '{\n  "name": "John",\n  "age": 30\n}';
 
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={RequestBodyMessages} locale="en">
         <RequestBodyEditor
           requestBody={validJson}
           setRequestBody={mockSetRequestBody}
@@ -97,7 +97,7 @@ describe('RequestBodyEditor', () => {
 
   it('clears content when clear button is clicked', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={RequestBodyMessages} locale="en">
         <RequestBodyEditor
           requestBody="some content"
           setRequestBody={mockSetRequestBody}
@@ -113,7 +113,7 @@ describe('RequestBodyEditor', () => {
 
   it('clears content to empty string when in text mode', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={RequestBodyMessages} locale="en">
         <RequestBodyEditor
           requestBody="some content"
           setRequestBody={mockSetRequestBody}
@@ -132,7 +132,7 @@ describe('RequestBodyEditor', () => {
 
   it('has the correct styling classes', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={RequestBodyMessages} locale="en">
         <RequestBodyEditor
           requestBody="{}"
           setRequestBody={mockSetRequestBody}

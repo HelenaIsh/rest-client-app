@@ -4,7 +4,7 @@ import SendButton from '../SendButton';
 import { NextIntlClientProvider } from 'next-intl';
 import '@testing-library/jest-dom';
 
-const messages = {
+export const sendButtonMessages = {
   SendButton: {
     send: 'Send',
   },
@@ -13,7 +13,7 @@ const messages = {
 describe('SendButton', () => {
   it('renders the send button with correct text', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={sendButtonMessages} locale="en">
         <SendButton />
       </NextIntlClientProvider>
     );
@@ -26,7 +26,7 @@ describe('SendButton', () => {
 
   it('has the correct styling classes', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={sendButtonMessages} locale="en">
         <SendButton />
       </NextIntlClientProvider>
     );

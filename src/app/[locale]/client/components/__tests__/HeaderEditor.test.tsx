@@ -4,7 +4,7 @@ import HeaderEditor from '../HeaderEditor';
 import { NextIntlClientProvider } from 'next-intl';
 import '@testing-library/jest-dom';
 
-const messages = {
+export const headerEditorMessages = {
   HeaderEditor: {
     table: {
       key: 'Key',
@@ -36,7 +36,7 @@ describe('HeaderEditor', () => {
 
   it('renders the header table with correct columns', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={headerEditorMessages} locale="en">
         <HeaderEditor headers={mockHeaders} setHeaders={mockSetHeaders} />
       </NextIntlClientProvider>
     );
@@ -49,7 +49,7 @@ describe('HeaderEditor', () => {
 
   it('renders all header rows with correct values', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={headerEditorMessages} locale="en">
         <HeaderEditor headers={mockHeaders} setHeaders={mockSetHeaders} />
       </NextIntlClientProvider>
     );
@@ -63,7 +63,7 @@ describe('HeaderEditor', () => {
 
   it('calls setHeaders when a header value changes', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={headerEditorMessages} locale="en">
         <HeaderEditor headers={mockHeaders} setHeaders={mockSetHeaders} />
       </NextIntlClientProvider>
     );
@@ -79,7 +79,7 @@ describe('HeaderEditor', () => {
 
   it('toggles header enabled state when checkbox is clicked', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={headerEditorMessages} locale="en">
         <HeaderEditor headers={mockHeaders} setHeaders={mockSetHeaders} />
       </NextIntlClientProvider>
     );
@@ -95,13 +95,13 @@ describe('HeaderEditor', () => {
 
   it('deletes a header when delete button is clicked', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={headerEditorMessages} locale="en">
         <HeaderEditor headers={mockHeaders} setHeaders={mockSetHeaders} />
       </NextIntlClientProvider>
     );
 
     const deleteButton = screen.getAllByRole('button', {
-      name: messages.HeaderEditor.aria.deleteRow,
+      name: headerEditorMessages.HeaderEditor.aria.deleteRow,
     })[0];
     fireEvent.click(deleteButton);
 
@@ -115,7 +115,7 @@ describe('HeaderEditor', () => {
     ];
 
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={headerEditorMessages} locale="en">
         <HeaderEditor
           headers={headersWithEmptyLastRow}
           setHeaders={mockSetHeaders}
@@ -135,7 +135,7 @@ describe('HeaderEditor', () => {
 
   it('has the correct styling classes', () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
+      <NextIntlClientProvider messages={headerEditorMessages} locale="en">
         <HeaderEditor headers={mockHeaders} setHeaders={mockSetHeaders} />
       </NextIntlClientProvider>
     );

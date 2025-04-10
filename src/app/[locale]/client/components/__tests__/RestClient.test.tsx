@@ -1,12 +1,24 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import RestClient from '../app/[locale]/client/components/RestClient';
+import RestClient from '../RestClient';
 import { useRouter } from 'next/navigation';
 import { useVariables } from '@/app/context/VariablesContext';
 import { Header } from '@/types';
 import { methods } from '@components/MethodSelector';
 import { NextIntlClientProvider } from 'next-intl';
 import '@testing-library/jest-dom';
+import { headerEditorMessages } from '@components/__tests__/HeaderEditor.test';
+import { RequestBodyMessages } from '@components/__tests__/RequestBodyEditor.test';
+import { sendButtonMessages } from '@components/__tests__/SendButton.test';
+import { endpointInputMessages } from '@components/__tests__/EndpointInput.test';
+
+vi.mock('@uiw/react-codemirror', () => ({
+  default: vi
+    .fn()
+    .mockImplementation(({ value }) => (
+      <div data-testid="codemirror">{value}</div>
+    )),
+}));
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
@@ -25,6 +37,10 @@ const messages = {
     genericError: 'An error occurred',
     networkError: 'Network error',
   },
+  ...headerEditorMessages,
+  ...RequestBodyMessages,
+  ...sendButtonMessages,
+  ...endpointInputMessages,
 };
 
 describe('RestClient', () => {
