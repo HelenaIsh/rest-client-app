@@ -3,7 +3,7 @@ import { Extension } from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { javascript } from '@codemirror/lang-javascript';
-import { methods } from '@/app/client/components/MethodSelector';
+import { methods } from '@components/MethodSelector';
 
 export const getFilteredHeaders = (
   headers: Header[]

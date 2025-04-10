@@ -19,6 +19,7 @@ import RequestBodyEditor from '@components/RequestBodyEditor';
 import HeaderEditor from '@components/HeaderEditor';
 import Tabs from '@components/Tabs';
 import { useTranslations } from 'next-intl';
+import { useVariables } from '@/app/context/VariablesContext';
 
 export default function RestClient({
   initialMethod,
@@ -31,8 +32,8 @@ export default function RestClient({
   initialBody?: string;
   initialHeaders?: Header[];
 }) {
+  const { substituteVariables } = useVariables();
   const t = useTranslations('RestClient');
-
   const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl || '');
   const [selectedMethod, setSelectedMethod] = useState<
     (typeof methods)[number]
@@ -106,11 +107,40 @@ export default function RestClient({
       new URL(endpointUrl);
     } catch {
       setToast({ message: 'URL is incorrect', type: 'error' });
+    }
+    const urlResult = substituteVariables(endpointUrl);
+    const bodyResult = substituteVariables(requestBody!);
+    const headersWithSubstitutions = headers.map((header) => {
+      const { result } = substituteVariables(header.value);
+      return {
+        ...header,
+        value: result,
+      };
+    });
+
+    const allMissingVariables = [
+      ...urlResult.missingVariables,
+      ...bodyResult.missingVariables,
+      ...headersWithSubstitutions.flatMap(
+        (header) => substituteVariables(header.value).missingVariables
+      ),
+    ];
+
+    if (allMissingVariables.length > 0) {
+      setToast({
+        message: `Missing variables: ${allMissingVariables.join(', ')}`,
+        type: 'error',
+      });
       return;
     }
 
     router.push(
-      buildRequestUrl(endpointUrl, selectedMethod, requestBody!, headers)
+      buildRequestUrl(
+        urlResult.result,
+        selectedMethod,
+        bodyResult.result,
+        headersWithSubstitutions
+      )
     );
   };
 

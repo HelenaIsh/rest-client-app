@@ -2,7 +2,7 @@
 
 import { useParams, useSearchParams } from 'next/navigation';
 import { Header } from '@/types';
-import { methods } from '@/app/client/components/MethodSelector';
+import { methods } from '@components/MethodSelector';
 import dynamic from 'next/dynamic';
 
 const RestClient = dynamic(() => import('../../components/RestClient'), {
