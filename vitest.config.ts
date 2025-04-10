@@ -8,11 +8,40 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     include: ['**/*.test.{ts,tsx}'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'test/',
+        '**/*.config.{js,ts,mjs}',
+        '**/vitest.config.ts',
+        '**/next.config.ts',
+        '**/eslint.config.mjs',
+        '**/postcss.config.mjs',
+        '**/tsconfig.json',
+        '**/.prettierrc',
+        '**/next-env.d.ts',
+        '**/messages/**',
+        '**/coverage/**',
+        '**/.husky/**',
+        '**/.git/**',
+        '**/.idea/**',
+        '**/.next/**',
+        '**/public/**',
+        '**/i18n/**',
+        '**/middleware.ts',
+        '**/types.ts',
+      ],
+    },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/app/[locale]/client/components'),
+      '@components': path.resolve(
+        __dirname,
+        './src/app/[locale]/client/components'
+      ),
     },
   },
 });
