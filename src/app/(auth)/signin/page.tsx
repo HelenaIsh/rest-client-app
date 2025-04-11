@@ -37,8 +37,11 @@ export default function SignInPage() {
         } else if (err.code === 'auth/too-many-requests') {
           setError('Too many unsuccessful login attempts. Please try again later.');
         } else {
-          // Zastosowano poprawkę typu
-          setError(((err as unknown) as Error).message || 'Failed to sign in. Please try again later.');
+  if (err instanceof Error) {
+    setError(err.message || 'Failed to sign in. Please try again later.');
+  } else {
+    setError('An unknown error occurred.');
+  }
         }
       } else {
         setError('An unknown error occurred.');
