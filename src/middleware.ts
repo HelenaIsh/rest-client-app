@@ -75,12 +75,13 @@ export default function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Ten wzorzec z i18n jest zwykle wystarczająco szeroki:
-    '/((?!api|_next|_vercel|.*\\..*).*)',
+    
     // Upewnij się, że obejmuje ścieżki z obu oryginalnych matcherów,
     // jeśli wzorzec i18n ich nie pokrywał. W tym przypadku prawdopodobnie pokrywa.
     // Można jawnie dodać, jeśli są wątpliwości:
-    '/', '/history', '/client', '/variables', '/signin', '/signup',
-    // '/client/:path*', '/history/:path*', '/variables/:path*'
+    // '/', '/history', '/client', '/variables', '/signin', '/signup',
+    // '/client/:path*', '/history/:path*', '/variables/:path*',
+    '/((?!api|_next|_vercel|.*\\..*).*)',
     // Ale wzorzec /((?!...)*) powinien je złapać.
   ],
 };
