@@ -4,6 +4,7 @@ import MethodSelector, { methods } from '@components/MethodSelector';
 import React, { FormEvent, useState, useEffect } from 'react';
 import EndpointInput from '@components/EndpointInput';
 import SendButton from '@components/SendButton';
+import GenerateButton from '@components/GenerateButton ';
 import { Header } from '@/types';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
@@ -183,6 +184,7 @@ export default function RestClient({
               setSelectedMethod={setSelectedMethod}
             />
             <SendButton />
+            <GenerateButton />
           </div>
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>

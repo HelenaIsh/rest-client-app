@@ -54,6 +54,9 @@
   "SendButton": {
     "send": "Send"
   },
+  "GenerateButton": {
+    "generate": "Generate"
+  },
   "RequestBodyEditor": {
     "type": {
       "json": "JSON",
