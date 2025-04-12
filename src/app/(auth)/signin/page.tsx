@@ -131,13 +131,14 @@ export default function SignInPage() {
               const token = await userCredential.user.getIdToken();
               document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
                 router.push('/client');
-            } catch (err: unknown) {
-              console.error('Google login error:', err);
-              if (typeof err === 'object' && err !== null && 'message' in err) {
-                setError(((err as unknown) as Error).message || 'Nie udało się zalogować przez Google. Spróbuj ponownie później.');
-                } else {
-                setError('An unknown error occurred.');
-              }
+catch (err: unknown) {
+  console.error('Google login error:', err);
+  if (err instanceof Error) {
+    setError(err.message || 'Failed to sign in with Google...');
+  } else {
+    setError('An unknown error occurred.');
+  }
+}
                } finally {
               setLoading(false);
             }
