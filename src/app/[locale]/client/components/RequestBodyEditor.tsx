@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+import { json } from '@codemirror/lang-json';
 import { EditorView } from '@codemirror/view';
+import { useTranslations } from 'next-intl';
 
 type ContentType = 'json' | 'text';
 
@@ -14,6 +15,8 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
   requestBody = '{}',
   setRequestBody,
 }) => {
+  const t = useTranslations('RequestBodyEditor');
+
   const [content, setContent] = useState<string>(requestBody);
   const [contentType, setContentType] = useState<ContentType>('json');
   const [isValidJson, setIsValidJson] = useState<boolean>(true);
@@ -61,11 +64,11 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
   };
 
   const extensions =
-    contentType === 'json' ? [javascript()] : [EditorView.lineWrapping];
+    contentType === 'json' ? [json()] : [EditorView.lineWrapping];
 
   return (
     <div className={'border border-gray-300 rounded-md overflow-hidden '}>
-      <div className="flex justify-between items-center p-2 border border-gray-300">
+      <div className="flex justify-between items-center p-2">
         <div className="flex gap-4 ">
           <label className="flex items-center gap-1 cursor-pointer ">
             <input
@@ -74,7 +77,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
               checked={contentType === 'json'}
               onChange={() => setContentType('json')}
             />
-            JSON
+            {t('type.json')}
           </label>
           <label className="flex items-center gap-1 cursor-pointer ">
             <input
@@ -83,7 +86,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
               checked={contentType === 'text'}
               onChange={() => setContentType('text')}
             />
-            Plain Text
+            {t('type.text')}
           </label>
         </div>
 
@@ -94,14 +97,14 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
             disabled={contentType === 'json' && !isValidJson}
             className="px-2 py-1  rounded border border-gray-300 hover:bg-gray-600 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Prettify
+            {t('actions.prettify')}
           </button>
           <button
             type="button"
             onClick={clearContent}
             className="px-2 py-1 bg-gray-700 text-gray-200 rounded border border-gray-300 hover:bg-gray-600"
           >
-            Clear
+            {t('actions.clear')}
           </button>
         </div>
       </div>
@@ -113,14 +116,14 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
           value={content}
           extensions={extensions}
           onChange={handleContentChange}
-          height="300px"
+          height="250px"
           className="text-sm"
         />
       </div>
 
       {!isValidJson && contentType === 'json' && (
         <div className="p-2 text-red-400 border-t border-red-500">
-          Invalid JSON format
+          {t('errors.invalidJson')}
         </div>
       )}
     </div>

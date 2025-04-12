@@ -34,6 +34,7 @@ export default function Tabs({ tabs, defaultActiveTab }: TabsProps) {
         <div
           key={tab.id}
           style={{ display: activeTab === tab.id ? 'block' : 'none' }}
+          className={'h-[350px] overflow-auto'}
         >
           {tab.content}
         </div>

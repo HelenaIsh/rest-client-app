@@ -131,6 +131,7 @@ export default function SignInPage() {
               const token = await userCredential.user.getIdToken();
               document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
                 router.push('/client');
+            }
 catch (err: unknown) {
   console.error('Google login error:', err);
   if (err instanceof Error) {
@@ -139,7 +140,7 @@ catch (err: unknown) {
     setError('An unknown error occurred.');
   }
 }
-               } finally {
+               finally {
               setLoading(false);
             }
           }}

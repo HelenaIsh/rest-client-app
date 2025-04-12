@@ -20,7 +20,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/app/[locale]/client/components/*"]
     }
   },
   "exclude": ["node_modules", "/tmp/**/*", "./tmp", "tmp", "*/tmp/**/**"],
