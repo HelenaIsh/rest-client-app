@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback  } from "react";
 import { methods } from './MethodSelector';
-
+import { useTranslations } from 'next-intl';
 
 interface GenerateCodeProps {
   language: string;
@@ -41,27 +41,33 @@ const codeGenerators: Record<"GET" | "DEFAULT", Record<string, GeneratorFn>> = {
 };
 
 const GenerateCode = ({ language, method, url, body }: GenerateCodeProps) => {
+  const t = useTranslations('GenerateCode');
   const [data, setData] = useState<RequestData>({ url, method, body });
   const [generatedCode, setGeneratedCode] = useState("");
   const [error, setError] = useState("");
+  const [attemptedGeneration, setAttemptedGeneration] = useState(false);
 
   const generateCode = useCallback(() => {
+    setAttemptedGeneration(true);
+
     if (!data.url || !data.method) {
-      setError("There are not enough details for the code to be generated");
+      setError(t("error"));
       return;
     }
 
     const group = data.method === "GET" ? "GET" : "DEFAULT";
     const generator = codeGenerators[group][language];
 
-    if (!generator) {
-      setError("Invalid language selected");
-      return;
-    }
+    if (!generator) return;
 
-    setGeneratedCode(generator(data));
+    const serializedData: RequestData = {
+      ...data,
+      body: typeof data.body === "string" ? data.body : JSON.stringify(data.body),
+    };
+
+    setGeneratedCode(generator(serializedData));
     setError("");
-  }, [data, language]);
+  }, [data, language, t]);
 
   useEffect(() => {
     setData((prev) => ({
@@ -79,7 +85,9 @@ const GenerateCode = ({ language, method, url, body }: GenerateCodeProps) => {
 
   return (
     <div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {attemptedGeneration && error && (
+        <p style={{ color: "red" }}>{error}</p>
+      )}
       {generatedCode && <pre>{generatedCode}</pre>}
     </div>
   );

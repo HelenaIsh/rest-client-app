@@ -93,5 +93,8 @@
     "aria": {
       "endpointUrl": "Endpoint URL input field"
     }
+  },
+  "GenerateCode": {
+    "error": "There are not enough details for the code to be generated"
   }
 }
