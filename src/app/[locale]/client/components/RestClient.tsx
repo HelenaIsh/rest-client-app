@@ -5,6 +5,7 @@ import React, { FormEvent, useState, useEffect } from 'react';
 import EndpointInput from '@components/EndpointInput';
 import SendButton from '@components/SendButton';
 import GenerateButton from '@components/GenerateButton ';
+import GenerateCode from '@components/GenerateCode';
 import { Header } from '@/types';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
 import { EditorView } from '@codemirror/view';
@@ -52,6 +53,7 @@ export default function RestClient({
     message: string;
     type: 'success' | 'error' | 'info';
   } | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState('');
 
   const router = useRouter();
 
@@ -184,8 +186,14 @@ export default function RestClient({
               setSelectedMethod={setSelectedMethod}
             />
             <SendButton />
-            <GenerateButton />
+            <GenerateButton onLanguageSelect={setSelectedLanguage} />
           </div>
+          <GenerateCode
+          language={selectedLanguage}
+          method={selectedMethod}
+          url={endpointUrl}
+          body={requestBody}/>
+
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
         <p className={'text-lg m-4'}>{t('response')}</p>
