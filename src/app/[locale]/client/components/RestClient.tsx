@@ -148,6 +148,43 @@ export default function RestClient({
     );
   };
 
+  const handleLanguageSelect = (lang: string) => {
+    try {
+      new URL(endpointUrl);
+      const urlResult = substituteVariables(endpointUrl);
+      const bodyResult = substituteVariables(requestBody!);
+      const headersWithSubstitutions = headers.map((header) => {
+        const { result } = substituteVariables(header.value);
+        return {
+          ...header,
+          value: result,
+        };
+      });
+
+      const allMissing = [
+        ...urlResult.missingVariables,
+        ...bodyResult.missingVariables,
+        ...headersWithSubstitutions.flatMap(
+          (header) => substituteVariables(header.value).missingVariables
+        ),
+      ];
+
+      const isInvalid =
+        !endpointUrl.trim() || !selectedMethod || allMissing.length > 0;
+
+      if (isInvalid) {
+        throw new Error();
+      }
+
+      setSelectedLanguage(lang);
+    } catch {
+      setToast({
+        message: t('generateCodeError'),
+        type: 'error',
+      });
+    }
+  };
+
   const tabs = [
     {
       id: 'body',
@@ -188,47 +225,7 @@ export default function RestClient({
             />
             <SendButton />
 
-            <GenerateButton
-              onLanguageSelect={(lang) => {
-                try {
-                  new URL(endpointUrl);
-                  const urlResult = substituteVariables(endpointUrl);
-                  const bodyResult = substituteVariables(requestBody!);
-                  const headersWithSubstitutions = headers.map((header) => {
-                    const { result } = substituteVariables(header.value);
-                    return {
-                      ...header,
-                      value: result,
-                    };
-                  });
-
-                  const allMissing = [
-                    ...urlResult.missingVariables,
-                    ...bodyResult.missingVariables,
-                    ...headersWithSubstitutions.flatMap(
-                      (header) =>
-                        substituteVariables(header.value).missingVariables
-                    ),
-                  ];
-
-                  const isInvalid =
-                    !endpointUrl.trim() ||
-                    !selectedMethod ||
-                    allMissing.length > 0;
-
-                  if (isInvalid) {
-                    throw new Error();
-                  }
-
-                  setSelectedLanguage(lang);
-                } catch {
-                  setToast({
-                    message: t('generateCodeError'),
-                    type: 'error',
-                  });
-                }
-              }}
-            />
+            <GenerateButton onLanguageSelect={handleLanguageSelect} />
           </div>
 
           <GenerateCode

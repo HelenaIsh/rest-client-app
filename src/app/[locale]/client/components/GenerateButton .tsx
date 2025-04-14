@@ -35,7 +35,7 @@ export default function GenerateButton({
     languageOptions.map(({ key, label }) => (
       <li
         key={key}
-        className="px-4 py-2 text-sm text-gray-700 hover:bg-teal-100 cursor-pointer"
+        className="px-4 py-2 text-sm text-gray-700 hover:bg-blue-100 cursor-pointer"
         onClick={() => handleLanguageSelect(key)}
       >
         {label}
@@ -57,8 +57,8 @@ export default function GenerateButton({
 
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-50">
-        <ul className="py-1">{renderLanguageItems()}</ul>
-      </div>
+          <ul className="py-1">{renderLanguageItems()}</ul>
+        </div>
       )}
     </div>
   );
