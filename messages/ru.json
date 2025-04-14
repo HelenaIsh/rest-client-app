@@ -49,7 +49,9 @@
     "body": "Тело",
     "headers": "Заголовки",
     "response": "Ответ",
+    "generatedCode": "Сгенерированный код",
     "noResponseYet": "Ответ еще не получен",
+    "noCodeYet": "Код пока не сгенерирован",
     "generateCodeError": "Недостаточно данных для генерации кода"
   },
   "SendButton": {

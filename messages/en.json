@@ -49,7 +49,9 @@
     "body": "Body",
     "headers": "Headers",
     "response": "Response",
+    "generatedCode": "Generated Code",
     "noResponseYet": "No response yet",
+    "noCodeYet": "No generated code",
     "generateCodeError": "There are not enough details for the code to be generated"
   },
   "SendButton": {

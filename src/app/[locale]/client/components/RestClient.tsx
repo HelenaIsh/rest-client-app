@@ -203,6 +203,39 @@ export default function RestClient({
     },
   ];
 
+  const responseTabs = [
+    {
+      id: 'response',
+      label: t('response'),
+      content: (
+        <div className="rounded-md border border-gray-300 overflow-hidden">
+          <CodeMirror
+            value={typeof responseData === 'string' ? responseData : ''}
+            extensions={
+              language ? [language as Extension] : [EditorView.lineWrapping]
+            }
+            readOnly={true}
+            height="250px"
+            className="text-sm"
+          />
+        </div>
+      )
+    },
+    {
+      id: 'code',
+      label: t('generatedCode'),
+      content: (
+        <div className="whitespace-pre-wrap text-sm w-full p-4 border border-gray-300 rounded-md min-h-[150px]">
+          {generatedCode ? (
+            <pre>{generatedCode}</pre>
+          ) : (
+            <p className="text-gray-500">{t('noCodeYet')}</p>
+          )}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="space-y-6 relative">
       {toast && (
@@ -237,28 +270,11 @@ export default function RestClient({
           />
 
           <Tabs tabs={tabs} defaultActiveTab="body" />
-        </form>
-        <p className={'text-lg m-4'}>{t('response')}</p>
         <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
           {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
         </p>{' '}
-        <div className="border border-gray-300 rounded-md overflow-x-auto">
-          {generatedCode ? (
-            <pre className="whitespace-pre-wrap p-4 text-sm">
-              {generatedCode}
-            </pre>
-          ) : (
-            <CodeMirror
-              value={responseData as string}
-              extensions={
-                language ? [language as Extension] : [EditorView.lineWrapping]
-              }
-              readOnly={true}
-              height="250px"
-              className="text-sm"
-            />
-          )}
-        </div>
+        <Tabs tabs={responseTabs} defaultActiveTab="response" />
+        </form>
       </div>
     </div>
   );

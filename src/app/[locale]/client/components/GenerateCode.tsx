@@ -65,6 +65,7 @@ const GenerateCode = ({
   const [data, setData] = useState<RequestData>({ url, method, body });
 
   const generateCode = useCallback(() => {
+
     const group = data.method === 'GET' ? 'GET' : 'DEFAULT';
     const generator = codeGenerators[group][language];
     if (!generator) return;
