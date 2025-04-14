@@ -15,7 +15,7 @@
     "@codemirror/lang-javascript": "^6.2.3",
     "@codemirror/lang-json": "^6.0.1",
     "@uiw/react-codemirror": "^4.23.10",
-"firebase": "^11.6.0",
+    "firebase": "^11.6.0",
     "autoprefixer": "^10.4.21",
     "next": "15.2.4",
     "next-intl": "^4.0.2",

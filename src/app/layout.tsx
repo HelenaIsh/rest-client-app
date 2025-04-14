@@ -3,7 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '../context/AuthContext';
 import React from 'react';
-import ClientLogoutButton from '@/components/ClientLogoutButton';import { VariablesProvider } from './context/VariablesContext';
+import ClientLogoutButton from '@/components/ClientLogoutButton';
+import { VariablesProvider } from './context/VariablesContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -23,19 +24,18 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
-}>) {  
-
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <div style={{ position: "absolute", top: 10, right: 10 }}>
+          <div style={{ position: 'absolute', top: 10, right: 10 }}>
             <ClientLogoutButton />
           </div>
-          <div className='min-h-screen'>
+          <div className="min-h-screen">
             <VariablesProvider>{children}</VariablesProvider>
           </div>
         </AuthProvider>

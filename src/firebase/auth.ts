@@ -1,5 +1,16 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signInWithPhoneNumber, RecaptchaVerifier, Auth } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  Auth,
+} from 'firebase/auth';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { PhoneAuthProvider } from 'firebase/auth';
 import { firebaseConfig } from './config';
@@ -22,21 +33,27 @@ if (isBrowser) {
 // Authentication functions
 export const signUp = async (email: string, password: string) => {
   if (!isBrowser) {
-    throw new Error('Auth operations are only supported in browser environment');
+    throw new Error(
+      'Auth operations are only supported in browser environment'
+    );
   }
   return createUserWithEmailAndPassword(auth, email, password);
 };
 
 export const signIn = async (email: string, password: string) => {
   if (!isBrowser) {
-    throw new Error('Auth operations are only supported in browser environment');
+    throw new Error(
+      'Auth operations are only supported in browser environment'
+    );
   }
   return signInWithEmailAndPassword(auth, email, password);
 };
 
 export const signInWithGoogle = async () => {
   if (!isBrowser) {
-    throw new Error('Auth operations are only supported in browser environment');
+    throw new Error(
+      'Auth operations are only supported in browser environment'
+    );
   }
   return signInWithPopup(auth, googleProvider);
 };
@@ -44,29 +61,39 @@ export const signInWithGoogle = async () => {
 // Phone authentication requires a two-step process
 export const setupRecaptcha = (containerOrId: string | HTMLElement) => {
   if (!isBrowser) {
-    throw new Error('Auth operations are only supported in browser environment');
+    throw new Error(
+      'Auth operations are only supported in browser environment'
+    );
   }
   return new RecaptchaVerifier(auth, containerOrId, {
     size: 'invisible',
     callback: () => {
       // reCAPTCHA solved, allow signInWithPhoneNumber.
-    }
+    },
   });
 };
 
-export const sendPhoneVerification = async (phoneNumber: string, appVerifier: RecaptchaVerifier) => {
+export const sendPhoneVerification = async (
+  phoneNumber: string,
+  appVerifier: RecaptchaVerifier
+) => {
   if (!isBrowser) {
-    throw new Error('Auth operations are only supported in browser environment');
+    throw new Error(
+      'Auth operations are only supported in browser environment'
+    );
   }
   return signInWithPhoneNumber(auth, phoneNumber, appVerifier);
 };
 
 export const logOut = async () => {
   if (!isBrowser) {
-    throw new Error('Auth operations are only supported in browser environment');
+    throw new Error(
+      'Auth operations are only supported in browser environment'
+    );
   }
   // Remove auth-token cookie when logging out
-  document.cookie = 'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict';
+  document.cookie =
+    'auth-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict';
   return signOut(auth);
 };
 

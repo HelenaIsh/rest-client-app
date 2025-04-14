@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { signUp, signInWithGoogle } from '../../../firebase/auth';
+import { signUp, signInWithGoogle } from '../../../../firebase/auth';
 import { useRouter } from 'next/navigation';
-
+import { useParams } from 'next/navigation';
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -12,12 +12,13 @@ export default function SignUpPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Validate passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -27,31 +28,67 @@ export default function SignUpPage() {
 
     try {
       const userCredential = await signUp(email, password);
-      // Set auth token in cookie for middleware to use
       const token = await userCredential.user.getIdToken();
       document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
-      router.push('/client');
+      router.push(`/${locale}/client`);
     } catch (err: unknown) {
       console.error('Signup error:', err);
-      // Tłumaczenie komunikatów błędów na język polski
       if (typeof err === 'object' && err !== null && 'code' in err) {
-        const firebaseError = err as { code: string; message: string }; // Asercja typu
+        const firebaseError = err as { code: string; message: string };
         if (firebaseError.code === 'auth/email-already-in-use') {
-          setError('Ten adres email jest już używany. Zaloguj się lub użyj innego adresu email.');
+          setError(
+            'This email address is already in use. Please sign in or use a different email address.'
+          );
         } else if (firebaseError.code === 'auth/invalid-email') {
-          setError('Podany adres email jest nieprawidłowy. Sprawdź format adresu email.');
+          setError(
+            'The email address provided is invalid. Please check the email format.'
+          );
         } else if (firebaseError.code === 'auth/weak-password') {
-          setError('Hasło jest zbyt słabe. Użyj silniejszego hasła (minimum 6 znaków).');
+          setError(
+            'The password is too weak. Please use a stronger password (minimum 6 characters).'
+          );
         } else if (firebaseError.code === 'auth/operation-not-allowed') {
-          setError('Rejestracja za pomocą emaila i hasła jest obecnie wyłączona.');
+          setError('Signing up with email and password is currently disabled.');
         } else {
-          setError(firebaseError.message || 'Nie udało się zarejestrować. Spróbuj ponownie później.');
+          setError(
+            firebaseError.message ||
+              'Failed to sign up. Please try again later.'
+          );
         }
       } else if (typeof err === 'object' && err !== null && 'message' in err) {
         const errorWithMessage = err as { message: string };
-        setError(errorWithMessage.message || 'Nie udało się zarejestrować. Spróbuj ponownie później.');
+        setError(
+          errorWithMessage.message ||
+            'Failed to sign up. Please try again later.'
+        );
       } else {
-        setError('Nie udało się zarejestrować. Spróbuj ponownie później.');
+        setError('Failed to sign up. Please try again later.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      const userCredential = await signInWithGoogle();
+      const token = await userCredential.user.getIdToken();
+      document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
+      router.push(`/${locale}/client`);
+    } catch (err: unknown) {
+      console.error('Google sign-up/sign-in error:', err);
+      if (typeof err === 'object' && err !== null && 'message' in err) {
+        const errorWithMessage = err as { message: string };
+        setError(
+          errorWithMessage.message ||
+            'Failed to sign up/sign in with Google. Please try again later.'
+        );
+      } else {
+        setError(
+          'Failed to sign up/sign in with Google. Please try again later.'
+        );
       }
     } finally {
       setLoading(false);
@@ -61,7 +98,9 @@ export default function SignUpPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-md shadow-md">
-        <h1 className="text-center text-2xl font-bold mb-6">Sign Up</h1>
+        <h1 className="text-center text-2xl font-bold text-blue-700 mb-6">
+          Sign Up
+        </h1>
 
         {error && (
           <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
@@ -71,41 +110,50 @@ export default function SignUpPage() {
 
         <form onSubmit={handleSignUp} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email
             </label>
-            <input             
+            <input
               id="email"
               type="email"
-              value={email}              
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
+              className="mt-1 block w-full rounded-md border border-gray-300  shadow-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
 
-          <div >
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
               id="password"
               type="password"
-              value={password}              
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
 
-          <div >
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700"
+            >
               Confirm Password
             </label>
             <input
               id="confirmPassword"
               type="password"
-              value={confirmPassword}              
+              value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
@@ -122,38 +170,23 @@ export default function SignUpPage() {
         </form>
 
         <div className="mt-4 border-t pt-4">
-         <div className="mt-4 border-t pt-4">
+          <div className="mt-4 border-t pt-4">
             <span className="signin-divider-text">Or continue with</span>
           </div>
         </div>
 
         <button
           type="button"
-          onClick={async () => {
-            setError('');
-               setLoading(true);
-            try {
-              const userCredential = await signInWithGoogle();
-              // Set auth token in cookie for middleware to use
-              const token = await userCredential.user.getIdToken();
-              document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
-              router.push('/client');
-            } catch (err: unknown) {
-              console.error('Google login error:', err);
-              if (typeof err === 'object' && err !== null && 'message' in err) {
-                const errorWithMessage = err as { message: string };
-                setError(errorWithMessage.message || 'Nie udało się zarejestrować przez Google. Spróbuj ponownie później.');
-              } else {
-                setError('Nie udało się zarejestrować przez Google. Spróbuj ponownie później.');
-              }
-            } finally {
-              setLoading(false);
-            }
-          }}
+          onClick={handleGoogleSignIn}
           disabled={loading}
-           className="w-full flex items-center justify-center border border-gray-300 hover:bg-gray-100 text-blue-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="w-full flex items-center justify-center border border-gray-300 hover:bg-gray-100 text-blue-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" width="24" height="24">
+          <svg
+            className="mr-2 h-5 w-5"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+          >
             <path
               fill="#4285F4"
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -172,7 +205,7 @@ export default function SignUpPage() {
             />
             <path fill="none" d="M1 1h22v22H1z" />
           </svg>
-          Zarejestruj przez Google
+          Sign up with Google
         </button>
       </div>
     </div>

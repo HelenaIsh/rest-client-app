@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/context/AuthContext";
-import Logout from "@/components/Logout";
+import { useAuth } from '@/context/AuthContext';
+import Logout from '@/components/Logout';
 
 const ClientLogoutButton = () => {
   const { user } = useAuth();
