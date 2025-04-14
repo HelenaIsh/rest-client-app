@@ -49,7 +49,8 @@
     "body": "Body",
     "headers": "Headers",
     "response": "Response",
-    "noResponseYet": "No response yet"
+    "noResponseYet": "No response yet",
+    "generateCodeError": "There are not enough details for the code to be generated"
   },
   "SendButton": {
     "send": "Send"
@@ -93,8 +94,5 @@
     "aria": {
       "endpointUrl": "Endpoint URL input field"
     }
-  },
-  "GenerateCode": {
-    "error": "There are not enough details for the code to be generated"
   }
 }

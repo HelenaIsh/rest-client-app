@@ -4,7 +4,9 @@ import { useTranslations } from 'next-intl';
 interface GenerateButtonProps {
   onLanguageSelect: (language: string) => void;
 }
-export default function GenerateButton({ onLanguageSelect }: GenerateButtonProps) {
+export default function GenerateButton({
+  onLanguageSelect,
+}: GenerateButtonProps) {
   const t = useTranslations('GenerateButton');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,7 +31,7 @@ export default function GenerateButton({ onLanguageSelect }: GenerateButtonProps
       >
         {t('generate')}
       </button>
-      
+
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto z-50">
           <ul className="py-1">

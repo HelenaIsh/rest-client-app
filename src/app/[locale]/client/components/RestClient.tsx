@@ -54,6 +54,7 @@ export default function RestClient({
     type: 'success' | 'error' | 'info';
   } | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -186,13 +187,57 @@ export default function RestClient({
               setSelectedMethod={setSelectedMethod}
             />
             <SendButton />
-            <GenerateButton onLanguageSelect={setSelectedLanguage} />
+
+            <GenerateButton
+              onLanguageSelect={(lang) => {
+                try {
+                  new URL(endpointUrl);
+                  const urlResult = substituteVariables(endpointUrl);
+                  const bodyResult = substituteVariables(requestBody!);
+                  const headersWithSubstitutions = headers.map((header) => {
+                    const { result } = substituteVariables(header.value);
+                    return {
+                      ...header,
+                      value: result,
+                    };
+                  });
+
+                  const allMissing = [
+                    ...urlResult.missingVariables,
+                    ...bodyResult.missingVariables,
+                    ...headersWithSubstitutions.flatMap(
+                      (header) =>
+                        substituteVariables(header.value).missingVariables
+                    ),
+                  ];
+
+                  const isInvalid =
+                    !endpointUrl.trim() ||
+                    !selectedMethod ||
+                    allMissing.length > 0;
+
+                  if (isInvalid) {
+                    throw new Error();
+                  }
+
+                  setSelectedLanguage(lang);
+                } catch {
+                  setToast({
+                    message: t('generateCodeError'),
+                    type: 'error',
+                  });
+                }
+              }}
+            />
           </div>
+
           <GenerateCode
-          language={selectedLanguage}
-          method={selectedMethod}
-          url={endpointUrl}
-          body={requestBody}/>
+            language={selectedLanguage}
+            method={selectedMethod}
+            url={endpointUrl}
+            body={requestBody}
+            setGeneratedCode={setGeneratedCode}
+          />
 
           <Tabs tabs={tabs} defaultActiveTab="body" />
         </form>
@@ -200,16 +245,22 @@ export default function RestClient({
         <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
           {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
         </p>{' '}
-        <div className="border border-gray-300 rounded-md">
-          <CodeMirror
-            value={responseData as string}
-            extensions={
-              language ? [language as Extension] : [EditorView.lineWrapping]
-            }
-            readOnly={true}
-            height="250px"
-            className="text-sm"
-          />
+        <div className="border border-gray-300 rounded-md overflow-x-auto">
+          {generatedCode ? (
+            <pre className="whitespace-pre-wrap p-4 text-sm">
+              {generatedCode}
+            </pre>
+          ) : (
+            <CodeMirror
+              value={responseData as string}
+              extensions={
+                language ? [language as Extension] : [EditorView.lineWrapping]
+              }
+              readOnly={true}
+              height="250px"
+              className="text-sm"
+            />
+          )}
         </div>
       </div>
     </div>
