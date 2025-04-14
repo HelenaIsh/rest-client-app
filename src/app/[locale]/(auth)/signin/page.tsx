@@ -18,14 +18,13 @@ export default function SignInPage() {
 
     try {
       const userCredential = await signIn(email, password);
-      // Set auth token in cookie for middleware to use
+
       const token = await userCredential.user.getIdToken();
       document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
       router.push('/client');
     } catch (err: unknown) {
-      // Zmieniamy typ na unknown
       console.error('Login error:', err);
-      // Tłumaczenie komunikatów błędów na język polski
+
       if (typeof err === 'object' && err !== null && 'code' in err) {
         if (err.code === 'auth/invalid-credential') {
           setError(
@@ -146,7 +145,7 @@ export default function SignInPage() {
             setLoading(true);
             try {
               const userCredential = await signInWithGoogle();
-              // Set auth token in cookie for middleware to use
+
               const token = await userCredential.user.getIdToken();
               document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
               router.push('/client');
@@ -162,7 +161,6 @@ export default function SignInPage() {
             }
           }}
           disabled={loading}
-          //className=""
           className="w-full flex items-center justify-center border border-gray-300 hover:bg-gray-100 text-blue-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
           <svg
