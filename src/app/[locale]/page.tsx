@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { auth } from '@/app/firebase/config';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useState, useEffect } from 'react';
+import Loading from '@/components/Loading';
 
 const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
@@ -25,9 +26,7 @@ const MainPage: React.FC = () => {
     return (
       <div className="main-container">
         <div className="app-content">
-          <div className="welcome-section">
-            <h1 className="welcome-sign">Loading...</h1>
-          </div>
+          <Loading className="h-full" />
         </div>
       </div>
     );

@@ -7,9 +7,10 @@ import dynamic from 'next/dynamic';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
 import { useEffect } from 'react';
+import Loading from '@/components/Loading';
 
 const RestClient = dynamic(() => import('../../components/RestClient'), {
-  loading: () => <div>Loading REST Client...</div>,
+  loading: () => <Loading className="h-full" />,
 });
 
 export default function RequestPage() {
@@ -28,7 +29,7 @@ export default function RequestPage() {
   }, [user, loading, router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading className="h-full" />;
   }
 
   if (!user) {

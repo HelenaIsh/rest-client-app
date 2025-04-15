@@ -8,6 +8,7 @@ import {
 import { auth } from '@/app/firebase/config';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Loading from '@/components/Loading';
 
 const SignInPage: React.FC = () => {
   const t = useTranslations('SignInPage');
@@ -65,7 +66,7 @@ const SignInPage: React.FC = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading className="h-full" />;
   }
 
   return (

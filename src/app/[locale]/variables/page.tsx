@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { auth } from '@/app/firebase/config';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Loading from '@/components/Loading';
 
 export default function Variables() {
   const { variables, addVariable, removeVariable } = useVariables();
@@ -21,7 +22,7 @@ export default function Variables() {
   }, [user, loading, router]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading className="h-full" />;
   }
 
   if (!user) {

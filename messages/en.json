@@ -1,4 +1,7 @@
 {
+  "Common": {
+    "loading": "Loading..."
+  },
   "MainPage": {
     "welcome": "Welcome!",
     "signIn": "Sign In",
@@ -34,20 +37,20 @@
     "deleteButton": "Delete"
   },
   "SignInPage": {
-    "title": "SignInPage",
+    "title": "Sign In Page",
     "mode": "Sign In",
-    "description": "This is the SignInPages page"
+    "description": "This is the sign in page"
   },
   "SignUpPage": {
-    "title": "SignUpPage",
+    "title": "Sign Up Page",
     "mode": "Sign Up",
-    "description": "This is the SignUpPage page"
+    "description": "This is the sign up page"
   },
   "RestClient": {
     "loading": "Loading REST Client...",
-    "invalidEndpointUrl": "Invalid or missing endpoint URL",
+    "invalidEndpointUrl": "Invalid or missing URL",
     "genericError": "An error occurred",
-    "networkError": "Network error: Failed to connect to the server",
+    "networkError": "Network error: could not connect to server",
     "body": "Body",
     "headers": "Headers",
     "response": "Response",
@@ -59,10 +62,10 @@
   "RequestBodyEditor": {
     "type": {
       "json": "JSON",
-      "text": "Plain Text"
+      "text": "Plain text"
     },
     "actions": {
-      "prettify": "Prettify",
+      "prettify": "Format",
       "clear": "Clear"
     },
     "errors": {

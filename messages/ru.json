@@ -1,4 +1,7 @@
 {
+  "Common": {
+    "loading": "Загрузка..."
+  },
   "MainPage": {
     "welcome": "Добро пожаловать!",
     "signIn": "Войти",
