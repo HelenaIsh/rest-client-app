@@ -39,12 +39,28 @@
   "SignInPage": {
     "title": "Страница входа",
     "mode": "Войти",
-    "description": "Это страница входа"
+    "description": "Это страница входа",
+    "errors": {
+      "unknown": "Произошла ошибка при входе",
+      "invalidEmail": "Неверный адрес электронной почты",
+      "userDisabled": "Этот аккаунт отключен",
+      "userNotFound": "Аккаунт с таким email не найден",
+      "wrongPassword": "Неверный пароль",
+      "invalidCredential": "Неверный email или пароль",
+      "tooManyRequests": "Слишком много попыток. Пожалуйста, попробуйте позже"
+    }
   },
   "SignUpPage": {
     "title": "Страница регистрации",
     "mode": "Зарегистрироваться",
-    "description": "Это страница регистрации"
+    "description": "Это страница регистрации",
+    "errors": {
+      "unknown": "Произошла ошибка при регистрации",
+      "emailInUse": "Этот email уже зарегистрирован",
+      "invalidEmail": "Неверный адрес электронной почты",
+      "operationNotAllowed": "Регистрация по email и паролю отключена",
+      "weakPassword": "Слишком слабый пароль"
+    }
   },
   "RestClient": {
     "loading": "Загрузка REST клиента...",

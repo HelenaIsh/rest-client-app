@@ -39,12 +39,28 @@
   "SignInPage": {
     "title": "Sign In Page",
     "mode": "Sign In",
-    "description": "This is the sign in page"
+    "description": "This is the sign in page",
+    "errors": {
+      "unknown": "An error occurred during sign in",
+      "invalidEmail": "Invalid email address",
+      "userDisabled": "This account has been disabled",
+      "userNotFound": "No account found with this email",
+      "wrongPassword": "Incorrect password",
+      "invalidCredential": "Incorrect email or password",
+      "tooManyRequests": "Too many failed attempts. Please try again later"
+    }
   },
   "SignUpPage": {
     "title": "Sign Up Page",
     "mode": "Sign Up",
-    "description": "This is the sign up page"
+    "description": "This is the sign up page",
+    "errors": {
+      "unknown": "An error occurred during sign up",
+      "emailInUse": "This email is already registered",
+      "invalidEmail": "Invalid email address",
+      "operationNotAllowed": "Email/password accounts are not enabled",
+      "weakPassword": "Password is too weak"
+    }
   },
   "RestClient": {
     "loading": "Loading REST Client...",
