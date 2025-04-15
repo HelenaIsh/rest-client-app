@@ -4,11 +4,12 @@ import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
 import { auth } from '@/app/firebase/config';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
   const locale = useLocale();
-  const user = auth.currentUser;
+  const [user] = useAuthState(auth);
 
   return (
     <div className="main-container">

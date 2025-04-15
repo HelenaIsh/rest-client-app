@@ -1,7 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import {
+  useAuthState,
+  useCreateUserWithEmailAndPassword,
+} from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -13,7 +16,7 @@ const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
-  const user = auth.currentUser;
+  const [user] = useAuthState(auth);
   const router = useRouter();
   if (user) {
     router.push('/');

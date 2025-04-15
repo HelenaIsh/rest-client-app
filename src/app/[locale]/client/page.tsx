@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { auth } from '@/app/firebase/config';
 import { useRouter } from 'next/navigation';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const RestClient = dynamic(() => import('./components/RestClient'), {
   loading: () => <Loading />,
@@ -15,7 +16,7 @@ const Loading = () => {
 };
 
 export default function Client() {
-  const user = auth.currentUser;
+  const [user] = useAuthState(auth);
   const router = useRouter();
   if (!user) {
     router.push('/signin');

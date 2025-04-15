@@ -1,9 +1,11 @@
 'use client';
 
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/types';
 import { methods } from '@components/MethodSelector';
 import dynamic from 'next/dynamic';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/firebase/config';
 
 const RestClient = dynamic(() => import('../../components/RestClient'), {
   loading: () => <div>Loading REST Client...</div>,
@@ -15,6 +17,11 @@ export default function RequestPage() {
     method: (typeof methods)[number];
   }>();
   const searchParams = useSearchParams();
+  const [user] = useAuthState(auth);
+  const router = useRouter();
+  if (!user) {
+    router.push('/signin');
+  }
 
   const [encodedUrl, encodedBody] = params.path || [];
   const endpointUrl = Buffer.from(

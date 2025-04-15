@@ -8,10 +8,11 @@ import { useLocale, useTranslations } from 'next-intl';
 import { toggleToOtherLocale } from '@/i18n/locale-utils';
 import { auth } from '@/app/firebase/config';
 import { signOut } from '@firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Header: React.FC = () => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
-  const user = auth.currentUser;
+  const [user] = useAuthState(auth);
 
   const pathname = usePathname();
   const router = useRouter();

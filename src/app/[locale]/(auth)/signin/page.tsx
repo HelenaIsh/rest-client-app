@@ -1,7 +1,10 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import {
+  useAuthState,
+  useSignInWithEmailAndPassword,
+} from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -13,7 +16,7 @@ const SignUpPage: React.FC = () => {
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
   const router = useRouter();
-  const user = auth.currentUser;
+  const [user] = useAuthState(auth);
   if (user) {
     router.push('/');
   }
