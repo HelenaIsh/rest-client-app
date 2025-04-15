@@ -3,7 +3,7 @@
     "welcome": "Добро пожаловать!",
     "signIn": "Войти",
     "signUp": "Зарегистрироваться",
-    "welcomeBack": "С возвращением, Username!",
+    "welcomeBack": "С возвращением",
     "restClient": "REST клиент",
     "history": "История",
     "variables": "Переменные",
@@ -35,10 +35,12 @@
   },
   "SignInPage": {
     "title": "Страница входа",
+    "mode": "Войти",
     "description": "Это страница входа"
   },
   "SignUpPage": {
     "title": "Страница регистрации",
+    "mode": "Зарегистрироваться",
     "description": "Это страница регистрации"
   },
   "RestClient": {

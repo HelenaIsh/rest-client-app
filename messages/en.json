@@ -3,7 +3,7 @@
     "welcome": "Welcome!",
     "signIn": "Sign In",
     "signUp": "Sign Up",
-    "welcomeBack": "Welcome Back, Username!",
+    "welcomeBack": "Welcome Back",
     "restClient": "REST Client",
     "history": "History",
     "variables": "Variables",
@@ -35,10 +35,12 @@
   },
   "SignInPage": {
     "title": "SignInPage",
+    "mode": "Sign In",
     "description": "This is the SignInPages page"
   },
   "SignUpPage": {
     "title": "SignUpPage",
+    "mode": "Sign Up",
     "description": "This is the SignUpPage page"
   },
   "RestClient": {

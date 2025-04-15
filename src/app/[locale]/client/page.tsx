@@ -1,5 +1,9 @@
+'use client';
+
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
+import { auth } from '@/app/firebase/config';
+import { useRouter } from 'next/navigation';
 
 const RestClient = dynamic(() => import('./components/RestClient'), {
   loading: () => <Loading />,
@@ -11,6 +15,11 @@ const Loading = () => {
 };
 
 export default function Client() {
+  const user = auth.currentUser;
+  const router = useRouter();
+  if (!user) {
+    router.push('/signin');
+  }
   return (
     <div className="w-full h-full max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col ">
       <RestClient />

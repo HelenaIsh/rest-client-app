@@ -3,17 +3,17 @@
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
+import { auth } from '@/app/firebase/config';
 
 const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
   const locale = useLocale();
-  const isAuthenticated = true;
-  //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of the main page — we need to connect the Authentication!
+  const user = auth.currentUser;
 
   return (
     <div className="main-container">
       <div className="app-content">
-        {!isAuthenticated ? (
+        {!user ? (
           <div className="welcome-section">
             <h1 className="welcome-sign">{t('welcome')}</h1>
             <div className="auth-links">
@@ -27,7 +27,7 @@ const MainPage: React.FC = () => {
           </div>
         ) : (
           <div className="welcome-section">
-            <h1 className="welcome-sign">{t('welcomeBack')}</h1>
+            <h1 className="welcome-sign">{`${t('welcomeBack')}, ${user.email}`}</h1>
             <div className="client-links">
               <Link href={`/${locale}/client`} className="btn">
                 {t('restClient')}
@@ -42,7 +42,6 @@ const MainPage: React.FC = () => {
           </div>
         )}
       </div>
-      {/*TODO Authors Section -  write a description */}
       <div className="authors-content">
         <h2 className="authors-sign">{t('ourTeam')}</h2>
         <div className="authors">

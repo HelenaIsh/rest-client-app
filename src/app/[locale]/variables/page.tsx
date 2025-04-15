@@ -3,11 +3,18 @@
 import { useState } from 'react';
 import { useVariables } from '@/app/context/VariablesContext';
 import { useTranslations } from 'next-intl';
+import { auth } from '@/app/firebase/config';
+import { useRouter } from 'next/navigation';
 
 export default function Variables() {
   const { variables, addVariable, removeVariable } = useVariables();
   const [newVariable, setNewVariable] = useState({ name: '', value: '' });
   const t = useTranslations('Variables');
+  const user = auth.currentUser;
+  const router = useRouter();
+  if (!user) {
+    router.push('/signin');
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -5,27 +5,21 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { toggleToOtherLocale } from '../i18n/locale-utils';
+import { toggleToOtherLocale } from '@/i18n/locale-utils';
+import { auth } from '@/app/firebase/config';
+import { signOut } from '@firebase/auth';
 
-interface HeaderProps {
-  isAuthenticated: boolean;
-}
-
-//TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of header ([Sign In] | [Sign up] OR [Sign Out])
-// — we need to connect the Authentication here
-
-const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
+const Header: React.FC = () => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
+  const user = auth.currentUser;
 
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('Header');
 
-  //TODO - Currently, onSignOut is not working.
-
-  const onSignOut = (): void => {
-    console.log('Sign out clicked');
+  const onSignOut = async (): Promise<void> => {
+    await signOut(auth);
   };
 
   const handleScroll = (): void => {
@@ -65,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
         <button className="nav-link" onClick={toggleLocale}>
           {locale === 'en' ? 'РУС' : 'EN'}
         </button>
-        {isAuthenticated ? (
+        {user ? (
           <Link href="#" onClick={onSignOut} className="nav-link">
             {t('signOut')}
           </Link>

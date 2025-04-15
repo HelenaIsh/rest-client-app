@@ -26,7 +26,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <Header isAuthenticated={false} />
+      <Header />
       <main className="main-content">{children}</main>
       <Footer />
     </NextIntlClientProvider>
