@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect} from 'react';
 
 type Tab = {
   id: string;
@@ -9,10 +9,36 @@ type Tab = {
 type TabsProps = {
   tabs: Tab[];
   defaultActiveTab?: string;
+  activeTab?: string;
+  onTabChange?: (tabId: string) => void;
 };
 
-export default function Tabs({ tabs, defaultActiveTab }: TabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultActiveTab || tabs[0]?.id);
+export default function Tabs({
+  tabs,
+  defaultActiveTab,
+  activeTab,
+  onTabChange,
+}: TabsProps) {
+  const [internalActiveTab, setInternalActiveTab] = useState(
+    defaultActiveTab || tabs[0]?.id
+  );
+
+  const currentTab = activeTab ?? internalActiveTab;
+
+   const setTab = (tabId: string) => {
+    if (onTabChange) {
+      onTabChange(tabId);
+    } else {
+      setInternalActiveTab(tabId);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab !== undefined && activeTab !== currentTab) {
+      setInternalActiveTab(activeTab);
+    }
+  }, [activeTab, currentTab]);
+
 
   return (
     <div>
@@ -22,9 +48,11 @@ export default function Tabs({ tabs, defaultActiveTab }: TabsProps) {
             type="button"
             key={tab.id}
             className={`text-lg ${
-              activeTab === tab.id ? 'font-bold text-blue-600' : 'text-gray-600'
+              currentTab === tab.id
+                ? 'font-bold text-blue-600'
+                : 'text-gray-600'
             }`}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => setTab(tab.id)}
           >
             {tab.label}
           </button>
@@ -33,7 +61,7 @@ export default function Tabs({ tabs, defaultActiveTab }: TabsProps) {
       {tabs.map((tab) => (
         <div
           key={tab.id}
-          style={{ display: activeTab === tab.id ? 'block' : 'none' }}
+          style={{ display: currentTab === tab.id ? 'block' : 'none' }}
           className={'h-[350px] overflow-auto'}
         >
           {tab.content}

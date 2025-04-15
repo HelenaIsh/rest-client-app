@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { methods } from './MethodSelector';
-import { useVariables } from '@/app/context/VariablesContext'
+import { useVariables } from '@/app/context/VariablesContext';
 
 interface GenerateCodeProps {
   language: string;
@@ -67,13 +67,14 @@ const GenerateCode = ({
   const [data, setData] = useState<RequestData>({ url, method, body });
 
   const generateCode = useCallback(() => {
-
     const group = data.method === 'GET' ? 'GET' : 'DEFAULT';
     const generator = codeGenerators[group][language];
     if (!generator) return;
 
-    const { result: substitutedUrl, missingVariables: missingUrl } = substituteVariables(data.url);
-    const { result: substitutedBody, missingVariables: missingBody } = substituteVariables(data.body);
+    const { result: substitutedUrl, missingVariables: missingUrl } =
+      substituteVariables(data.url);
+    const { result: substitutedBody, missingVariables: missingBody } =
+      substituteVariables(data.body);
 
     if (missingUrl.length > 0 || missingBody.length > 0) {
       console.log('Missing variables:', [...missingUrl, ...missingBody]);

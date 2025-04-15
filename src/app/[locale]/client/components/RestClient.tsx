@@ -8,6 +8,7 @@ import GenerateButton from '@components/GenerateButton';
 import GenerateCode from '@components/GenerateCode';
 import { Header } from '@/types';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
 import { EditorView } from '@codemirror/view';
 import { useRouter } from 'next/navigation';
 import Toast from '@/components/Toast';
@@ -55,6 +56,7 @@ export default function RestClient({
   } | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const [activeResponseTab, setActiveResponseTab] = useState<string>('response');
 
   const router = useRouter();
 
@@ -148,15 +150,15 @@ export default function RestClient({
     );
   };
 
-  const handleLanguageSelect = (lang: string) => {
+  const handleGenerateCode = (lang: string) => {
     const urlResult = substituteVariables(endpointUrl);
     const bodyResult = substituteVariables(requestBody);
-  
+
     const allMissingVariables = [
       ...urlResult.missingVariables,
       ...bodyResult.missingVariables,
     ];
-  
+
     if (allMissingVariables.length > 0) {
       const missing = allMissingVariables.map((v) => `{{${v}}}`).join(', ');
 
@@ -166,7 +168,7 @@ export default function RestClient({
       });
       return;
     }
-  
+
     try {
       new URL(urlResult.result);
       setSelectedLanguage(lang);
@@ -212,15 +214,21 @@ export default function RestClient({
             className="text-sm"
           />
         </div>
-      )
+      ),
     },
     {
       id: 'code',
       label: t('generatedCode'),
       content: (
-        <div className="whitespace-pre-wrap text-sm w-full p-4 border border-gray-300 rounded-md min-h-[150px]">
+        <div className="whitespace-pre-wrap rounded-md border border-gray-300 overflow-hidden">
           {generatedCode ? (
-            <pre>{generatedCode}</pre>
+            <CodeMirror
+            value={generatedCode}
+            extensions={[javascript()]}
+            readOnly={true}
+            height="250px"
+            className="text-sm"
+          />
           ) : (
             <p className="text-gray-500">{t('noCodeYet')}</p>
           )}
@@ -251,9 +259,8 @@ export default function RestClient({
             />
             <SendButton />
 
-            <GenerateButton onLanguageSelect={handleLanguageSelect} />
+            <GenerateButton onLanguageSelect={handleGenerateCode} />
           </div>
-
           <GenerateCode
             language={selectedLanguage}
             method={selectedMethod}
@@ -261,12 +268,17 @@ export default function RestClient({
             body={requestBody}
             setGeneratedCode={setGeneratedCode}
           />
-
           <Tabs tabs={tabs} defaultActiveTab="body" />
-        <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
-          {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
-        </p>{' '}
-        <Tabs tabs={responseTabs} defaultActiveTab="response" />
+          <p
+            className={`font-mono font-bold ${getStatusColor(responseStatus)}`}
+          >
+            {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
+          </p>{' '}
+          <Tabs
+            tabs={responseTabs}
+            activeTab={activeResponseTab}
+            onTabChange={setActiveResponseTab}
+          />
         </form>
       </div>
     </div>
