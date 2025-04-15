@@ -50,7 +50,7 @@
     "headers": "Заголовки",
     "response": "Ответ",
     "generatedCode": "Сгенерированный код",
-    "missingVariables": "Отсутствуют переменные: {{vars}}",
+    "missingVariables": "Отсутствующие переменные",
     "noResponseYet": "Ответ еще не получен",
     "noCodeYet": "Код пока не сгенерирован",
     "generateCodeError": "Недостаточно данных для генерации кода"

@@ -160,10 +160,9 @@ export default function RestClient({
     ];
 
     if (allMissingVariables.length > 0) {
-      const missing = allMissingVariables.map((v) => `{{${v}}}`).join(', ');
 
       setToast({
-        message: t('missingVariables', { vars: missing }),
+        message: t('missingVariables'),
         type: 'error',
       });
       return;

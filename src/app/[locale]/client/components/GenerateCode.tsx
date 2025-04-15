@@ -77,7 +77,6 @@ const GenerateCode = ({
       substituteVariables(data.body);
 
     if (missingUrl.length > 0 || missingBody.length > 0) {
-      console.log('Missing variables:', [...missingUrl, ...missingBody]);
       return;
     }
 
