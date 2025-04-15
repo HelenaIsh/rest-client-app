@@ -56,7 +56,8 @@ export default function RestClient({
   } | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
-  const [activeResponseTab, setActiveResponseTab] = useState<string>('response');
+  const [activeResponseTab, setActiveResponseTab] =
+    useState<string>('response');
 
   const router = useRouter();
 
@@ -160,7 +161,6 @@ export default function RestClient({
     ];
 
     if (allMissingVariables.length > 0) {
-
       setToast({
         message: t('missingVariables'),
         type: 'error',
@@ -171,6 +171,7 @@ export default function RestClient({
     try {
       new URL(urlResult.result);
       setSelectedLanguage(lang);
+      setActiveResponseTab('code');
     } catch {
       setToast({
         message: t('generateCodeError'),
@@ -222,12 +223,12 @@ export default function RestClient({
         <div className="whitespace-pre-wrap rounded-md border border-gray-300 overflow-hidden">
           {generatedCode ? (
             <CodeMirror
-            value={generatedCode}
-            extensions={[javascript()]}
-            readOnly={true}
-            height="250px"
-            className="text-sm"
-          />
+              value={generatedCode}
+              extensions={[javascript()]}
+              readOnly={true}
+              height="250px"
+              className="text-sm"
+            />
           ) : (
             <p className="text-gray-500">{t('noCodeYet')}</p>
           )}

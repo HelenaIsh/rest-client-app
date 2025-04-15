@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect} from 'react';
+import { ReactNode, useState } from 'react';
 
 type Tab = {
   id: string;
@@ -20,25 +20,10 @@ export default function Tabs({
   onTabChange,
 }: TabsProps) {
   const [internalActiveTab, setInternalActiveTab] = useState(
-    defaultActiveTab || tabs[0]?.id
+    defaultActiveTab || tabs[0]?.id || ''
   );
 
   const currentTab = activeTab ?? internalActiveTab;
-
-   const setTab = (tabId: string) => {
-    if (onTabChange) {
-      onTabChange(tabId);
-    } else {
-      setInternalActiveTab(tabId);
-    }
-  };
-
-  useEffect(() => {
-    if (activeTab !== undefined && activeTab !== currentTab) {
-      setInternalActiveTab(activeTab);
-    }
-  }, [activeTab, currentTab]);
-
 
   return (
     <div>
@@ -52,7 +37,9 @@ export default function Tabs({
                 ? 'font-bold text-blue-600'
                 : 'text-gray-600'
             }`}
-            onClick={() => setTab(tab.id)}
+            onClick={() =>
+              onTabChange ? onTabChange(tab.id) : setInternalActiveTab(tab.id)
+            }
           >
             {tab.label}
           </button>
