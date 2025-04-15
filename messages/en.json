@@ -50,6 +50,7 @@
     "headers": "Headers",
     "response": "Response",
     "generatedCode": "Generated Code",
+    "missingVariables": "Missing variables: {{vars}}",
     "noResponseYet": "No response yet",
     "noCodeYet": "No generated code",
     "generateCodeError": "There are not enough details for the code to be generated"

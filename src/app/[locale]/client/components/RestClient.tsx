@@ -148,45 +148,29 @@ export default function RestClient({
     );
   };
 
-    const handleLanguageSelect = (lang: string) => {
+  const handleLanguageSelect = (lang: string) => {
     const urlResult = substituteVariables(endpointUrl);
-    const bodyResult = substituteVariables(requestBody!);
-    const langResult = substituteVariables(lang);
-
-    console.log('Substituted language result:', langResult.result);
-    
-    const headersWithResults = headers.map((header) => {
-      const result = substituteVariables(header.value);
-      return {
-        ...header,
-        value: result.result,
-        missingVariables: result.missingVariables,
-      };
-    });
-    
+    const bodyResult = substituteVariables(requestBody);
+  
     const allMissingVariables = [
       ...urlResult.missingVariables,
       ...bodyResult.missingVariables,
-      ...headersWithResults.flatMap((header) => header.missingVariables),
-      ...langResult.missingVariables,
     ];
   
-    
     if (allMissingVariables.length > 0) {
-      console.log('Missing variables in language selection:', allMissingVariables);
+      const missing = allMissingVariables.map((v) => `{{${v}}}`).join(', ');
+
       setToast({
-        message: `Missing variables: ${allMissingVariables.join(', ')}`,
+        message: t('missingVariables', { vars: missing }),
         type: 'error',
       });
       return;
     }
-    
+  
     try {
       new URL(urlResult.result);
-  
-      setSelectedLanguage(langResult.result);
+      setSelectedLanguage(lang);
     } catch {
-      console.log('Error with generated URL:', urlResult.result);
       setToast({
         message: t('generateCodeError'),
         type: 'error',

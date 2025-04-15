@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { methods } from './MethodSelector';
+import { useVariables } from '@/app/context/VariablesContext'
 
 interface GenerateCodeProps {
   language: string;
@@ -62,6 +63,7 @@ const GenerateCode = ({
   body,
   setGeneratedCode,
 }: GenerateCodeProps) => {
+  const { substituteVariables } = useVariables();
   const [data, setData] = useState<RequestData>({ url, method, body });
 
   const generateCode = useCallback(() => {
@@ -70,15 +72,23 @@ const GenerateCode = ({
     const generator = codeGenerators[group][language];
     if (!generator) return;
 
-    const serializedData: RequestData = {
-      ...data,
-      body:
-        typeof data.body === 'string' ? data.body : JSON.stringify(data.body),
+    const { result: substitutedUrl, missingVariables: missingUrl } = substituteVariables(data.url);
+    const { result: substitutedBody, missingVariables: missingBody } = substituteVariables(data.body);
+
+    if (missingUrl.length > 0 || missingBody.length > 0) {
+      console.log('Missing variables:', [...missingUrl, ...missingBody]);
+      return;
+    }
+
+    const substitutedData: RequestData = {
+      url: substitutedUrl,
+      method: data.method,
+      body: substitutedBody,
     };
 
-    const generated = generator(serializedData);
+    const generated = generator(substitutedData);
     setGeneratedCode(generated);
-  }, [data, language, setGeneratedCode]);
+  }, [data, language, setGeneratedCode, substituteVariables]);
 
   useEffect(() => {
     setData({ method, url, body });
