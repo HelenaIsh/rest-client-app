@@ -1,0 +1,44 @@
+sequenceDiagram
+    participant User/Browser as User
+    participant Next.js Server as Server
+    participant Middleware as MW
+    participant i18n Middleware as i18nMW
+    participant Auth Check Logic as AuthCheck
+
+    User->>Server: Żądanie URL (np. /en/client, /pl/signin)
+    Server->>MW: Wywołaj middleware(request)
+
+    %% 1. Wywołanie i18n Middleware
+    MW->>i18nMW: intlMiddleware(request)
+    i18nMW-->>MW: Zwróć i18nResponse
+
+    %% 2. Sprawdzenie odpowiedzi i18n
+    MW->>MW: Sprawdź i18nResponse (status >= 300 lub nagłówek 'x-middleware-rewrite')
+
+    alt i18n wymaga przekierowania/przepisania
+        MW-->>Server: Zwróć i18nResponse (Przekierowanie/Przepisanie)
+        Server-->>User: Odpowiedz (np. 3xx Redirect lub wewnętrzne przepisanie)
+        Note right of MW: Przepływ zatrzymany przed AuthCheck
+    else i18n nie wymaga akcji (pozwala kontynuować)
+
+        %% 3. Wywołanie logiki autentykacji
+        MW->>AuthCheck: checkAuth(request)
+        AuthCheck-->>MW: Zwróć authResponse (Przekierowanie lub null)
+
+        %% 4. Sprawdzenie odpowiedzi autentykacji
+        MW->>MW: Sprawdź authResponse
+
+        alt Auth wymaga przekierowania
+            MW-->>Server: Zwróć authResponse (Przekierowanie np. do /signin lub /client)
+            Server-->>User: Odpowiedz (np. 3xx Redirect)
+            Note right of MW: Przepływ zatrzymany po AuthCheck
+        else Auth OK (authResponse jest null)
+
+            %% 5. Kontynuacja z odpowiedzią i18n
+            MW-->>Server: Zwróć oryginalną i18nResponse (pozwala na dalsze przetwarzanie)
+            Server->>Server: Przetwórz żądanie (np. renderuj stronę)
+            Server-->>User: Odpowiedz (np. 200 OK + HTML strony)
+            Note right of MW: Dostęp do strony dozwolony
+        end
+    end
+

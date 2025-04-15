@@ -24,6 +24,6 @@
       "@components/*": ["./src/app/[locale]/client/components/*"]
     }
   },
-  "exclude": ["node_modules", "/tmp/**/*", "./tmp", "tmp", "*/tmp/**/**"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

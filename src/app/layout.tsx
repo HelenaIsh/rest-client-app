@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { AuthProvider } from '../context/AuthContext';
-import React from 'react';
-import ClientLogoutButton from '@/components/ClientLogoutButton';
 import { VariablesProvider } from './context/VariablesContext';
 
 const geistSans = Geist({
@@ -31,14 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <div style={{ position: 'absolute', top: 10, right: 10 }}>
-            <ClientLogoutButton />
-          </div>
-          <div className="min-h-screen">
-            <VariablesProvider>{children}</VariablesProvider>
-          </div>
-        </AuthProvider>
+        <VariablesProvider>{children}</VariablesProvider>
       </body>
     </html>
   );

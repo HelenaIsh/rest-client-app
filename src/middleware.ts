@@ -4,6 +4,7 @@ import { routing } from './i18n/routing';
 
 const protectedPaths = ['/client', '/history', '/variables'];
 
+// Funkcja sprawdzająca autentykację (pozostaje bez zmian)
 function checkAuth(request: NextRequest): NextResponse | null {
   console.log('--- Inside checkAuth ---');
   const originalPathname = request.nextUrl.pathname;
@@ -54,31 +55,25 @@ function checkAuth(request: NextRequest): NextResponse | null {
 
 const intlMiddleware = createMiddleware({
   locales: routing.locales,
-  defaultLocale: routing.defaultLocale,
+  defaultLocale: 'en',
   localeDetection: true,
-  localePrefix: 'always',
 });
 
-export default function middleware(request: NextRequest) {
-  console.log(`--- Middleware START for: ${request.nextUrl.pathname} ---`);
+export function middleware(request: NextRequest): NextResponse {
+  console.log(`>>> Middleware invoked for: ${request.nextUrl.pathname}`);
 
-  console.log(`--> Running checkAuth FIRST for: ${request.nextUrl.pathname}`);
   const authResponse = checkAuth(request);
   if (authResponse) {
-    console.log('Auth middleware returned a redirect. Returning authResponse.');
+    console.log('<<< Middleware returning auth response');
     return authResponse;
   }
 
-  console.log(
-    'Auth check passed (returned null). Proceeding to i18n middleware.'
-  );
-  const i18nResponse = intlMiddleware(request);
-
-  console.log(`i18nMiddleware status: ${i18nResponse.status}`);
-  console.log('Returning response from i18n middleware.');
-  return i18nResponse;
+  console.log('--- Handing over to intlMiddleware ---');
+  const intlResponse = intlMiddleware(request);
+  console.log('<<< Middleware returning intl response');
+  return intlResponse;
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'],
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };
