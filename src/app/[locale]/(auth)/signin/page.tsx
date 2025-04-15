@@ -6,20 +6,24 @@ import {
   useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-const SignUpPage: React.FC = () => {
+const SignInPage: React.FC = () => {
   const t = useTranslations('SignInPage');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
   const router = useRouter();
-  const [user] = useAuthState(auth);
-  if (user) {
-    router.push('/');
-  }
+  const [user, loading] = useAuthState(auth);
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
   const handleSignIn = async () => {
     try {
       const res = await signInWithEmailAndPassword(email, password);
@@ -59,6 +63,10 @@ const SignUpPage: React.FC = () => {
       await handleSignIn();
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col ">
@@ -102,4 +110,4 @@ const SignUpPage: React.FC = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;

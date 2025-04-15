@@ -13,6 +13,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 const Header: React.FC = () => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
   const [user] = useAuthState(auth);
+  const [mounted, setMounted] = useState(false);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -23,17 +24,17 @@ const Header: React.FC = () => {
     await signOut(auth);
   };
 
-  const handleScroll = (): void => {
-    if (window.scrollY > 0) {
-      setIsSticky(true);
-    } else {
-      setIsSticky(false);
-    }
-  };
-
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    setMounted(true);
+    const handleScroll = (): void => {
+      if (window.scrollY > 0) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
 
+    window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -43,6 +44,10 @@ const Header: React.FC = () => {
     const newPath = toggleToOtherLocale(locale, pathname);
     router.push(newPath);
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <header className={`header ${isSticky ? 'sticky' : ''}`}>

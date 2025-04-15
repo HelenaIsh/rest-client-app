@@ -6,7 +6,7 @@ import {
   useCreateUserWithEmailAndPassword,
 } from 'react-firebase-hooks/auth';
 import { auth } from '@/app/firebase/config';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const SignUpPage: React.FC = () => {
@@ -16,11 +16,14 @@ const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '' });
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const router = useRouter();
-  if (user) {
-    router.push('/');
-  }
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
 
   const handleSignUp = async () => {
     try {
@@ -29,6 +32,7 @@ const SignUpPage: React.FC = () => {
       setEmail('');
       setPassword('');
       setErrors({ email: '', password: '' });
+      router.push('/');
     } catch (error) {
       console.log(error);
     }
@@ -60,6 +64,10 @@ const SignUpPage: React.FC = () => {
       await handleSignUp();
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col ">

@@ -5,11 +5,33 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { auth } from '@/app/firebase/config';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useState, useEffect } from 'react';
 
 const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
   const locale = useLocale();
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="main-container">
+        <div className="app-content">
+          <div className="welcome-section">
+            <h1 className="welcome-sign">Loading...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="main-container">
