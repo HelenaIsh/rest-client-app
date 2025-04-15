@@ -4,7 +4,7 @@ import MethodSelector, { methods } from '@components/MethodSelector';
 import React, { FormEvent, useState, useEffect } from 'react';
 import EndpointInput from '@components/EndpointInput';
 import SendButton from '@components/SendButton';
-import GenerateButton from '@components/GenerateButton ';
+import GenerateButton from '@components/GenerateButton';
 import GenerateCode from '@components/GenerateCode';
 import { Header } from '@/types';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
@@ -148,36 +148,45 @@ export default function RestClient({
     );
   };
 
-  const handleLanguageSelect = (lang: string) => {
-    try {
-      new URL(endpointUrl);
-      const urlResult = substituteVariables(endpointUrl);
-      const bodyResult = substituteVariables(requestBody!);
-      const headersWithSubstitutions = headers.map((header) => {
-        const { result } = substituteVariables(header.value);
-        return {
-          ...header,
-          value: result,
-        };
+    const handleLanguageSelect = (lang: string) => {
+    const urlResult = substituteVariables(endpointUrl);
+    const bodyResult = substituteVariables(requestBody!);
+    const langResult = substituteVariables(lang);
+
+    console.log('Substituted language result:', langResult.result);
+    
+    const headersWithResults = headers.map((header) => {
+      const result = substituteVariables(header.value);
+      return {
+        ...header,
+        value: result.result,
+        missingVariables: result.missingVariables,
+      };
+    });
+    
+    const allMissingVariables = [
+      ...urlResult.missingVariables,
+      ...bodyResult.missingVariables,
+      ...headersWithResults.flatMap((header) => header.missingVariables),
+      ...langResult.missingVariables,
+    ];
+  
+    
+    if (allMissingVariables.length > 0) {
+      console.log('Missing variables in language selection:', allMissingVariables);
+      setToast({
+        message: `Missing variables: ${allMissingVariables.join(', ')}`,
+        type: 'error',
       });
-
-      const allMissing = [
-        ...urlResult.missingVariables,
-        ...bodyResult.missingVariables,
-        ...headersWithSubstitutions.flatMap(
-          (header) => substituteVariables(header.value).missingVariables
-        ),
-      ];
-
-      const isInvalid =
-        !endpointUrl.trim() || !selectedMethod || allMissing.length > 0;
-
-      if (isInvalid) {
-        throw new Error();
-      }
-
-      setSelectedLanguage(lang);
+      return;
+    }
+    
+    try {
+      new URL(urlResult.result);
+  
+      setSelectedLanguage(langResult.result);
     } catch {
+      console.log('Error with generated URL:', urlResult.result);
       setToast({
         message: t('generateCodeError'),
         type: 'error',
