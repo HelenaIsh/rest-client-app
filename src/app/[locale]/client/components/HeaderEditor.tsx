@@ -68,7 +68,7 @@ const HeaderEditor = ({
                 type="text"
                 value={header.key}
                 onChange={(e) => handleChange(header.id, 'key', e.target.value)}
-                className="w-full p-1 border border-gray-300 rounded-md"
+                className="p-1 border border-gray-300 rounded-md"
                 placeholder={t('placeholders.key')}
               />
             </td>
