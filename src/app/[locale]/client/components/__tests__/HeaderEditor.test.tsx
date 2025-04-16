@@ -145,7 +145,7 @@ describe('HeaderEditor', () => {
 
     const inputs = screen.getAllByRole('textbox');
     inputs.forEach((input) => {
-      expect(input).toHaveClass('w-full p-1 border border-gray-300 rounded-md');
+      expect(input).toHaveClass('p-1 border border-gray-300 rounded-md');
     });
   });
 });

@@ -36,6 +36,11 @@ const messages = {
     noResponseYet: 'No response yet',
     genericError: 'An error occurred',
     networkError: 'Network error',
+    generatedCode: 'Generated code',
+    noCodeYet: 'noCodeYet',
+  },
+  GenerateButton: {
+    generate: 'Generate',
   },
   ...headerEditorMessages,
   ...RequestBodyMessages,
