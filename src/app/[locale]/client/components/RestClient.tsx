@@ -4,8 +4,11 @@ import MethodSelector, { methods } from '@components/MethodSelector';
 import React, { FormEvent, useState, useEffect } from 'react';
 import EndpointInput from '@components/EndpointInput';
 import SendButton from '@components/SendButton';
+import GenerateButton from '@components/GenerateButton';
+import GenerateCode from '@components/GenerateCode';
 import { Header } from '@/types';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
 import { EditorView } from '@codemirror/view';
 import { useRouter } from 'next/navigation';
 import Toast from '@/components/Toast';
@@ -51,6 +54,10 @@ export default function RestClient({
     message: string;
     type: 'success' | 'error' | 'info';
   } | null>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const [activeResponseTab, setActiveResponseTab] =
+    useState<string>('response');
 
   const router = useRouter();
 
@@ -144,6 +151,35 @@ export default function RestClient({
     );
   };
 
+  const handleGenerateCode = (lang: string) => {
+    const urlResult = substituteVariables(endpointUrl);
+    const bodyResult = substituteVariables(requestBody);
+
+    const allMissingVariables = [
+      ...urlResult.missingVariables,
+      ...bodyResult.missingVariables,
+    ];
+
+    if (allMissingVariables.length > 0) {
+      setToast({
+        message: t('missingVariables'),
+        type: 'error',
+      });
+      return;
+    }
+
+    try {
+      new URL(urlResult.result);
+      setSelectedLanguage(lang);
+      setActiveResponseTab('code');
+    } catch {
+      setToast({
+        message: t('generateCodeError'),
+        type: 'error',
+      });
+    }
+  };
+
   const tabs = [
     {
       id: 'body',
@@ -159,6 +195,45 @@ export default function RestClient({
       id: 'headers',
       label: t('headers'),
       content: <HeaderEditor headers={headers} setHeaders={setHeaders} />,
+    },
+  ];
+
+  const responseTabs = [
+    {
+      id: 'response',
+      label: t('response'),
+      content: (
+        <div className="rounded-md border border-gray-300 overflow-hidden">
+          <CodeMirror
+            value={typeof responseData === 'string' ? responseData : ''}
+            extensions={
+              language ? [language as Extension] : [EditorView.lineWrapping]
+            }
+            readOnly={true}
+            height="250px"
+            className="text-sm"
+          />
+        </div>
+      ),
+    },
+    {
+      id: 'code',
+      label: t('generatedCode'),
+      content: (
+        <div className="whitespace-pre-wrap rounded-md border border-gray-300 overflow-hidden">
+          {generatedCode ? (
+            <CodeMirror
+              value={generatedCode}
+              extensions={[javascript()]}
+              readOnly={true}
+              height="250px"
+              className="text-sm"
+            />
+          ) : (
+            <p className="text-gray-500">{t('noCodeYet')}</p>
+          )}
+        </div>
+      ),
     },
   ];
 
@@ -183,24 +258,28 @@ export default function RestClient({
               setSelectedMethod={setSelectedMethod}
             />
             <SendButton />
+
+            <GenerateButton onLanguageSelect={handleGenerateCode} />
           </div>
-          <Tabs tabs={tabs} defaultActiveTab="body" />
-        </form>
-        <p className={'text-lg m-4'}>{t('response')}</p>
-        <p className={`font-mono font-bold ${getStatusColor(responseStatus)}`}>
-          {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
-        </p>{' '}
-        <div className="border border-gray-300 rounded-md">
-          <CodeMirror
-            value={responseData as string}
-            extensions={
-              language ? [language as Extension] : [EditorView.lineWrapping]
-            }
-            readOnly={true}
-            height="250px"
-            className="text-sm"
+          <GenerateCode
+            language={selectedLanguage}
+            method={selectedMethod}
+            url={endpointUrl}
+            body={requestBody}
+            setGeneratedCode={setGeneratedCode}
           />
-        </div>
+          <Tabs tabs={tabs} defaultActiveTab="body" />
+          <p
+            className={`font-mono font-bold ${getStatusColor(responseStatus)}`}
+          >
+            {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
+          </p>{' '}
+          <Tabs
+            tabs={responseTabs}
+            activeTab={activeResponseTab}
+            onTabChange={setActiveResponseTab}
+          />
+        </form>
       </div>
     </div>
   );
