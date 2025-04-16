@@ -23,7 +23,10 @@
   },
   "History": {
     "title": "History",
-    "description": "This is the history page"
+    "description": "This is the history page",
+    "emptyHistory": "You haven't executed any requests yet",
+    "tryRestClient": "Try the REST Client",
+    "clearHistory": "Clear History"
   },
   "Variables": {
     "title": "Variables",

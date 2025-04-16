@@ -4,6 +4,7 @@ import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { javascript } from '@codemirror/lang-javascript';
 import { methods } from '@components/MethodSelector';
+import { HistoryItem } from '@/types';
 
 export const getFilteredHeaders = (
   headers: Header[]
@@ -67,4 +68,17 @@ export const buildRequestUrl = (
   });
 
   return `${path}?${params.toString()}`;
+};
+
+export const getHistory = (): HistoryItem[] => {
+  const history = localStorage.getItem('rest-client-history');
+  return history ? JSON.parse(history) : [];
+};
+
+export const addToHistory = (item: HistoryItem): void => {
+  const history = getHistory();
+  localStorage.setItem(
+    'rest-client-history',
+    JSON.stringify([...history, item])
+  );
 };
