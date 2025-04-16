@@ -70,10 +70,17 @@
     "body": "Тело",
     "headers": "Заголовки",
     "response": "Ответ",
-    "noResponseYet": "Ответ еще не получен"
+    "generatedCode": "Сгенерированный код",
+    "missingVariables": "Отсутствующие переменные",
+    "noResponseYet": "Ответ еще не получен",
+    "noCodeYet": "Код пока не сгенерирован",
+    "generateCodeError": "Недостаточно данных для генерации кода"
   },
   "SendButton": {
     "send": "Отправить"
+  },
+  "GenerateButton": {
+    "generate": "Сгенерировать"
   },
   "RequestBodyEditor": {
     "type": {

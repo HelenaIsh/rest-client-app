@@ -70,10 +70,17 @@
     "body": "Body",
     "headers": "Headers",
     "response": "Response",
-    "noResponseYet": "No response yet"
+    "generatedCode": "Generated Code",
+    "missingVariables": "Missing variables",
+    "noResponseYet": "No response yet",
+    "noCodeYet": "No generated code",
+    "generateCodeError": "There are not enough details for the code to be generated"
   },
   "SendButton": {
     "send": "Send"
+  },
+  "GenerateButton": {
+    "generate": "Generate"
   },
   "RequestBodyEditor": {
     "type": {
