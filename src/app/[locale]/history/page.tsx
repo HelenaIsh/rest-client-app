@@ -1,12 +1,13 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HistoryItem } from '@/types';
 import { getHistory } from '../client/utils/utils';
 
-const History: React.FC = () => {
+const HistoryComponent = () => {
   const t = useTranslations('History');
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
@@ -64,5 +65,9 @@ const History: React.FC = () => {
     </>
   );
 };
+
+const History = dynamic(() => Promise.resolve(HistoryComponent), {
+  ssr: false,
+});
 
 export default History;

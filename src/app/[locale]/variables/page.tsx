@@ -1,10 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { useVariables } from '@/app/context/VariablesContext';
 import { useTranslations } from 'next-intl';
 
-export default function Variables() {
+const VariablesComponent = () => {
   const { variables, addVariable, removeVariable } = useVariables();
   const [newVariable, setNewVariable] = useState({ name: '', value: '' });
   const t = useTranslations('Variables');
@@ -73,4 +74,10 @@ export default function Variables() {
       </div>
     </div>
   );
-}
+};
+
+const Variables = dynamic(() => Promise.resolve(VariablesComponent), {
+  ssr: false,
+});
+
+export default Variables;
