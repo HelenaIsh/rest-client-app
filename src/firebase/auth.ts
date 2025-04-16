@@ -7,12 +7,12 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-  // signInWithPhoneNumber,
+  
   RecaptchaVerifier,
   Auth,
 } from 'firebase/auth';
 
-// import { PhoneAuthProvider } from 'firebase/auth';
+
 import { firebaseConfig } from './config';
 
 const isBrowser = typeof window !== 'undefined';
@@ -66,17 +66,7 @@ export const setupRecaptcha = (containerOrId: string | HTMLElement) => {
   });
 };
 
-// export const sendPhoneVerification = async (
-//   phoneNumber: string,
-//   appVerifier: RecaptchaVerifier
-// ) => {
-//   if (!isBrowser) {
-//     throw new Error(
-//       'Auth operations are only supported in browser environment'
-//     );
-//   }
-//   return signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-// };
+
 
 export const logOut = async () => {
   if (!isBrowser) {

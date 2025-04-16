@@ -1,10 +1,9 @@
-// src/app/[locale]/(auth)/signup/page.tsx
 'use client';
 
 import { useState } from 'react';
 import { signUp, signInWithGoogle } from '../../../../firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
-import Link from 'next/link'; // <--- ADD THIS LINE
+import Link from 'next/link'; 
 import GoogleIcon from '../../../../components/GoogleIcon';
 
 export default function SignUpPage() {

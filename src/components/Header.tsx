@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -6,26 +7,23 @@ import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { toggleToOtherLocale } from '../i18n/locale-utils';
+import { useAuth } from '../app/context/AuthContext'; 
 
-interface HeaderProps {
-  isAuthenticated: boolean;
-}
 
-//TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of header ([Sign In] | [Sign up] OR [Sign Out])
-// — we need to connect the Authentication here
-
-const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
+const Header: React.FC = () => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
-
+  const { user, loading, signOut } = useAuth(); 
   const pathname = usePathname();
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('Header');
 
-  //TODO - Currently, onSignOut is not working.
-
-  const onSignOut = (): void => {
-    console.log('Sign out clicked');
+  
+  const handleSignOut = async (): Promise<void> => {
+  
+    await signOut();
+  
+    router.push(`/${locale}/`);
   };
 
   const handleScroll = (): void => {
@@ -38,7 +36,6 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
@@ -51,7 +48,8 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
 
   return (
     <header className={`header ${isSticky ? 'sticky' : ''}`}>
-      <Link href="/" className="logo">
+      {/* Fix logo link to include locale */}
+      <Link href={`/${locale}/`} className="logo">
         <Image
           src="/images/logo.png"
           alt="logo"
@@ -65,16 +63,22 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
         <button className="nav-link" onClick={toggleLocale}>
           {locale === 'en' ? 'РУС' : 'EN'}
         </button>
-        {isAuthenticated ? (
-          <Link href="#" onClick={onSignOut} className="nav-link">
+
+        
+        {loading ? (
+          <span className="nav-link">...</span> 
+        ) : user ? (
+          
+          <button onClick={handleSignOut} className="nav-link">
             {t('signOut')}
-          </Link>
+          </button>
         ) : (
+        
           <>
-            <Link href="/signin" className="nav-link">
+            <Link href={`/${locale}/signin`} className="nav-link">
               {t('signIn')}
             </Link>
-            <Link href="/signup" className="nav-link">
+            <Link href={`/${locale}/signup`} className="nav-link">
               {t('signUp')}
             </Link>
           </>

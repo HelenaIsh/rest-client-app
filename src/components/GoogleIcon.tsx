@@ -1,8 +1,6 @@
 import React from 'react';
 
-// Usunięto pusty interfejs GoogleIconProps
 
-// Bezpośrednio używamy typu React.SVGProps<SVGSVGElement>
 const GoogleIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   return (
     <svg
