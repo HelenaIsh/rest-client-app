@@ -52,11 +52,16 @@ export const buildRequestUrl = (
   requestBody: string,
   headers: Header[]
 ) => {
-  const encodedUrl = btoa(endpointUrl);
+  const toBase64 = (str: string): string => {
+    const bytes = new TextEncoder().encode(str);
+    const binary = String.fromCharCode(...bytes);
+    return btoa(binary);
+  };
+  const encodedUrl = toBase64(endpointUrl);
   let path = `/client/${selectedMethod}/${encodedUrl}`;
 
   if (selectedMethod !== 'GET' && selectedMethod !== 'HEAD') {
-    const encodedBody = btoa(requestBody);
+    const encodedBody = toBase64(requestBody);
     path += `/${encodedBody}`;
   }
 
