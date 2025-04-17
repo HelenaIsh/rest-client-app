@@ -174,7 +174,6 @@ export default function SignInPage() {
         </div>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          {/* Zmieniono Don't na Don&apos;t */}
           Don&apos;t have an account?{' '}
           <Link
             href={`/${locale}/signup`}

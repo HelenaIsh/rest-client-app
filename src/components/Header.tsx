@@ -44,7 +44,6 @@ const Header: React.FC = () => {
 
   return (
     <header className={`header ${isSticky ? 'sticky' : ''}`}>
-      {/* Fix logo link to include locale */}
       <Link href={`/${locale}/`} className="logo">
         <Image
           src="/images/logo.png"
@@ -57,7 +56,7 @@ const Header: React.FC = () => {
 
       <nav className="nav">
         <button className="nav-link" onClick={toggleLocale}>
-          {locale === 'en' ? 'РУС' : 'EN'}
+          {locale === 'en' ? 'RUS' : 'EN'}
         </button>
 
         {loading ? (

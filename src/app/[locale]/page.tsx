@@ -3,13 +3,22 @@
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuth } from '../context/AuthContext';
 
 const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
   const locale = useLocale();
-  const isAuthenticated = true;
-  //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of the main page — we need to connect the Authentication!
-  //TODO we must ask author (TODO or file)I dont now
+
+  const { user, loading } = useAuth();
+
+  const isAuthenticated = !!user;
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  const username = user?.displayName || user?.email || 'User';
+
   return (
     <div className="main-container">
       <div className="app-content">
@@ -27,7 +36,7 @@ const MainPage: React.FC = () => {
           </div>
         ) : (
           <div className="welcome-section">
-            <h1 className="welcome-sign">{t('welcomeBack')}</h1>
+            <h1 className="welcome-sign">{`Welcome Back, ${username}!`}</h1>
             <div className="client-links">
               <Link href={`/${locale}/client`} className="btn">
                 {t('restClient')}
@@ -42,7 +51,7 @@ const MainPage: React.FC = () => {
           </div>
         )}
       </div>
-      {/*TODO Authors Section -  write a description */}
+
       <div className="authors-content">
         <h2 className="authors-sign">{t('ourTeam')}</h2>
         <div className="authors">
