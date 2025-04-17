@@ -40,6 +40,10 @@
     "title": "Страница входа",
     "mode": "Войти",
     "description": "Это страница входа",
+    "form": {
+      "emailPlaceholder": "Электронная почта",
+      "passwordPlaceholder": "Пароль"
+    },
     "errors": {
       "unknown": "Произошла ошибка при входе",
       "invalidEmail": "Неверный адрес электронной почты",
@@ -47,19 +51,25 @@
       "userNotFound": "Аккаунт с таким email не найден",
       "wrongPassword": "Неверный пароль",
       "invalidCredential": "Неверный email или пароль",
-      "tooManyRequests": "Слишком много попыток. Пожалуйста, попробуйте позже"
+      "tooManyRequests": "Слишком много попыток. Пожалуйста, попробуйте позже",
+      "passwordRequirements": "Пароль должен содержать не менее 8 символов, включая букву, цифру и специальный символ"
     }
   },
   "SignUpPage": {
     "title": "Страница регистрации",
     "mode": "Зарегистрироваться",
     "description": "Это страница регистрации",
+    "form": {
+      "emailPlaceholder": "Электронная почта",
+      "passwordPlaceholder": "Пароль"
+    },
     "errors": {
       "unknown": "Произошла ошибка при регистрации",
       "emailInUse": "Этот email уже зарегистрирован",
       "invalidEmail": "Неверный адрес электронной почты",
       "operationNotAllowed": "Регистрация по email и паролю отключена",
-      "weakPassword": "Слишком слабый пароль"
+      "weakPassword": "Слишком слабый пароль",
+      "passwordRequirements": "Пароль должен содержать не менее 8 символов, включая букву, цифру и специальный символ"
     }
   },
   "RestClient": {

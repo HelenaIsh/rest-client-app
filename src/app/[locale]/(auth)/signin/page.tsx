@@ -91,10 +91,10 @@ const SignInPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors = {
-      email: validateEmail(email) ? '' : 'Invalid email address',
+      email: validateEmail(email) ? '' : t('errors.invalidEmail'),
       password: validatePassword(password)
         ? ''
-        : 'Password must be at least 8 characters and include a letter, a number, and a special character.',
+        : t('errors.passwordRequirements'),
     };
     setErrors(newErrors);
     if (!newErrors.email && !newErrors.password) {
@@ -121,7 +121,7 @@ const SignInPage: React.FC = () => {
         <div>
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t('form.emailPlaceholder')}
             className="w-full border rounded px-3 py-2"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -134,7 +134,7 @@ const SignInPage: React.FC = () => {
         <div>
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t('form.passwordPlaceholder')}
             className="w-full border rounded px-3 py-2"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
