@@ -64,9 +64,7 @@ const SignUpPage: React.FC = () => {
         setErrors({ email: '', password: '' });
         router.push('/');
       }
-    } catch (error) {
-      console.error('Sign up error:', error);
-    }
+    } catch {}
   };
 
   const validateEmail = (email: string) => {

@@ -70,9 +70,7 @@ const SignInPage: React.FC = () => {
         setErrors({ email: '', password: '' });
         router.push('/');
       }
-    } catch (error) {
-      console.error('Sign in error:', error);
-    }
+    } catch {}
   };
 
   const validateEmail = (email: string) => {
