@@ -1,4 +1,3 @@
-// src/types.ts
 export interface Header {
   id: number;
   key: string;
@@ -6,12 +5,11 @@ export interface Header {
   enabled: boolean;
 }
 
-// Dodaj ten interfejs
 export interface HistoryEntry {
-  id: string; // Unikalny identyfikator
-  method: string; // Metoda HTTP
-  url: string; // URL *po* podstawieniu zmiennych
-  headers: Record<string, string>; // Nagłówki *po* podstawieniu zmiennych (tylko włączone)
-  body?: string; // Ciało zapytania *po* podstawieniu zmiennych (opcjonalne)
-  timestamp: number; // Czas wykonania
+  id: string;
+  method: string;
+  url: string;
+  headers: Record<string, string>;
+  body?: string;
+  timestamp: number;
 }
