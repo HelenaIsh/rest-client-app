@@ -9,7 +9,7 @@ const MainPage: React.FC = () => {
   const locale = useLocale();
   const isAuthenticated = true;
   //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of the main page — we need to connect the Authentication!
-
+  //TODO we must ask author (TODO or file)I dont now
   return (
     <div className="main-container">
       <div className="app-content">
