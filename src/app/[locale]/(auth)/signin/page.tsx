@@ -84,7 +84,7 @@ const SignInPage: React.FC = () => {
       password.length >= 8 &&
       /[\p{L}]/u.test(password) &&
       /[0-9]/.test(password) &&
-      /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      /[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/.test(password)
     );
   };
 
