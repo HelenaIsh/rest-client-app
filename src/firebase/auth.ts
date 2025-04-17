@@ -7,11 +7,9 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-  
   RecaptchaVerifier,
   Auth,
 } from 'firebase/auth';
-
 
 import { firebaseConfig } from './config';
 
@@ -65,8 +63,6 @@ export const setupRecaptcha = (containerOrId: string | HTMLElement) => {
     callback: () => {},
   });
 };
-
-
 
 export const logOut = async () => {
   if (!isBrowser) {
