@@ -4,7 +4,6 @@ import { routing } from './i18n/routing';
 
 const protectedPaths = ['/client', '/history', '/variables'];
 
-// Funkcja sprawdzająca autentykację (pozostaje bez zmian)
 function checkAuth(request: NextRequest): NextResponse | null {
   console.log('--- Inside checkAuth ---');
   const originalPathname = request.nextUrl.pathname;

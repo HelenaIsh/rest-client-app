@@ -44,8 +44,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-
-
     });
 
     return () => unsubscribe();
@@ -67,12 +65,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loading,
     signOut,
   };
-
-
-
-
-
-
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
