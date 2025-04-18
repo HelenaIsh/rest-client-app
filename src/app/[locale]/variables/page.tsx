@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState, useEffect } from 'react';
 import { useVariables } from '@/app/context/VariablesContext';
 import { useTranslations } from 'next-intl';
@@ -8,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Loading from '@/components/Loading';
 
-export default function Variables() {
+const VariablesComponent = () => {
   const { variables, addVariable, removeVariable } = useVariables();
   const [newVariable, setNewVariable] = useState({ name: '', value: '' });
   const t = useTranslations('Variables');
@@ -41,7 +42,7 @@ export default function Variables() {
     <div className="w-full h-full max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col">
       <h1 className="text-2xl font-bold mb-4">{t('title')}</h1>
       <p className="mb-4">{t('description')}</p>
-      
+
       <form onSubmit={handleSubmit} className="mb-4">
         <div className="flex gap-4">
           <input
@@ -83,4 +84,10 @@ export default function Variables() {
       </div>
     </div>
   );
-}
+};
+
+const Variables = dynamic(() => Promise.resolve(VariablesComponent), {
+  ssr: false,
+});
+
+export default Variables;

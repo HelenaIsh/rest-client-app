@@ -26,7 +26,10 @@
   },
   "History": {
     "title": "История",
-    "description": "Это страница истории"
+    "description": "Это страница истории",
+    "emptyHistory": "Вы еще не выполнили ни одного запроса",
+    "tryRestClient": "Попробуйте REST клиент",
+    "clearHistory": "Очистить историю"
   },
   "Variables": {
     "title": "Переменные",
