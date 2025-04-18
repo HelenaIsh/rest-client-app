@@ -3,17 +3,39 @@
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
+import { auth } from '@/app/firebase/config';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useState, useEffect } from 'react';
+import Loading from '@/components/Loading';
 
 const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
   const locale = useLocale();
-  const isAuthenticated = true;
-  //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of the main page — we need to connect the Authentication!
+  const [user, loading] = useAuthState(auth);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="main-container">
+        <div className="app-content">
+          <Loading className="h-full" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="main-container">
       <div className="app-content">
-        {!isAuthenticated ? (
+        {!user ? (
           <div className="welcome-section">
             <h1 className="welcome-sign">{t('welcome')}</h1>
             <div className="auth-links">
@@ -27,7 +49,7 @@ const MainPage: React.FC = () => {
           </div>
         ) : (
           <div className="welcome-section">
-            <h1 className="welcome-sign">{t('welcomeBack')}</h1>
+            <h1 className="welcome-sign">{`${t('welcomeBack')}, ${user.email}`}</h1>
             <div className="client-links">
               <Link href={`/${locale}/client`} className="btn">
                 {t('restClient')}
@@ -42,7 +64,6 @@ const MainPage: React.FC = () => {
           </div>
         )}
       </div>
-      {/*TODO Authors Section -  write a description */}
       <div className="authors-content">
         <h2 className="authors-sign">{t('ourTeam')}</h2>
         <div className="authors">
