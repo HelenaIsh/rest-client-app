@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { signUp, signInWithGoogle } from '../../../../firebase/auth';
+import { signUp } from '@/firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import GoogleIcon from '../../../../components/GoogleIcon';
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -64,32 +63,6 @@ export default function SignUpPage() {
         );
       } else {
         setError('Failed to sign up. Please try again later.');
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = async () => {
-    setError('');
-    setLoading(true);
-    try {
-      const userCredential = await signInWithGoogle();
-      const token = await userCredential.user.getIdToken();
-      document.cookie = `auth-token=${token}; path=/; max-age=3600; SameSite=Strict`;
-      router.push(`/${locale}/client`);
-    } catch (err: unknown) {
-      console.error('Google sign-up/sign-in error:', err);
-      if (typeof err === 'object' && err !== null && 'message' in err) {
-        const errorWithMessage = err as { message: string };
-        setError(
-          errorWithMessage.message ||
-            'Failed to sign up/sign in with Google. Please try again later.'
-        );
-      } else {
-        setError(
-          'Failed to sign up/sign in with Google. Please try again later.'
-        );
       }
     } finally {
       setLoading(false);
@@ -181,19 +154,6 @@ export default function SignUpPage() {
                 Or continue with
               </span>
             </div>
-          </div>
-
-          <div className="mt-6">
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              disabled={loading}
-              className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            >
-              <span className="sr-only">Sign up with Google</span>
-              <GoogleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
-              Sign up with Google
-            </button>
           </div>
         </div>
         <div className="mt-6 text-center text-sm text-gray-600">
