@@ -230,7 +230,7 @@ h6 {
   flex: 1;
   text-align: center;
   padding: 10px;
-  background-color: #fff;
+  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -249,10 +249,12 @@ h6 {
 
 .authors {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  border-radius: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
   justify-items: center;
   width: 100%;
+  padding: 20px 30px;
 }
 
 .author-link {
