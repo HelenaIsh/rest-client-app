@@ -10,7 +10,7 @@ import { Header } from '@/types';
 import CodeMirror, { Extension } from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { EditorView } from '@codemirror/view';
-import { useRouter } from 'next/navigation';
+
 import Toast from '@/components/Toast';
 import {
   buildRequestUrl,
@@ -21,8 +21,13 @@ import {
 import RequestBodyEditor from '@components/RequestBodyEditor';
 import HeaderEditor from '@components/HeaderEditor';
 import Tabs from '@components/Tabs';
+
 import { useTranslations } from 'next-intl';
 import { useVariables } from '@/app/context/VariablesContext';
+
+import { useHistorySaver } from '../utils/useHistorySaver';
+
+import { useRouter } from '@/i18n/navigation';
 
 export default function RestClient({
   initialMethod,
@@ -37,15 +42,17 @@ export default function RestClient({
 }) {
   const { substituteVariables } = useVariables();
   const t = useTranslations('RestClient');
+
   const [endpointUrl, setEndpointUrl] = useState<string>(initialUrl || '');
   const [selectedMethod, setSelectedMethod] = useState<
     (typeof methods)[number]
   >(initialMethod || 'GET');
-  const [requestBody, setRequestBody] = useState(initialBody || '{}');
+
+  const [requestBody, setRequestBody] = useState(initialBody || '');
   const [headers, setHeaders] = useState<Header[]>(
     initialHeaders && initialHeaders.length > 0
       ? initialHeaders
-      : [{ id: 1, key: '', value: '', enabled: false }]
+      : [{ id: Date.now(), key: '', value: '', enabled: true }]
   );
   const [responseData, setResponseData] = useState<unknown>('');
   const [responseStatus, setResponseStatus] = useState<number | undefined>();
@@ -61,36 +68,42 @@ export default function RestClient({
 
   const router = useRouter();
 
+  const { saveRequestToHistory } = useHistorySaver();
+
   useEffect(() => {
-    if (!initialMethod && !initialUrl) return;
+    if (!initialUrl) return;
+
     try {
-      new URL(initialUrl!);
+      new URL(initialUrl);
     } catch {
-      setToast({ message: 'URL is incorrect', type: 'error' });
+      setToast({ message: t('invalidUrl'), type: 'error' });
       return;
     }
+
     const myFetch = async () => {
       const requestHeaders = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        ...getFilteredHeaders(headers),
+        ...getFilteredHeaders(initialHeaders || []),
       };
       const options: RequestInit = {
-        method: selectedMethod,
+        method: initialMethod || 'GET',
         headers: requestHeaders,
-        ...(selectedMethod !== 'GET' &&
-          selectedMethod !== 'HEAD' && { body: requestBody }),
+
+        ...(initialMethod &&
+          initialMethod !== 'GET' &&
+          initialMethod !== 'HEAD' &&
+          initialBody && { body: initialBody }),
       };
 
       try {
-        const response = await fetch(endpointUrl, options);
+        const response = await fetch(initialUrl, options);
         setResponseStatus(response.status);
         const { data, detectedLanguage } = await handleResponse(response);
         setResponseData(data);
         setLanguage(detectedLanguage);
       } catch (error) {
         let errorMessage = t('genericError');
-
         if (error instanceof TypeError) {
           errorMessage = t('networkError');
         } else if (error instanceof Error) {
@@ -101,52 +114,58 @@ export default function RestClient({
     };
 
     myFetch();
-  }, []);
+  }, [initialMethod, initialUrl, initialBody, initialHeaders, t]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!endpointUrl) {
-      setToast({ message: 'Invalid or missing endpoint URL', type: 'error' });
+      setToast({ message: t('invalidUrl'), type: 'error' });
       return;
     }
-
     try {
       new URL(endpointUrl);
     } catch {
-      setToast({ message: 'URL is incorrect', type: 'error' });
+      setToast({ message: t('invalidUrl'), type: 'error' });
+      return;
     }
+
     const urlResult = substituteVariables(endpointUrl);
-    const bodyResult = substituteVariables(requestBody!);
+    const bodyResult = substituteVariables(requestBody);
+
     const headersWithSubstitutions = headers.map((header) => {
-      const { result } = substituteVariables(header.value);
-      return {
-        ...header,
-        value: result,
-      };
+      const { result, missingVariables } = substituteVariables(header.value);
+      return { ...header, value: result, _missingVariables: missingVariables };
     });
 
     const allMissingVariables = [
       ...urlResult.missingVariables,
       ...bodyResult.missingVariables,
-      ...headersWithSubstitutions.flatMap(
-        (header) => substituteVariables(header.value).missingVariables
-      ),
-    ];
+      ...headersWithSubstitutions.flatMap((h) => h._missingVariables || []),
+    ].filter((v, i, a) => a.indexOf(v) === i);
 
     if (allMissingVariables.length > 0) {
       setToast({
-        message: `Missing variables: ${allMissingVariables.join(', ')}`,
+        message: `${t('missingVariables')}: ${allMissingVariables.join(', ')}`,
         type: 'error',
       });
       return;
     }
+
+    saveRequestToHistory({
+      method: selectedMethod,
+      url: urlResult.result,
+      headers: headersWithSubstitutions,
+      body: bodyResult.result,
+    });
 
     router.push(
       buildRequestUrl(
         urlResult.result,
         selectedMethod,
         bodyResult.result,
-        headersWithSubstitutions
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        headersWithSubstitutions.map(({ _missingVariables, ...rest }) => rest)
       )
     );
   };
@@ -154,29 +173,20 @@ export default function RestClient({
   const handleGenerateCode = (lang: string) => {
     const urlResult = substituteVariables(endpointUrl);
     const bodyResult = substituteVariables(requestBody);
-
     const allMissingVariables = [
       ...urlResult.missingVariables,
       ...bodyResult.missingVariables,
     ];
-
     if (allMissingVariables.length > 0) {
-      setToast({
-        message: t('missingVariables'),
-        type: 'error',
-      });
+      setToast({ message: t('missingVariables'), type: 'error' });
       return;
     }
-
     try {
       new URL(urlResult.result);
       setSelectedLanguage(lang);
       setActiveResponseTab('code');
     } catch {
-      setToast({
-        message: t('generateCodeError'),
-        type: 'error',
-      });
+      setToast({ message: t('generateCodeError'), type: 'error' });
     }
   };
 
@@ -205,9 +215,15 @@ export default function RestClient({
       content: (
         <div className="rounded-md border border-gray-300 overflow-hidden">
           <CodeMirror
-            value={typeof responseData === 'string' ? responseData : ''}
+            value={
+              typeof responseData === 'object' && responseData !== null
+                ? JSON.stringify(responseData, null, 2)
+                : String(responseData ?? '')
+            }
             extensions={
-              language ? [language as Extension] : [EditorView.lineWrapping]
+              language
+                ? [language as Extension, EditorView.lineWrapping]
+                : [EditorView.lineWrapping]
             }
             readOnly={true}
             height="250px"
@@ -224,13 +240,13 @@ export default function RestClient({
           {generatedCode ? (
             <CodeMirror
               value={generatedCode}
-              extensions={[javascript()]}
+              extensions={[javascript(), EditorView.lineWrapping]}
               readOnly={true}
               height="250px"
               className="text-sm"
             />
           ) : (
-            <p className="text-gray-500">{t('noCodeYet')}</p>
+            <p className="text-gray-500 p-4">{t('noCodeYet')}</p>
           )}
         </div>
       ),
@@ -248,7 +264,9 @@ export default function RestClient({
       )}
       <div className="bg-white rounded-lg shadow p-6">
         <form onSubmit={handleSubmit}>
-          <div className="flex items-stretch">
+          <div className="flex items-stretch mb-4">
+            {' '}
+            {/* Dodano margines dolny */}
             <EndpointInput
               endpointUrl={endpointUrl}
               setEndpointUrl={setEndpointUrl}
@@ -258,7 +276,6 @@ export default function RestClient({
               setSelectedMethod={setSelectedMethod}
             />
             <SendButton />
-
             <GenerateButton onLanguageSelect={handleGenerateCode} />
           </div>
           <GenerateCode
@@ -266,19 +283,26 @@ export default function RestClient({
             method={selectedMethod}
             url={endpointUrl}
             body={requestBody}
+            headers={headers}
             setGeneratedCode={setGeneratedCode}
           />
           <Tabs tabs={tabs} defaultActiveTab="body" />
-          <p
-            className={`font-mono font-bold ${getStatusColor(responseStatus)}`}
-          >
-            {responseStatus ? `HTTP ${responseStatus}` : t('noResponseYet')}
-          </p>{' '}
-          <Tabs
-            tabs={responseTabs}
-            activeTab={activeResponseTab}
-            onTabChange={setActiveResponseTab}
-          />
+          <div className="mt-6">
+            {' '}
+            {/* Dodano margines górny dla sekcji odpowiedzi */}
+            <p
+              className={`font-mono font-bold mb-2 ${getStatusColor(responseStatus)}`}
+            >
+              {responseStatus
+                ? `Status: ${responseStatus}`
+                : t('noResponseYet')}
+            </p>
+            <Tabs
+              tabs={responseTabs}
+              activeTab={activeResponseTab}
+              onTabChange={setActiveResponseTab}
+            />
+          </div>
         </form>
       </div>
     </div>

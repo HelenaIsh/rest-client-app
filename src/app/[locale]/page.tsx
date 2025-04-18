@@ -8,7 +8,6 @@ const MainPage: React.FC = () => {
   const t = useTranslations('MainPage');
   const locale = useLocale();
   const isAuthenticated = true;
-  //TODO - Currently, isAuthenticated is hardcoded(thue/false) for different states of the main page — we need to connect the Authentication!
 
   return (
     <div className="main-container">

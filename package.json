@@ -16,6 +16,7 @@
     "@codemirror/lang-json": "^6.0.1",
     "@uiw/react-codemirror": "^4.23.10",
     "autoprefixer": "^10.4.21",
+    "firebase": "^11.6.0",
     "next": "15.2.4",
     "next-intl": "^4.0.2",
     "postcss": "^8.5.3",
@@ -33,6 +34,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
     "prettier": "3.5.3",
+    "strip-comments": "^2.0.1",
     "tailwindcss": "^4.0.17",
     "typescript": "^5"
   }
