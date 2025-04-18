@@ -1,14 +1,34 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useVariables } from '@/app/context/VariablesContext';
 import { useTranslations } from 'next-intl';
+import { auth } from '@/app/firebase/config';
+import { useRouter } from 'next/navigation';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import Loading from '@/components/Loading';
 
 const VariablesComponent = () => {
   const { variables, addVariable, removeVariable } = useVariables();
   const [newVariable, setNewVariable] = useState({ name: '', value: '' });
   const t = useTranslations('Variables');
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/signin');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <Loading className="h-full" />;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,53 +39,43 @@ const VariablesComponent = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">{t('title')}</h1>
+    <div className="w-full h-full max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col">
+      <h1 className="text-2xl font-bold mb-4">{t('title')}</h1>
+      <p className="mb-4">{t('description')}</p>
 
-      <form onSubmit={handleSubmit} className="mb-8">
-        <div className="flex gap-4 mb-4">
+      <form onSubmit={handleSubmit} className="mb-4">
+        <div className="flex gap-4">
           <input
             type="text"
             placeholder={t('variableNamePlaceholder')}
+            className="flex-1 border rounded px-3 py-2"
             value={newVariable.name}
-            onChange={(e) =>
-              setNewVariable((prev) => ({ ...prev, name: e.target.value }))
-            }
-            className="flex-1 p-2 border rounded"
+            onChange={(e) => setNewVariable({ ...newVariable, name: e.target.value })}
           />
           <input
             type="text"
             placeholder={t('variableValuePlaceholder')}
+            className="flex-1 border rounded px-3 py-2"
             value={newVariable.value}
-            onChange={(e) =>
-              setNewVariable((prev) => ({ ...prev, value: e.target.value }))
-            }
-            className="flex-1 p-2 border rounded"
+            onChange={(e) => setNewVariable({ ...newVariable, value: e.target.value })}
           />
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700"
           >
             {t('addVariableButton')}
           </button>
         </div>
       </form>
 
-      <div className="space-y-4">
+      <div className="space-y-2">
         {variables.map((variable) => (
-          <div
-            key={variable.name}
-            className="flex items-center gap-4 p-4 border rounded"
-          >
-            <div className="flex-1">
-              <div className="font-mono p-2 rounded mb-2">
-                {`{{${variable.name}}}`}
-              </div>
-              <div className="text-gray-600">{variable.value}</div>
-            </div>
+          <div key={variable.name} className="flex items-center gap-4">
+            <span className="font-mono">{variable.name}</span>
+            <span className="font-mono">{variable.value}</span>
             <button
               onClick={() => removeVariable(variable.name)}
-              className="px-3 py-1 text-red-500 hover:text-red-700"
+              className="text-red-500 hover:text-red-700"
             >
               {t('deleteButton')}
             </button>

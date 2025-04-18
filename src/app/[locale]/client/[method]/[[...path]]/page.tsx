@@ -1,12 +1,16 @@
 'use client';
 
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/types';
 import { methods } from '@components/MethodSelector';
 import dynamic from 'next/dynamic';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/firebase/config';
+import { useEffect } from 'react';
+import Loading from '@/components/Loading';
 
 const RestClient = dynamic(() => import('../../components/RestClient'), {
-  loading: () => <div>Loading REST Client...</div>,
+  loading: () => <Loading className="h-full" />,
 });
 
 export default function RequestPage() {
@@ -15,6 +19,22 @@ export default function RequestPage() {
     method: (typeof methods)[number];
   }>();
   const searchParams = useSearchParams();
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/signin');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <Loading className="h-full" />;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const [encodedUrl, encodedBody] = params.path || [];
   const endpointUrl = Buffer.from(

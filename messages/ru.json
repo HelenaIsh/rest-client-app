@@ -1,9 +1,12 @@
 {
+  "Common": {
+    "loading": "Загрузка..."
+  },
   "MainPage": {
     "welcome": "Добро пожаловать!",
     "signIn": "Войти",
     "signUp": "Зарегистрироваться",
-    "welcomeBack": "С возвращением, Username!",
+    "welcomeBack": "С возвращением",
     "restClient": "REST клиент",
     "history": "История",
     "variables": "Переменные",
@@ -38,11 +41,39 @@
   },
   "SignInPage": {
     "title": "Страница входа",
-    "description": "Это страница входа"
+    "mode": "Войти",
+    "description": "Это страница входа",
+    "form": {
+      "emailPlaceholder": "Электронная почта",
+      "passwordPlaceholder": "Пароль"
+    },
+    "errors": {
+      "unknown": "Произошла ошибка при входе",
+      "invalidEmail": "Неверный адрес электронной почты",
+      "userDisabled": "Этот аккаунт отключен",
+      "userNotFound": "Аккаунт с таким email не найден",
+      "wrongPassword": "Неверный пароль",
+      "invalidCredential": "Неверный email или пароль",
+      "tooManyRequests": "Слишком много попыток. Пожалуйста, попробуйте позже",
+      "passwordRequirements": "Пароль должен содержать не менее 8 символов, включая букву, цифру и специальный символ"
+    }
   },
   "SignUpPage": {
     "title": "Страница регистрации",
-    "description": "Это страница регистрации"
+    "mode": "Зарегистрироваться",
+    "description": "Это страница регистрации",
+    "form": {
+      "emailPlaceholder": "Электронная почта",
+      "passwordPlaceholder": "Пароль"
+    },
+    "errors": {
+      "unknown": "Произошла ошибка при регистрации",
+      "emailInUse": "Этот email уже зарегистрирован",
+      "invalidEmail": "Неверный адрес электронной почты",
+      "operationNotAllowed": "Регистрация по email и паролю отключена",
+      "weakPassword": "Слишком слабый пароль",
+      "passwordRequirements": "Пароль должен содержать не менее 8 символов, включая букву, цифру и специальный символ"
+    }
   },
   "RestClient": {
     "loading": "Загрузка REST клиента...",
