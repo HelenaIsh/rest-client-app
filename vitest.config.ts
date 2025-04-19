@@ -10,7 +10,7 @@ export default defineConfig({
     include: ['**/*.test.{ts,tsx}'],
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json'],
       exclude: [
         'node_modules/',
         'test/',
@@ -24,6 +24,7 @@ export default defineConfig({
         '**/next-env.d.ts',
         '**/messages/**',
         '**/coverage/**',
+        '**/config**',
         '**/.husky/**',
         '**/.git/**',
         '**/.idea/**',
