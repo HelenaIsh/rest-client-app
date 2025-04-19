@@ -104,3 +104,4 @@ const Variables = dynamic(() => Promise.resolve(VariablesComponent), {
 });
 
 export default Variables;
+export { VariablesComponent };

@@ -4,74 +4,17 @@ import { NextIntlClientProvider } from 'next-intl';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
 import { useVariables } from '@/app/context/VariablesContext';
-import { Auth } from 'firebase/auth';
-import { useState } from 'react';
 import '@testing-library/jest-dom';
+import { VariablesComponent } from '../page';
 
-const MockVariablesComponent = () => {
-  const [user, loading] = useAuthState({} as Auth);
-  const router = useRouter();
-  const { variables, addVariable, removeVariable } = useVariables();
-  const [formData, setFormData] = useState({ name: '', value: '' });
-
-  if (loading) {
-    return <div data-testid="loading">Loading...</div>;
-  }
-
-  if (!user) {
-    router.push('/signin');
-    return null;
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.name && formData.value) {
-      addVariable(formData);
-      setFormData({ name: '', value: '' });
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  return (
-    <div>
-      <h1>Variables</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="name"
-          placeholder="Variable name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-        <input
-          name="value"
-          placeholder="Variable value"
-          value={formData.value}
-          onChange={handleChange}
-        />
-        <button type="submit">Add Variable</button>
-      </form>
-      <div>
-        {variables.map((variable) => (
-          <div key={variable.name}>
-            <span>{variable.name}</span>
-            <span>{variable.value}</span>
-            <button onClick={() => removeVariable(variable.name)}>
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+type VariablesMessages = {
+  title: string;
+  description: string;
+  variableNamePlaceholder: string;
+  variableValuePlaceholder: string;
+  addVariableButton: string;
+  deleteButton: string;
 };
-
-vi.mock('@/app/[locale]/variables/page', () => ({
-  default: MockVariablesComponent,
-}));
 
 vi.mock('@/app/firebase/config', () => ({
   auth: {
@@ -83,21 +26,33 @@ vi.mock('@/app/firebase/config', () => ({
   },
 }));
 
+const mockTranslations = Object.assign(
+  (key: keyof VariablesMessages): string => messages.Variables[key],
+  {
+    rich: vi.fn(),
+    markup: vi.fn(),
+    raw: vi.fn(),
+    has: vi.fn(),
+  }
+);
+
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => mockTranslations),
+  NextIntlClientProvider: ({
+    children,
+  }: {
+    children: React.ReactNode;
+    messages: { Variables: VariablesMessages };
+    locale: string;
+  }) => <div data-testid="next-intl-provider">{children}</div>,
+}));
+
 vi.mock('react-firebase-hooks/auth', () => ({
   useAuthState: vi.fn(),
 }));
 
-const mockRouter = {
-  push: vi.fn(),
-  replace: vi.fn(),
-  back: vi.fn(),
-  forward: vi.fn(),
-  refresh: vi.fn(),
-  prefetch: vi.fn(),
-};
-
 vi.mock('next/navigation', () => ({
-  useRouter: () => mockRouter,
+  useRouter: vi.fn(),
 }));
 
 vi.mock('@/app/context/VariablesContext', () => ({
@@ -112,44 +67,50 @@ const messages = {
     variableValuePlaceholder: 'Variable value',
     addVariableButton: 'Add Variable',
     deleteButton: 'Delete',
-  },
-  Common: {
-    loading: 'Loading...',
-  },
+  } as VariablesMessages,
 };
 
-describe('Variables', () => {
+const mockUser = {
+  uid: '123',
+  emailVerified: true,
+  isAnonymous: false,
+  metadata: {},
+  providerData: [],
+  refreshToken: '',
+  tenantId: null,
+  delete: vi.fn(),
+  getIdToken: vi.fn(),
+  getIdTokenResult: vi.fn(),
+  reload: vi.fn(),
+  toJSON: vi.fn(),
+  displayName: null,
+  email: null,
+  phoneNumber: null,
+  photoURL: null,
+  providerId: '',
+};
+
+const mockVariables = [
+  { name: 'API_KEY', value: '12345' },
+  { name: 'BASE_URL', value: 'https://api.example.com' },
+];
+
+describe('VariablesComponent', () => {
   const mockAddVariable = vi.fn();
   const mockRemoveVariable = vi.fn();
-
-  const mockUser = {
-    uid: '123',
-    emailVerified: true,
-    isAnonymous: false,
-    metadata: {},
-    providerData: [],
-    refreshToken: '',
-    tenantId: null,
-    delete: vi.fn(),
-    getIdToken: vi.fn(),
-    getIdTokenResult: vi.fn(),
-    reload: vi.fn(),
-    toJSON: vi.fn(),
-    displayName: null,
-    email: null,
-    phoneNumber: null,
-    photoURL: null,
-    providerId: '',
+  const mockRouter = {
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
   };
-
-  const mockVariables = [
-    { name: 'API_KEY', value: '12345' },
-    { name: 'BASE_URL', value: 'https://api.example.com' },
-  ];
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(useAuthState).mockReturnValue([mockUser, false, undefined]);
+    vi.mocked(useRouter).mockReturnValue(mockRouter);
     vi.mocked(useVariables).mockReturnValue({
       variables: mockVariables,
       addVariable: mockAddVariable,
@@ -162,7 +123,7 @@ describe('Variables', () => {
   const renderWithProvider = () => {
     return render(
       <NextIntlClientProvider messages={messages} locale="en">
-        <MockVariablesComponent />
+        <VariablesComponent />
       </NextIntlClientProvider>
     );
   };
@@ -175,19 +136,29 @@ describe('Variables', () => {
 
   it('renders the form inputs when authenticated', () => {
     renderWithProvider();
-    expect(screen.getByPlaceholderText('Variable name')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Variable value')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Add Variable' })
+      screen.getByPlaceholderText(messages.Variables.variableNamePlaceholder)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(messages.Variables.variableValuePlaceholder)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: messages.Variables.addVariableButton })
     ).toBeInTheDocument();
   });
 
   it('adds a new variable when form is submitted', async () => {
     renderWithProvider();
 
-    const nameInput = screen.getByPlaceholderText('Variable name');
-    const valueInput = screen.getByPlaceholderText('Variable value');
-    const submitButton = screen.getByRole('button', { name: 'Add Variable' });
+    const nameInput = screen.getByPlaceholderText(
+      messages.Variables.variableNamePlaceholder
+    );
+    const valueInput = screen.getByPlaceholderText(
+      messages.Variables.variableValuePlaceholder
+    );
+    const submitButton = screen.getByRole('button', {
+      name: messages.Variables.addVariableButton,
+    });
 
     fireEvent.change(nameInput, { target: { value: 'NEW_VAR' } });
     fireEvent.change(valueInput, { target: { value: 'new_value' } });
@@ -207,9 +178,15 @@ describe('Variables', () => {
   it('does not add a variable when name or value is empty', () => {
     renderWithProvider();
 
-    const nameInput = screen.getByPlaceholderText('Variable name');
-    const valueInput = screen.getByPlaceholderText('Variable value');
-    const submitButton = screen.getByRole('button', { name: 'Add Variable' });
+    const nameInput = screen.getByPlaceholderText(
+      messages.Variables.variableNamePlaceholder
+    );
+    const valueInput = screen.getByPlaceholderText(
+      messages.Variables.variableValuePlaceholder
+    );
+    const submitButton = screen.getByRole('button', {
+      name: messages.Variables.addVariableButton,
+    });
 
     fireEvent.change(nameInput, { target: { value: '' } });
     fireEvent.change(valueInput, { target: { value: 'some_value' } });
@@ -225,7 +202,9 @@ describe('Variables', () => {
   it('removes a variable when delete button is clicked', () => {
     renderWithProvider();
 
-    const deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
+    const deleteButtons = screen.getAllByRole('button', {
+      name: messages.Variables.deleteButton,
+    });
     fireEvent.click(deleteButtons[0]);
 
     expect(mockRemoveVariable).toHaveBeenCalledWith('API_KEY');
@@ -235,7 +214,7 @@ describe('Variables', () => {
     renderWithProvider();
 
     mockVariables.forEach((variable) => {
-      expect(screen.getByText(variable.name)).toBeInTheDocument();
+      expect(screen.getByText(`{{${variable.name}}}`)).toBeInTheDocument();
       expect(screen.getByText(variable.value)).toBeInTheDocument();
     });
   });
