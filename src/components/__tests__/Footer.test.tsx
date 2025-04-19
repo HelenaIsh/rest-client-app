@@ -40,17 +40,6 @@ describe('Footer', () => {
 
   it('renders GitHub links for all developers', () => {
     render(<Footer />);
-
-    const alanLink = screen.getByRole('link', { name: /AlanKowalzky/i });
-    expect(alanLink).toHaveAttribute('href', 'https://github.com/AlanKowalzky');
-    expect(alanLink).toHaveAttribute('target', '_blank');
-    expect(alanLink).toHaveAttribute('rel', 'noopener noreferrer');
-
-    const alanImage = screen.getByAltText('AlanKowalzky');
-    expect(alanImage).toBeInTheDocument();
-    expect(alanImage).toHaveAttribute('width', '40');
-    expect(alanImage).toHaveAttribute('height', '40');
-
     const links = screen.getAllByRole('link');
     const helenaLink = links.find(
       (link) => link.getAttribute('href') === 'https://github.com/HelenaIsh'

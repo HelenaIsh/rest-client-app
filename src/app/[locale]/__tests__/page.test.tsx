@@ -102,7 +102,6 @@ describe('MainPage', () => {
     render(<MainPage />);
 
     expect(screen.getByText('ourTeam')).toBeInTheDocument();
-    expect(screen.getByText('Alan Kowalzky')).toBeInTheDocument();
     expect(screen.getByText('Helena Ish')).toBeInTheDocument();
     expect(screen.getByText('Mayskii')).toBeInTheDocument();
   });
