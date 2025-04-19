@@ -121,3 +121,4 @@ const History = dynamic(() => Promise.resolve(HistoryComponent), {
 });
 
 export default History;
+export { HistoryComponent };
