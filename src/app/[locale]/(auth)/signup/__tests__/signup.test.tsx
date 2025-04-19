@@ -13,7 +13,7 @@ vi.mock('@/app/firebase/config', () => ({
     currentUser: null,
     onAuthStateChanged: vi.fn((callback) => {
       callback(null);
-      return () => {}; // Return cleanup function
+      return () => {};
     }),
   },
 }));

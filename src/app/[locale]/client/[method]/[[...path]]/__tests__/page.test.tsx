@@ -85,7 +85,7 @@ describe('RequestPage', () => {
   beforeEach(() => {
     vi.mocked(useParams).mockReturnValue({
       method: 'GET',
-      path: ['aHR0cHM6Ly9hcGkuZXhhbXBsZS5jb20=', 'e30='], // base64 encoded 'https://api.example.com' and '{}'
+      path: ['aHR0cHM6Ly9hcGkuZXhhbXBsZS5jb20=', 'e30='],
     });
     mockUseRouter.mockReturnValue(mockRouter);
   });
