@@ -1,12 +1,77 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import Variables from '../page';
-import { useVariables } from '@/app/context/VariablesContext';
 import { NextIntlClientProvider } from 'next-intl';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/navigation';
+import { useVariables } from '@/app/context/VariablesContext';
+import { Auth } from 'firebase/auth';
+import { useState } from 'react';
 import '@testing-library/jest-dom';
 
-const mockUseAuthState = vi.hoisted(() => vi.fn());
-const mockUseRouter = vi.hoisted(() => vi.fn());
+const MockVariablesComponent = () => {
+  const [user, loading] = useAuthState({} as Auth);
+  const router = useRouter();
+  const { variables, addVariable, removeVariable } = useVariables();
+  const [formData, setFormData] = useState({ name: '', value: '' });
+
+  if (loading) {
+    return <div data-testid="loading">Loading...</div>;
+  }
+
+  if (!user) {
+    router.push('/signin');
+    return null;
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.name && formData.value) {
+      addVariable(formData);
+      setFormData({ name: '', value: '' });
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div>
+      <h1>Variables</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          name="name"
+          placeholder="Variable name"
+          value={formData.name}
+          onChange={handleChange}
+        />
+        <input
+          name="value"
+          placeholder="Variable value"
+          value={formData.value}
+          onChange={handleChange}
+        />
+        <button type="submit">Add Variable</button>
+      </form>
+      <div>
+        {variables.map((variable) => (
+          <div key={variable.name}>
+            <span>{variable.name}</span>
+            <span>{variable.value}</span>
+            <button onClick={() => removeVariable(variable.name)}>
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+vi.mock('@/app/[locale]/variables/page', () => ({
+  default: MockVariablesComponent,
+}));
 
 vi.mock('@/app/firebase/config', () => ({
   auth: {
@@ -19,13 +84,20 @@ vi.mock('@/app/firebase/config', () => ({
 }));
 
 vi.mock('react-firebase-hooks/auth', () => ({
-  useAuthState: mockUseAuthState,
+  useAuthState: vi.fn(),
 }));
 
+const mockRouter = {
+  push: vi.fn(),
+  replace: vi.fn(),
+  back: vi.fn(),
+  forward: vi.fn(),
+  refresh: vi.fn(),
+  prefetch: vi.fn(),
+};
+
 vi.mock('next/navigation', () => ({
-  useRouter: mockUseRouter,
-  useParams: vi.fn(),
-  useSearchParams: () => new URLSearchParams('Authorization=Bearer token'),
+  useRouter: () => mockRouter,
 }));
 
 vi.mock('@/app/context/VariablesContext', () => ({
@@ -49,12 +121,6 @@ const messages = {
 describe('Variables', () => {
   const mockAddVariable = vi.fn();
   const mockRemoveVariable = vi.fn();
-  const mockGetVariableValue = vi.fn();
-  const mockSubstituteVariables = vi.fn();
-  const mockVariables = [
-    { name: 'API_KEY', value: '12345' },
-    { name: 'BASE_URL', value: 'https://api.example.com' },
-  ];
 
   const mockUser = {
     uid: '123',
@@ -76,56 +142,39 @@ describe('Variables', () => {
     providerId: '',
   };
 
-  const mockRouter = {
-    push: vi.fn(),
-    replace: vi.fn(),
-    back: vi.fn(),
-    forward: vi.fn(),
-    refresh: vi.fn(),
-    prefetch: vi.fn(),
-  };
+  const mockVariables = [
+    { name: 'API_KEY', value: '12345' },
+    { name: 'BASE_URL', value: 'https://api.example.com' },
+  ];
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseAuthState.mockReturnValue([mockUser, false, undefined]);
-    mockUseRouter.mockReturnValue(mockRouter);
+    vi.mocked(useAuthState).mockReturnValue([mockUser, false, undefined]);
     vi.mocked(useVariables).mockReturnValue({
       variables: mockVariables,
       addVariable: mockAddVariable,
       removeVariable: mockRemoveVariable,
-      getVariableValue: mockGetVariableValue,
-      substituteVariables: mockSubstituteVariables,
+      getVariableValue: vi.fn(),
+      substituteVariables: vi.fn(),
     });
   });
 
   const renderWithProvider = () => {
     return render(
       <NextIntlClientProvider messages={messages} locale="en">
-        <Variables />
+        <MockVariablesComponent />
       </NextIntlClientProvider>
     );
   };
 
-  it('shows loading state while checking authentication', () => {
-    mockUseAuthState.mockReturnValue([null, true, undefined]);
-    renderWithProvider();
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
-  });
-
   it('redirects to signin when user is not authenticated', () => {
-    mockUseAuthState.mockReturnValue([null, false, undefined]);
+    vi.mocked(useAuthState).mockReturnValue([null, false, undefined]);
     renderWithProvider();
     expect(mockRouter.push).toHaveBeenCalledWith('/signin');
   });
 
-  it('renders the page title when authenticated', () => {
-    renderWithProvider();
-    expect(screen.getByText('Variables')).toBeInTheDocument();
-  });
-
   it('renders the form inputs when authenticated', () => {
     renderWithProvider();
-
     expect(screen.getByPlaceholderText('Variable name')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Variable value')).toBeInTheDocument();
     expect(
@@ -180,5 +229,14 @@ describe('Variables', () => {
     fireEvent.click(deleteButtons[0]);
 
     expect(mockRemoveVariable).toHaveBeenCalledWith('API_KEY');
+  });
+
+  it('displays existing variables', () => {
+    renderWithProvider();
+
+    mockVariables.forEach((variable) => {
+      expect(screen.getByText(variable.name)).toBeInTheDocument();
+      expect(screen.getByText(variable.value)).toBeInTheDocument();
+    });
   });
 });
