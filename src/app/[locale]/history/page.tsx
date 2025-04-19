@@ -30,21 +30,21 @@ const HistoryComponent = () => {
   return (
     <>
       <div className="flex justify-between items-center mb-6">
-        <h1>{t('title')}</h1>
+        <h1 className="text-2xl font-bold mb-4">{t('title')}</h1>
       </div>
 
       {history.length > 0 ? (
         <>
-          <div className="space-y-4">
+          <div className="w-full h-full max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg grid gap-6">
             {currentItems.map((item, index) => (
               <div
                 key={`${item.method}-${item.endpointUrl}-${index}`}
-                className="border rounded-lg p-4 hover:bg-gray-50"
+                className="border rounded-lg p-4 hover:bg-gray-100"
               >
                 <Link href={item.path} className="block">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2 w-full md:w-auto">
                     <span
-                      className={`px-2 py-1 rounded text-sm font-medium ${
+                      className={`px-2 py-1 rounded text-sm font-medium flex-shrink-0 ${
                         item.method === 'GET'
                           ? 'bg-green-100 text-green-800'
                           : item.method === 'POST'
@@ -58,7 +58,9 @@ const HistoryComponent = () => {
                     >
                       {item.method}
                     </span>
-                    <span className="text-gray-700">{item.endpointUrl}</span>
+                    <span className="text-gray-700 text-sm block overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      {item.endpointUrl}
+                    </span>
                   </div>
                 </Link>
               </div>
@@ -74,17 +76,21 @@ const HistoryComponent = () => {
               >
                 Previous
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 rounded border ${
-                    currentPage === page ? 'bg-blue-500 text-white' : ''
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-1 rounded border ${
+                      currentPage === page
+                        ? 'bg-[var(--maincolor)] text-white'
+                        : ''
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
@@ -96,11 +102,11 @@ const HistoryComponent = () => {
           )}
         </>
       ) : (
-        <div className="text-center py-8">
-          <p className="text-gray-600 mb-4">{t('emptyHistory')}</p>
+        <div className="text-center py-8 px-4 bg-gray-50 border rounded-xl shadow-sm">
+          <p className="text-gray-600 text-lg mb-4">{t('emptyHistory')}</p>
           <Link
             href="/client"
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="inline-block bg-[var(--maincolor)] text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition"
           >
             {t('tryRestClient')}
           </Link>
