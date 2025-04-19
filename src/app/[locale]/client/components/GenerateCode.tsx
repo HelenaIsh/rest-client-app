@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { methods } from './MethodSelector';
 import { useVariables } from '@/app/context/VariablesContext';
 
-interface GenerateCodeProps {
+export interface GenerateCodeProps {
   language: string;
   method: (typeof methods)[number];
   url: string;

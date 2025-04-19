@@ -52,7 +52,10 @@ export default function RequestPage() {
   });
 
   return (
-    <div className="w-full h-full max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col ">
+    <div
+      data-testid="request-container"
+      className="w-full h-full max-w-7xl mx-auto p-4 bg-white text-gray-500 rounded-2xl shadow-lg flex flex-col "
+    >
       <RestClient
         initialMethod={params.method}
         initialUrl={endpointUrl}

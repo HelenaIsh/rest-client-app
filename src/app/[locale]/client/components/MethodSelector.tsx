@@ -12,7 +12,7 @@ export default function MethodSelector({
   selectedMethod = 'GET',
   setSelectedMethod,
 }: {
-  selectedMethod: (typeof methods)[number];
+  selectedMethod?: (typeof methods)[number];
   setSelectedMethod: (selectedMethod: (typeof methods)[number]) => void;
 }) {
   return (
