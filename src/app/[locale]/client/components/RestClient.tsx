@@ -17,6 +17,7 @@ import {
   getFilteredHeaders,
   getStatusColor,
   handleResponse,
+  addToHistory,
 } from '@/app/[locale]/client/utils/utils';
 import RequestBodyEditor from '@components/RequestBodyEditor';
 import HeaderEditor from '@components/HeaderEditor';
@@ -142,14 +143,23 @@ export default function RestClient({
       return;
     }
 
-    router.push(
-      buildRequestUrl(
-        urlResult.result,
-        selectedMethod,
-        bodyResult.result,
-        headersWithSubstitutions
-      )
+    const path = buildRequestUrl(
+      urlResult.result,
+      selectedMethod,
+      bodyResult.result,
+      headersWithSubstitutions
     );
+
+    const newHistoryItem = {
+      method: selectedMethod,
+      endpointUrl: urlResult.result,
+      body: bodyResult.result,
+      headers: headersWithSubstitutions,
+      path,
+    };
+
+    addToHistory(newHistoryItem);
+    router.push(path);
   };
 
   const handleGenerateCode = (lang: string) => {

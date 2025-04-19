@@ -4,3 +4,11 @@ export interface Header {
   value: string;
   enabled: boolean;
 }
+
+export interface HistoryItem {
+  method: string;
+  endpointUrl: string;
+  body: string;
+  headers: Header[];
+  path: string;
+}
