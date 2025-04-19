@@ -35,10 +35,14 @@ vi.mock('@/app/context/VariablesContext', () => ({
 const messages = {
   Variables: {
     title: 'Variables',
+    description: 'This is the Variables page',
     variableNamePlaceholder: 'Variable name',
     variableValuePlaceholder: 'Variable value',
     addVariableButton: 'Add Variable',
     deleteButton: 'Delete',
+  },
+  Common: {
+    loading: 'Loading...',
   },
 };
 

@@ -38,6 +38,9 @@ const messages = {
   RestClient: {
     loading: 'Loading...',
   },
+  Common: {
+    loading: 'Loading...',
+  },
 };
 
 describe('Client', () => {

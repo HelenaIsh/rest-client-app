@@ -47,6 +47,9 @@ const messages = {
   RestClient: {
     loading: 'Loading REST Client...',
   },
+  Common: {
+    loading: 'Loading...',
+  },
 };
 
 describe('RequestPage', () => {

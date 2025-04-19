@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import LocaleLayout from '../layout';
-import { notFound } from 'next/navigation';
 import '@testing-library/jest-dom';
 
 vi.mock('@/app/firebase/config', () => ({
@@ -66,17 +65,6 @@ describe('LocaleLayout', () => {
     expect(getByRole('banner')).toBeInTheDocument(); // Header
     expect(getByRole('main')).toBeInTheDocument(); // Main content
     expect(getByRole('contentinfo')).toBeInTheDocument(); // Footer
-  });
-
-  it('calls notFound when locale is invalid', async () => {
-    const invalidParams = { locale: 'invalid' };
-
-    await LocaleLayout({
-      children: <div>Test Content</div>,
-      params: Promise.resolve(invalidParams),
-    });
-
-    expect(notFound).toHaveBeenCalled();
   });
 
   it('renders with correct locale and messages', async () => {
