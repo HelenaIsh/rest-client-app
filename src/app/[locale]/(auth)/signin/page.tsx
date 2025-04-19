@@ -113,14 +113,17 @@ const SignInPage: React.FC = () => {
           onClose={() => setToastMessage(null)}
         />
       )}
-      <form onSubmit={handleSubmit} className="max-w-sm mx-auto p-4 space-y-4">
-        <h2 className="text-xl font-semibold text-center">{t('mode')}</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-sm mx-auto p-6 space-y-5 bg-gray-50 rounded-xl shadow-md"
+      >
+        <h2 className="text-2xl font-semibold text-center">{t('mode')}</h2>
 
         <div>
           <input
             type="email"
             placeholder={t('form.emailPlaceholder')}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--maincolor)]"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -133,7 +136,7 @@ const SignInPage: React.FC = () => {
           <input
             type="password"
             placeholder={t('form.passwordPlaceholder')}
-            className="w-full border rounded px-3 py-2"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--maincolor)]"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -144,7 +147,7 @@ const SignInPage: React.FC = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white rounded py-2 hover:bg-blue-700"
+          className="w-full bg-[var(--maincolor)] text-white rounded-lg py-2 font-medium shadow hover:opacity-90 transition"
         >
           {t('mode')}
         </button>
