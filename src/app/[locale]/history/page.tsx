@@ -42,9 +42,9 @@ const HistoryComponent = () => {
                 className="border rounded-lg p-4 hover:bg-gray-100"
               >
                 <Link href={item.path} className="block">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2 w-full md:w-auto">
                     <span
-                      className={`px-2 py-1 rounded text-sm font-medium ${
+                      className={`px-2 py-1 rounded text-sm font-medium flex-shrink-0 ${
                         item.method === 'GET'
                           ? 'bg-green-100 text-green-800'
                           : item.method === 'POST'
@@ -58,7 +58,9 @@ const HistoryComponent = () => {
                     >
                       {item.method}
                     </span>
-                    <span className="text-gray-700">{item.endpointUrl}</span>
+                    <span className="text-gray-700 text-sm block overflow-ellipsis overflow-hidden whitespace-nowrap">
+                      {item.endpointUrl}
+                    </span>
                   </div>
                 </Link>
               </div>
