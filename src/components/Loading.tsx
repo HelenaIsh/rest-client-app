@@ -12,7 +12,10 @@ const Loading: React.FC<LoadingProps> = ({ className = '', text }) => {
   const loadingText = text || t('loading');
 
   return (
-    <div data-testid="loading" className={`flex items-center justify-center ${className}`}>
+    <div
+      data-testid="loading"
+      className={`flex items-center justify-center ${className}`}
+    >
       <div className="flex flex-col items-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         <p className="mt-2 text-gray-600">{loadingText}</p>

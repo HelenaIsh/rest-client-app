@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/navigation';
 import { useVariables } from '@/app/context/VariablesContext';
 import '@testing-library/jest-dom';
-import { VariablesComponent } from '../page';
+import { VariablesComponent } from '../VariablesComponent';
 
 type VariablesMessages = {
   title: string;

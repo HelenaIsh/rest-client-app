@@ -30,7 +30,10 @@ export default function Client() {
   }
 
   return (
-    <div data-testid="client-container" className="w-full h-full max-w-7xl mx-auto p-4 text-gray-500 rounded-2xl shadow-lg flex flex-col bg-[var(--maincolor)]">
+    <div
+      data-testid="client-container"
+      className="w-full h-full max-w-7xl mx-auto p-4 text-gray-500 rounded-2xl shadow-lg flex flex-col bg-[var(--maincolor)]"
+    >
       <RestClient />
     </div>
   );

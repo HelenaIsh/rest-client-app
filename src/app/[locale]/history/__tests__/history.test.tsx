@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { getHistory } from '@/app/[locale]/client/utils/utils';
 import { HistoryItem, Header } from '@/types';
 import '@testing-library/jest-dom';
-import { HistoryComponent } from '../page';
+import { HistoryComponent } from '../HistoryComponent';
 
 type HistoryMessages = {
   title: string;
