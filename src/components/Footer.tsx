@@ -26,22 +26,6 @@ const Footer: React.FC = () => {
           <p className="footer-github-article">{t('developedBy')}</p>
           <div className="footer-github-links">
             <a
-              href="https://github.com/AlanKowalzky"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className="github-img-container">
-                <Image
-                  src="/images/AlanKowalzky.jpeg"
-                  className="github-logo"
-                  alt="AlanKowalzky"
-                  width={40}
-                  height={40}
-                  style={{ height: 'auto' }}
-                />
-              </div>
-            </a>
-            <a
               href="https://github.com/HelenaIsh"
               target="_blank"
               rel="noopener noreferrer"

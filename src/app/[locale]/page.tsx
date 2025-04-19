@@ -68,23 +68,6 @@ const MainPage: React.FC = () => {
         <h2 className="authors-sign">{t('ourTeam')}</h2>
         <div className="authors">
           <a
-            href="https://github.com/AlanKowalzky"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="author-link"
-          >
-            <Image
-              src="/images/AlanKowalzky.jpeg"
-              alt="Alan Kowalzky"
-              width={50}
-              height={50}
-              className="author-img"
-            />
-            <span>Alan Kowalzky</span>
-            <p className="author-description">{t('alanDescription')}</p>
-          </a>
-
-          <a
             href="https://github.com/HelenaIsh"
             target="_blank"
             rel="noopener noreferrer"
