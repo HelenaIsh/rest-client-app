@@ -3,11 +3,30 @@ import { render, screen } from '@testing-library/react';
 import RequestPage from '../page';
 import { NextIntlClientProvider } from 'next-intl';
 import { useParams } from 'next/navigation';
+import { User } from 'firebase/auth';
 import '@testing-library/jest-dom';
+
+const mockUseAuthState = vi.hoisted(() => vi.fn());
+const mockUseRouter = vi.hoisted(() => vi.fn());
+
+vi.mock('@/app/firebase/config', () => ({
+  auth: {
+    currentUser: null,
+    onAuthStateChanged: vi.fn((callback) => {
+      callback(null);
+      return vi.fn();
+    }),
+  },
+}));
+
+vi.mock('react-firebase-hooks/auth', () => ({
+  useAuthState: mockUseAuthState,
+}));
 
 vi.mock('next/navigation', () => ({
   useParams: vi.fn(),
   useSearchParams: () => new URLSearchParams('Authorization=Bearer token'),
+  useRouter: mockUseRouter,
 }));
 
 vi.mock('next/dynamic', () => ({
@@ -31,14 +50,70 @@ const messages = {
 };
 
 describe('RequestPage', () => {
+  const mockRouter = {
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+  };
+
+  const mockUser: Partial<User> = {
+    uid: '123',
+    emailVerified: true,
+    isAnonymous: false,
+    metadata: {},
+    providerData: [],
+    refreshToken: '',
+    tenantId: null,
+    delete: vi.fn(),
+    getIdToken: vi.fn(),
+    getIdTokenResult: vi.fn(),
+    reload: vi.fn(),
+    toJSON: vi.fn(),
+    displayName: null,
+    email: null,
+    phoneNumber: null,
+    photoURL: null,
+    providerId: '',
+  };
+
   beforeEach(() => {
     vi.mocked(useParams).mockReturnValue({
       method: 'GET',
       path: ['aHR0cHM6Ly9hcGkuZXhhbXBsZS5jb20=', 'e30='], // base64 encoded 'https://api.example.com' and '{}'
     });
+    mockUseRouter.mockReturnValue(mockRouter);
   });
 
-  it('renders the request page with RestClient component and correct props', () => {
+  it('shows loading state while checking authentication', () => {
+    mockUseAuthState.mockReturnValue([null, true, undefined]);
+
+    render(
+      <NextIntlClientProvider messages={messages} locale="en">
+        <RequestPage />
+      </NextIntlClientProvider>
+    );
+
+    expect(screen.getByTestId('loading')).toBeInTheDocument();
+  });
+
+  it('redirects to signin when user is not authenticated', () => {
+    mockUseAuthState.mockReturnValue([null, false, undefined]);
+
+    render(
+      <NextIntlClientProvider messages={messages} locale="en">
+        <RequestPage />
+      </NextIntlClientProvider>
+    );
+
+    expect(mockRouter.push).toHaveBeenCalledWith('/signin');
+  });
+
+  it('renders the request page with RestClient component when user is authenticated', () => {
+    mockUseAuthState.mockReturnValue([mockUser as User, false, undefined]);
+
     render(
       <NextIntlClientProvider messages={messages} locale="en">
         <RequestPage />
@@ -70,6 +145,8 @@ describe('RequestPage', () => {
   });
 
   it('decodes URL and body parameters correctly', () => {
+    mockUseAuthState.mockReturnValue([mockUser as User, false, undefined]);
+
     render(
       <NextIntlClientProvider messages={messages} locale="en">
         <RequestPage />
@@ -83,6 +160,8 @@ describe('RequestPage', () => {
   });
 
   it('converts search params to headers correctly', () => {
+    mockUseAuthState.mockReturnValue([mockUser as User, false, undefined]);
+
     render(
       <NextIntlClientProvider messages={messages} locale="en">
         <RequestPage />
