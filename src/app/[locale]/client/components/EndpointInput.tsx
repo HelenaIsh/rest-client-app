@@ -23,7 +23,10 @@ export default function EndpointInput({
       }`}
       type="text"
       value={endpointUrl}
-      onChange={(e) => setEndpointUrl(e.target.value)}
+      onChange={(e) => {
+        const filtered = e.target.value.replace(/[а-яА-ЯёЁ]/g, '');
+        setEndpointUrl(filtered);
+      }}
       placeholder={t('placeholder')}
       title={isValid ? '' : t('errors.invalidUrl')}
       aria-label={t('aria.endpointUrl')}
