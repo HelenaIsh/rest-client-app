@@ -121,11 +121,6 @@ export default function RestClient({
       return;
     }
 
-    try {
-      new URL(endpointUrl);
-    } catch {
-      setToast({ message: 'URL is incorrect', type: 'error' });
-    }
     const urlResult = substituteVariables(endpointUrl);
     const bodyResult = substituteVariables(requestBody!);
     const headersWithSubstitutions = headers.map((header) => {

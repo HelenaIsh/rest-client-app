@@ -44,9 +44,7 @@ const RequestBodyEditor: React.FC<RequestBodyEditorProps> = ({
         const prettified = JSON.stringify(parsed, null, 2);
         setContent(prettified);
         setRequestBody(prettified);
-      } catch (e) {
-        console.error('Invalid JSON cannot be prettified', e);
-      }
+      } catch {}
     } else {
       const prettified = content
         .split('\n')
