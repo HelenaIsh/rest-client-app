@@ -1,0 +1,134 @@
+{
+  "Common": {
+    "loading": "Loading..."
+  },
+  "MainPage": {
+    "welcome": "Welcome!",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "welcomeBack": "Welcome Back",
+    "restClient": "REST Client",
+    "history": "History",
+    "variables": "Variables",
+    "ourTeam": "Our Team",
+    "helenaDescription": "My name is Lena. Last year, I completed the JSFE course. I already have some work experience — I was part of an infrastructure team at an IT company in Russia. I was responsible for building a React component library. The work was quite specific with many nuances. However, I didn't work with many tools — there was no interaction with the backend, I had no experience with Next.js, among other things. Six months ago, I moved to Croatia and left my job. I decided to continue learning and explore the tools I hadn't worked with before.",
+    "mayaDescription": "My name is Maya. I'm currently on an exciting journey of learning and growing as a developer. Originally from Russia and now based in the USA, I'm diving deep into the world of frontend development through the JSFE course, while also expanding my knowledge with the React course offered by RSSchool. My goal is to continuously improve my skills and gain hands-on experience so that I can eventually build complex, full-stack applications."
+  },
+  "Header": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out"
+  },
+  "Footer": {
+    "developedBy": "Developed by the team:",
+    "copyright": "Copyright"
+  },
+  "History": {
+    "title": "History",
+    "description": "This is the history page",
+    "emptyHistory": "You haven't executed any requests yet",
+    "tryRestClient": "Try the REST Client",
+    "clearHistory": "Clear History"
+  },
+  "Variables": {
+    "title": "Variables",
+    "description": "This is the Variables page",
+    "variableNamePlaceholder": "Variable name",
+    "variableValuePlaceholder": "Variable value",
+    "addVariableButton": "Add Variable",
+    "deleteButton": "Delete"
+  },
+  "SignInPage": {
+    "title": "SignInPage",
+    "mode": "Sign In",
+    "description": "This is the sign in page",
+    "form": {
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password"
+    },
+    "errors": {
+      "unknown": "An error occurred during sign in",
+      "invalidEmail": "Invalid email address",
+      "userDisabled": "This account has been disabled",
+      "userNotFound": "No account found with this email",
+      "wrongPassword": "Incorrect password",
+      "invalidCredential": "Incorrect email or password",
+      "tooManyRequests": "Too many failed attempts. Please try again later",
+      "passwordRequirements": "Password must be at least 8 characters and include a letter, a number, and a special character"
+    }
+  },
+  "SignUpPage": {
+    "title": "SignUpPage",
+    "mode": "Sign Up",
+    "description": "This is the sign up page",
+    "form": {
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password"
+    },
+    "errors": {
+      "unknown": "An error occurred during sign up",
+      "emailInUse": "This email is already registered",
+      "invalidEmail": "Invalid email address",
+      "operationNotAllowed": "Email/password accounts are not enabled",
+      "weakPassword": "Password is too weak",
+      "passwordRequirements": "Password must be at least 8 characters and include a letter, a number, and a special character"
+    }
+  },
+  "RestClient": {
+    "loading": "Loading REST Client...",
+    "invalidEndpointUrl": "Invalid or missing endpoint URL",
+    "genericError": "An error occurred",
+    "networkError": "Network error: Failed to connect to the server",
+    "body": "Body",
+    "headers": "Headers",
+    "response": "Response",
+    "generatedCode": "Generated Code",
+    "missingVariables": "Missing variables",
+    "noResponseYet": "No response yet",
+    "noCodeYet": "No generated code",
+    "generateCodeError": "There are not enough details for the code to be generated"
+  },
+  "SendButton": {
+    "send": "Send"
+  },
+  "GenerateButton": {
+    "generate": "Generate"
+  },
+  "RequestBodyEditor": {
+    "type": {
+      "json": "JSON",
+      "text": "Plain Text"
+    },
+    "actions": {
+      "prettify": "Prettify",
+      "clear": "Clear"
+    },
+    "errors": {
+      "invalidJson": "Invalid JSON format"
+    }
+  },
+  "HeaderEditor": {
+    "table": {
+      "key": "Key",
+      "value": "Value",
+      "enabled": "Enabled",
+      "delete": "Delete"
+    },
+    "placeholders": {
+      "key": "Enter key",
+      "value": "Enter value"
+    },
+    "aria": {
+      "deleteRow": "Delete header row"
+    }
+  },
+  "EndpointInput": {
+    "placeholder": "Enter Endpoint URL",
+    "errors": {
+      "invalidUrl": "Invalid URL"
+    },
+    "aria": {
+      "endpointUrl": "Endpoint URL input field"
+    }
+  }
+}
