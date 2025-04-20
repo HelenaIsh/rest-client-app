@@ -6,12 +6,32 @@ import { getHistory } from '@/app/[locale]/client/utils/utils';
 import { HistoryItem, Header } from '@/types';
 import '@testing-library/jest-dom';
 import { HistoryComponent } from '../HistoryComponent';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/navigation';
 
 type HistoryMessages = {
   title: string;
   emptyHistory: string;
   tryRestClient: string;
 };
+
+vi.mock('@/app/firebase/config', () => ({
+  auth: {
+    currentUser: null,
+    onAuthStateChanged: vi.fn((callback) => {
+      callback(null);
+      return vi.fn();
+    }),
+  },
+}));
+
+vi.mock('react-firebase-hooks/auth', () => ({
+  useAuthState: vi.fn(),
+}));
+
+vi.mock('next/navigation', () => ({
+  useRouter: vi.fn(),
+}));
 
 vi.mock('next-intl', () => ({
   useTranslations: vi.fn(),
@@ -84,9 +104,39 @@ const mockHistoryItems: HistoryItem[] = [
   },
 ];
 
+const mockUser = {
+  uid: '123',
+  emailVerified: true,
+  isAnonymous: false,
+  metadata: {},
+  providerData: [],
+  refreshToken: '',
+  tenantId: null,
+  delete: vi.fn(),
+  getIdToken: vi.fn(),
+  getIdTokenResult: vi.fn(),
+  reload: vi.fn(),
+  toJSON: vi.fn(),
+  displayName: null,
+  email: null,
+  phoneNumber: null,
+  photoURL: null,
+  providerId: '',
+};
+
 describe('HistoryComponent', () => {
   beforeEach(() => {
+    const mockRouter = {
+      push: vi.fn(),
+      replace: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+      prefetch: vi.fn(),
+    };
     vi.clearAllMocks();
+    vi.mocked(useAuthState).mockReturnValue([mockUser, false, undefined]);
+    vi.mocked(useRouter).mockReturnValue(mockRouter);
     const mockTranslations = Object.assign(
       (key: keyof HistoryMessages): string => messages.History[key],
       {
