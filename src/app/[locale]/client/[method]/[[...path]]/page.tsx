@@ -61,6 +61,7 @@ export default function RequestPage() {
         initialUrl={endpointUrl}
         initialBody={requestBody}
         initialHeaders={headers}
+        key={Date.now()}
       />
     </div>
   );
