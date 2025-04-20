@@ -64,6 +64,16 @@ const MainPage: React.FC = () => {
           </div>
         )}
       </div>
+      <div className="mb-8 bg-white text-gray-900 text-center p-6 rounded-md shadow">
+        <h1 className="text-2xl font-bold mb-2">
+          REST Client - Project description
+        </h1>
+        <p className="mb-2">
+          This is a lightweight REST client, inspired by Postman. It allows you
+          to test APIs by selecting HTTP methods, entering endpoints, editing
+          headers, and providing request bodies.
+        </p>
+      </div>
       <div className="authors-content">
         <h2 className="authors-sign">{t('ourTeam')}</h2>
         <div className="authors">

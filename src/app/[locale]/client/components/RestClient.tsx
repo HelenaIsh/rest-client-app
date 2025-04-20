@@ -76,15 +76,24 @@ export default function RestClient({
         Accept: 'application/json',
         ...getFilteredHeaders(headers),
       };
-      const options: RequestInit = {
-        method: selectedMethod,
-        headers: requestHeaders,
-        ...(selectedMethod !== 'GET' &&
-          selectedMethod !== 'HEAD' && { body: requestBody }),
-      };
 
       try {
-        const response = await fetch(endpointUrl, options);
+        const response = await fetch('/api/proxy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            url: endpointUrl,
+            selectedMethod,
+            requestHeaders,
+            body:
+              selectedMethod !== 'GET' && selectedMethod !== 'HEAD'
+                ? requestBody
+                : undefined,
+          }),
+        });
+
         setResponseStatus(response.status);
         const { data, detectedLanguage } = await handleResponse(response);
         setResponseData(data);
@@ -213,9 +222,10 @@ export default function RestClient({
         <div className="rounded-md border border-gray-300 overflow-hidden">
           <CodeMirror
             value={typeof responseData === 'string' ? responseData : ''}
-            extensions={
-              language ? [language as Extension] : [EditorView.lineWrapping]
-            }
+            extensions={[
+              EditorView.lineWrapping,
+              ...(language ? [language as Extension] : []),
+            ]}
             readOnly={true}
             height="250px"
             className="text-sm"

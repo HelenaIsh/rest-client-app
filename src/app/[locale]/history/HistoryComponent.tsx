@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { HistoryItem } from '@/types';
 import { getHistory } from '../client/utils/utils';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/app/firebase/config';
+import { useRouter } from 'next/navigation';
+import Loading from '@/components/Loading';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -12,10 +16,26 @@ export const HistoryComponent = () => {
   const t = useTranslations('History');
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [user, loading] = useAuthState(auth);
+  const router = useRouter();
 
   useEffect(() => {
     setHistory(getHistory());
   }, []);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/signin');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return <Loading className="h-full" />;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const totalPages = Math.ceil(history.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
