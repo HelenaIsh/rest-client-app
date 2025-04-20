@@ -226,9 +226,10 @@ export default function RestClient({
         <div className="rounded-md border border-gray-300 overflow-hidden">
           <CodeMirror
             value={typeof responseData === 'string' ? responseData : ''}
-            extensions={
-              language ? [language as Extension] : [EditorView.lineWrapping]
-            }
+            extensions={[
+              EditorView.lineWrapping,
+              ...(language ? [language as Extension] : []),
+            ]}
             readOnly={true}
             height="250px"
             className="text-sm"
