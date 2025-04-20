@@ -164,7 +164,6 @@ export default function RestClient({
 
     addToHistory(newHistoryItem);
     router.push(path);
-    window.location.reload();
   };
 
   const handleGenerateCode = (lang: string) => {
